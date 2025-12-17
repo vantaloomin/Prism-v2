@@ -510,6 +510,7 @@ function updateCreditsDisplay() {
 async function handlePackPurchase(packType) {
     if (gameState.credits < CONFIG.PACK_COST) {
         console.log('Not enough credits!');
+        bounceFeedback(document.getElementById('credits-amount'));
         return;
     }
 
@@ -526,6 +527,9 @@ async function handlePackPurchase(packType) {
     packContainer.hidden = false;
     packImage.textContent = packType === 'waifu' ? '🌸' : '⚔️';
 
+    // Reset pack state
+    gsap.set(packImage, { scale: 1, rotation: 0, opacity: 1, boxShadow: 'none' });
+
     // Generate cards (but don't show yet)
     const cards = openPack(packType);
 
@@ -534,25 +538,100 @@ async function handlePackPurchase(packType) {
         `${c.name} [${c.rarity.id.toUpperCase()}/${c.frame.id}/${c.holo.id}]`
     ));
 
-    // Pack shake animation on click
+    // Check if we have any rare cards for special effects
+    const bestRarity = cards.reduce((best, card) => {
+        const level = getRarityEffectLevel(card.rarity.id);
+        return level > best.level ? { level, card } : best;
+    }, { level: 0, card: null });
+
+    // Pack click triggers GSAP animation sequence
     packImage.onclick = async () => {
-        packImage.classList.add('shaking');
+        packImage.onclick = null; // Prevent double-clicks
 
-        await sleep(600);
+        // Create and play the dramatic pack opening animation
+        const openingTimeline = createPackOpeningAnimation(packImage);
 
-        // Hide pack, show cards
-        packContainer.hidden = true;
-        renderCardDisplay(cards);
+        openingTimeline.eventCallback('onComplete', () => {
+            // Hide pack container
+            packContainer.hidden = true;
 
-        // Add cards to inventory
-        gameState.inventory.push(...cards);
-        gameState.stats.packsOpened++;
-        gameState.stats.totalCards += cards.length;
+            // Render cards (face down initially)
+            renderCardDisplayAnimated(cards);
 
-        // Save and update collection
-        saveGame();
-        renderCollection();
+            // Add cards to inventory
+            gameState.inventory.push(...cards);
+            gameState.stats.packsOpened++;
+            gameState.stats.totalCards += cards.length;
+
+            // Save and update collection
+            saveGame();
+            renderCollection();
+        });
     };
+}
+
+/**
+ * Render card display with GSAP dealing animation
+ * @param {Array} cards - Card data array
+ */
+function renderCardDisplayAnimated(cards) {
+    const displayArea = document.getElementById('card-display-area');
+    displayArea.innerHTML = '';
+
+    // Create card elements
+    const cardElements = cards.map((cardData, index) => {
+        const cardElement = createCardElement(cardData, true); // Face down
+        displayArea.appendChild(cardElement);
+        return { element: cardElement, data: cardData, index };
+    });
+
+    // Create continue button
+    const continueBtn = document.createElement('button');
+    continueBtn.className = 'continue-button';
+    continueBtn.textContent = 'Continue';
+    continueBtn.hidden = true;
+    displayArea.appendChild(continueBtn);
+
+    continueBtn.addEventListener('click', () => {
+        showPackShop();
+    });
+
+    // Animate cards dealing in
+    const dealTimeline = createCardDealingAnimation(
+        cardElements.map(c => c.element)
+    );
+
+    // After dealing, flip cards one by one with stagger
+    dealTimeline.eventCallback('onComplete', () => {
+        let flipped = 0;
+
+        cardElements.forEach(({ element, data }, index) => {
+            setTimeout(() => {
+                // Create flip animation
+                const flipTl = createCardFlipAnimation(element, data);
+
+                // Add is-flipped class for CSS state
+                element.classList.add('is-flipped');
+
+                // Trigger rare effects after flip completes
+                flipTl.eventCallback('onComplete', () => {
+                    triggerRareCardEffects(element, data);
+
+                    flipped++;
+                    // Show continue button after all cards flipped
+                    if (flipped === cardElements.length) {
+                        continueBtn.hidden = false;
+                        gsap.from(continueBtn, {
+                            y: 20,
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: "back.out"
+                        });
+                    }
+                });
+            }, index * (AnimConfig.cards.flipDelay * 1000 + AnimConfig.cards.flipStagger * 1000));
+        });
+    });
 }
 
 /**
