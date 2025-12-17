@@ -144,7 +144,7 @@ function generateCard(packType) {
     const holo = rollHolo();
     const pool = CHARACTER_POOLS[packType];
     const character = pool[Math.floor(Math.random() * pool.length)];
-    
+
     return {
         id: generateCardId(),
         characterId: character.id,
@@ -188,7 +188,7 @@ function createCardElement(cardData, faceDown = true) {
         card.classList.add('is-flipped');
     }
     card.dataset.cardId = cardData.id;
-    
+
     card.innerHTML = `
         <div class="card-inner">
             <!-- Card Back -->
@@ -218,7 +218,7 @@ function createCardElement(cardData, faceDown = true) {
             </div>
         </div>
     `;
-    
+
     // Add flip interaction
     card.addEventListener('click', () => {
         if (!card.classList.contains('is-flipped')) {
@@ -229,7 +229,7 @@ function createCardElement(cardData, faceDown = true) {
             }
         }
     });
-    
+
     return card;
 }
 
@@ -244,7 +244,7 @@ function triggerSpecialReveal(cardElement, cardData) {
         document.body.classList.add('screen-shake');
         setTimeout(() => document.body.classList.remove('screen-shake'), 500);
     }
-    
+
     // Could add confetti, sound effects, etc. here
     console.log('🎉 Special reveal:', cardData.rarity.name, cardData.frame.name, cardData.holo.name);
 }
@@ -256,7 +256,7 @@ function triggerSpecialReveal(cardElement, cardData) {
 function renderCardDisplay(cards) {
     const displayArea = document.getElementById('card-display-area');
     displayArea.innerHTML = '';
-    
+
     cards.forEach((cardData, index) => {
         const cardElement = createCardElement(cardData, true);
         cardElement.classList.add('dealing');
@@ -271,9 +271,9 @@ function renderCardDisplay(cards) {
 function renderGallery() {
     const galleryGrid = document.getElementById('gallery-grid');
     const countElement = document.getElementById('collection-count');
-    
+
     countElement.textContent = gameState.inventory.length;
-    
+
     if (gameState.inventory.length === 0) {
         galleryGrid.innerHTML = `
             <div class="gallery-empty" style="grid-column: 1 / -1;">
@@ -283,12 +283,12 @@ function renderGallery() {
         `;
         return;
     }
-    
+
     galleryGrid.innerHTML = '';
-    
+
     // Show newest first
     const sortedInventory = [...gameState.inventory].reverse();
-    
+
     sortedInventory.forEach(cardData => {
         const cardElement = createCardElement(cardData, false);
         galleryGrid.appendChild(cardElement);
@@ -300,11 +300,11 @@ function renderGallery() {
  */
 function updateCreditsDisplay() {
     document.getElementById('credits-amount').textContent = gameState.credits;
-    
+
     // Disable buttons if not enough credits
     const waifuBtn = document.getElementById('btn-waifu-pack');
     const husbandoBtn = document.getElementById('btn-husbando-pack');
-    
+
     waifuBtn.disabled = gameState.credits < CONFIG.PACK_COST;
     husbandoBtn.disabled = gameState.credits < CONFIG.PACK_COST;
 }
@@ -322,43 +322,43 @@ async function handlePackPurchase(packType) {
         console.log('Not enough credits!');
         return;
     }
-    
+
     // Deduct credits
     gameState.credits -= CONFIG.PACK_COST;
     updateCreditsDisplay();
-    
+
     // Hide shop, show pack animation
     const packShop = document.getElementById('pack-shop');
     const packContainer = document.getElementById('pack-animation-container');
     const packImage = document.getElementById('pack-image');
-    
+
     packShop.hidden = true;
     packContainer.hidden = false;
     packImage.textContent = packType === 'waifu' ? '🌸' : '⚔️';
-    
+
     // Generate cards (but don't show yet)
     const cards = openPack(packType);
-    
+
     // Log for debugging
-    console.log('Pack opened:', cards.map(c => 
+    console.log('Pack opened:', cards.map(c =>
         `${c.name} [${c.rarity.id.toUpperCase()}/${c.frame.id}/${c.holo.id}]`
     ));
-    
+
     // Pack shake animation on click
     packImage.onclick = async () => {
         packImage.classList.add('shaking');
-        
+
         await sleep(600);
-        
+
         // Hide pack, show cards
         packContainer.hidden = true;
         renderCardDisplay(cards);
-        
+
         // Add cards to inventory
         gameState.inventory.push(...cards);
         gameState.stats.packsOpened++;
         gameState.stats.totalCards += cards.length;
-        
+
         // Save and update gallery
         saveGame();
         renderGallery();
@@ -371,7 +371,7 @@ async function handlePackPurchase(packType) {
 function showPackShop() {
     const packShop = document.getElementById('pack-shop');
     const displayArea = document.getElementById('card-display-area');
-    
+
     displayArea.innerHTML = '';
     packShop.hidden = false;
 }
@@ -390,7 +390,7 @@ function saveGame() {
         stats: gameState.stats,
         savedAt: Date.now()
     };
-    
+
     try {
         localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(saveData));
         console.log('Game saved!', saveData.stats);
@@ -459,33 +459,33 @@ function testRngDistribution(iterations = 1000) {
         frame: {},
         holo: {}
     };
-    
+
     for (let i = 0; i < iterations * CONFIG.PACK_SIZE; i++) {
         const r = rollRarity();
         const f = rollFrame();
         const h = rollHolo();
-        
+
         results.rarity[r.id] = (results.rarity[r.id] || 0) + 1;
         results.frame[f.id] = (results.frame[f.id] || 0) + 1;
         results.holo[h.id] = (results.holo[h.id] || 0) + 1;
     }
-    
+
     const total = iterations * CONFIG.PACK_SIZE;
     console.log('=== RNG Distribution Test ===');
     console.log(`Sample size: ${total} cards (${iterations} packs)`);
     console.log('\nRarity:');
     for (const [key, count] of Object.entries(results.rarity)) {
-        console.log(`  ${key}: ${count} (${(count/total*100).toFixed(2)}%)`);
+        console.log(`  ${key}: ${count} (${(count / total * 100).toFixed(2)}%)`);
     }
     console.log('\nFrame:');
     for (const [key, count] of Object.entries(results.frame)) {
-        console.log(`  ${key}: ${count} (${(count/total*100).toFixed(2)}%)`);
+        console.log(`  ${key}: ${count} (${(count / total * 100).toFixed(2)}%)`);
     }
     console.log('\nHolo:');
     for (const [key, count] of Object.entries(results.holo)) {
-        console.log(`  ${key}: ${count} (${(count/total*100).toFixed(2)}%)`);
+        console.log(`  ${key}: ${count} (${(count / total * 100).toFixed(2)}%)`);
     }
-    
+
     // Check for God Roll
     let godRolls = 0;
     for (let i = 0; i < iterations * CONFIG.PACK_SIZE; i++) {
@@ -507,22 +507,22 @@ function testRngDistribution(iterations = 1000) {
 function init() {
     // Load saved data
     loadGame();
-    
+
     // Update UI
     updateCreditsDisplay();
     renderGallery();
-    
+
     // Bind event listeners
     document.getElementById('btn-waifu-pack').addEventListener('click', () => {
         handlePackPurchase('waifu');
     });
-    
+
     document.getElementById('btn-husbando-pack').addEventListener('click', () => {
         handlePackPurchase('husbando');
     });
-    
+
     document.getElementById('btn-reset').addEventListener('click', resetSave);
-    
+
     // Add click handler for card display area to go back to shop
     document.getElementById('card-display-area').addEventListener('click', (e) => {
         // Only show shop if clicking empty area (not a card)
@@ -530,10 +530,14 @@ function init() {
             showPackShop();
         }
     });
-    
+
     console.log('✦ Project Prism initialized! ✦');
     console.log('Debug: Run testRngDistribution(1000) to test RNG');
 }
 
 // Start the game when DOM is ready
 document.addEventListener('DOMContentLoaded', init);
+
+// Expose debug utilities to global scope for console access
+window.testRngDistribution = testRngDistribution;
+window.gameState = gameState;

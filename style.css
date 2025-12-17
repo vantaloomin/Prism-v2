@@ -9,22 +9,22 @@
     --bg-secondary: #12121a;
     --bg-tertiary: #1a1a25;
     --bg-card: #15151f;
-    
+
     --accent-primary: #8b5cf6;
     --accent-secondary: #a78bfa;
     --accent-glow: rgba(139, 92, 246, 0.4);
-    
+
     --text-primary: #f0f0f5;
     --text-secondary: #a0a0b0;
     --text-muted: #606070;
-    
+
     /* Rarity Colors */
     --rarity-c: #9ca3af;
     --rarity-r: #3b82f6;
     --rarity-sr: #a855f7;
     --rarity-ssr: #f59e0b;
     --rarity-ur: #ef4444;
-    
+
     /* Frame Colors */
     --frame-white: #f5f5f5;
     --frame-blue: #60a5fa;
@@ -32,12 +32,12 @@
     --frame-gold: #fbbf24;
     --frame-rainbow: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff);
     --frame-black: #1a1a1a;
-    
+
     /* Sizing */
     --card-width: 180px;
     --card-height: 252px;
     --card-radius: 12px;
-    
+
     /* Transitions */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
@@ -45,7 +45,9 @@
 }
 
 /* Reset & Base */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -145,6 +147,10 @@ body {
 /* Pack Shop */
 .pack-shop {
     text-align: center;
+}
+
+.pack-shop[hidden] {
+    display: none !important;
 }
 
 .shop-title {
@@ -374,134 +380,201 @@ body {
    FRAME STYLES
    ============================================ */
 
-.frame-white .card-layer-frame { border-color: var(--frame-white); }
-.frame-blue .card-layer-frame { border-color: var(--frame-blue); box-shadow: inset 0 0 20px rgba(96, 165, 250, 0.3); }
-.frame-red .card-layer-frame { border-color: var(--frame-red); box-shadow: inset 0 0 20px rgba(248, 113, 113, 0.3); }
-.frame-gold .card-layer-frame { border-color: var(--frame-gold); box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.3); }
-.frame-black .card-layer-frame { border-color: var(--frame-black); box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8); }
+.frame-white .card-layer-frame {
+    border-color: var(--frame-white);
+}
+
+.frame-blue .card-layer-frame {
+    border-color: var(--frame-blue);
+    box-shadow: inset 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+.frame-red .card-layer-frame {
+    border-color: var(--frame-red);
+    box-shadow: inset 0 0 20px rgba(248, 113, 113, 0.3);
+}
+
+.frame-gold .card-layer-frame {
+    border-color: var(--frame-gold);
+    box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.frame-black .card-layer-frame {
+    border-color: var(--frame-black);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
 
 .frame-rainbow .card-layer-frame {
     border: 4px solid transparent;
     background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
-                linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff) border-box;
+        linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff) border-box;
     animation: rainbow-shift 3s linear infinite;
 }
 
 @keyframes rainbow-shift {
-    0%, 100% { filter: hue-rotate(0deg); }
-    50% { filter: hue-rotate(180deg); }
+
+    0%,
+    100% {
+        filter: hue-rotate(0deg);
+    }
+
+    50% {
+        filter: hue-rotate(180deg);
+    }
 }
 
 /* ============================================
    RARITY STYLES
    ============================================ */
 
-.rarity-c .card-rarity { background: var(--rarity-c); color: #000; }
-.rarity-r .card-rarity { background: var(--rarity-r); }
-.rarity-sr .card-rarity { background: var(--rarity-sr); }
-.rarity-ssr .card-rarity { background: var(--rarity-ssr); color: #000; }
-.rarity-ur .card-rarity { 
-    background: linear-gradient(135deg, var(--rarity-ur), #ff6b6b); 
+.rarity-c .card-rarity {
+    background: var(--rarity-c);
+    color: #000;
+}
+
+.rarity-r .card-rarity {
+    background: var(--rarity-r);
+}
+
+.rarity-sr .card-rarity {
+    background: var(--rarity-sr);
+}
+
+.rarity-ssr .card-rarity {
+    background: var(--rarity-ssr);
+    color: #000;
+}
+
+.rarity-ur .card-rarity {
+    background: linear-gradient(135deg, var(--rarity-ur), #ff6b6b);
     animation: pulse-glow 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 10px var(--rarity-ur); }
-    50% { box-shadow: 0 0 25px var(--rarity-ur), 0 0 40px var(--rarity-ur); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px var(--rarity-ur);
+    }
+
+    50% {
+        box-shadow: 0 0 25px var(--rarity-ur), 0 0 40px var(--rarity-ur);
+    }
 }
 
 /* ============================================
    HOLO EFFECTS
    ============================================ */
 
-.holo-none .card-layer-holo { display: none; }
+.holo-none .card-layer-holo {
+    display: none;
+}
 
 .holo-shiny .card-layer-holo {
-    background: linear-gradient(
-        135deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.1) 45%,
-        rgba(255, 255, 255, 0.4) 50%,
-        rgba(255, 255, 255, 0.1) 55%,
-        transparent 100%
-    );
+    background: linear-gradient(135deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 45%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.1) 55%,
+            transparent 100%);
     animation: shine-sweep 2s ease-in-out infinite;
 }
 
 @keyframes shine-sweep {
-    0% { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(200%) rotate(45deg); }
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(200%) rotate(45deg);
+    }
 }
 
 .holo-rainbow .card-layer-holo {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 0, 0, 0.2),
-        rgba(255, 127, 0, 0.2),
-        rgba(255, 255, 0, 0.2),
-        rgba(0, 255, 0, 0.2),
-        rgba(0, 0, 255, 0.2),
-        rgba(139, 0, 255, 0.2)
-    );
+    background: linear-gradient(135deg,
+            rgba(255, 0, 0, 0.2),
+            rgba(255, 127, 0, 0.2),
+            rgba(255, 255, 0, 0.2),
+            rgba(0, 255, 0, 0.2),
+            rgba(0, 0, 255, 0.2),
+            rgba(139, 0, 255, 0.2));
     mix-blend-mode: overlay;
     animation: holo-shift 4s linear infinite;
 }
 
 @keyframes holo-shift {
-    0%, 100% { filter: hue-rotate(0deg); opacity: 0.6; }
-    50% { filter: hue-rotate(360deg); opacity: 0.8; }
+
+    0%,
+    100% {
+        filter: hue-rotate(0deg);
+        opacity: 0.6;
+    }
+
+    50% {
+        filter: hue-rotate(360deg);
+        opacity: 0.8;
+    }
 }
 
 .holo-pearl .card-layer-holo {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 182, 193, 0.3),
-        rgba(176, 224, 230, 0.3),
-        rgba(255, 182, 193, 0.3)
-    );
+    background: linear-gradient(135deg,
+            rgba(255, 182, 193, 0.3),
+            rgba(176, 224, 230, 0.3),
+            rgba(255, 182, 193, 0.3));
     mix-blend-mode: screen;
     animation: pearl-shimmer 3s ease-in-out infinite;
 }
 
 @keyframes pearl-shimmer {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.7; }
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .holo-fractal .card-layer-holo {
-    background: 
-        repeating-conic-gradient(
-            from 0deg,
+    background:
+        repeating-conic-gradient(from 0deg,
             rgba(139, 92, 246, 0.1) 0deg 30deg,
-            transparent 30deg 60deg
-        );
+            transparent 30deg 60deg);
     mix-blend-mode: color-dodge;
     animation: fractal-rotate 10s linear infinite;
 }
 
 @keyframes fractal-rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .holo-void .card-layer-holo {
-    background: radial-gradient(
-        ellipse at center,
-        transparent 0%,
-        rgba(0, 0, 0, 0.3) 40%,
-        rgba(20, 0, 40, 0.6) 70%,
-        rgba(40, 0, 80, 0.8) 100%
-    );
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 40%,
+            rgba(20, 0, 40, 0.6) 70%,
+            rgba(40, 0, 80, 0.8) 100%);
     mix-blend-mode: multiply;
     animation: void-pulse 2s ease-in-out infinite;
 }
 
 @keyframes void-pulse {
-    0%, 100% { 
+
+    0%,
+    100% {
         opacity: 0.7;
         transform: scale(1);
     }
-    50% { 
+
+    50% {
         opacity: 1;
         transform: scale(1.05);
     }
@@ -519,6 +592,10 @@ body {
     justify-content: center;
     background: rgba(10, 10, 15, 0.95);
     z-index: 100;
+}
+
+.pack-animation-container[hidden] {
+    display: none !important;
 }
 
 .pack-wrapper {
@@ -548,11 +625,27 @@ body {
 }
 
 @keyframes pack-shake {
-    0%, 100% { transform: translateX(0) rotate(0deg); }
-    20% { transform: translateX(-10px) rotate(-5deg); }
-    40% { transform: translateX(10px) rotate(5deg); }
-    60% { transform: translateX(-10px) rotate(-3deg); }
-    80% { transform: translateX(10px) rotate(3deg); }
+
+    0%,
+    100% {
+        transform: translateX(0) rotate(0deg);
+    }
+
+    20% {
+        transform: translateX(-10px) rotate(-5deg);
+    }
+
+    40% {
+        transform: translateX(10px) rotate(5deg);
+    }
+
+    60% {
+        transform: translateX(-10px) rotate(-3deg);
+    }
+
+    80% {
+        transform: translateX(10px) rotate(3deg);
+    }
 }
 
 /* Card Deal Animation */
@@ -566,6 +659,7 @@ body {
         opacity: 0;
         transform: translateY(-100px) rotateZ(20deg) scale(0.5);
     }
+
     100% {
         opacity: 1;
         transform: translateY(0) rotateZ(0deg) scale(1);
@@ -658,21 +752,21 @@ body {
         gap: 15px;
         text-align: center;
     }
-    
+
     .pack-buttons {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .pack-button {
         width: 100%;
         max-width: 280px;
     }
-    
+
     .card-display-area {
         gap: 10px;
     }
-    
+
     .card {
         --card-width: 140px;
         --card-height: 196px;
