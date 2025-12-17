@@ -506,6 +506,16 @@ function renderCollection(page = null) {
         const cardElement = createCardElement(group.card, false);
         wrapper.appendChild(cardElement);
 
+        // Add shader on hover for collection cards
+        if (typeof initShaderCanvas === 'function') {
+            cardElement.addEventListener('mouseenter', () => {
+                initShaderCanvas(cardElement, group.card);
+            });
+            cardElement.addEventListener('mouseleave', () => {
+                destroyShaderCanvas();
+            });
+        }
+
         // Add count badge if duplicates
         if (group.count > 1) {
             const countBadge = document.createElement('span');
@@ -683,6 +693,16 @@ function renderCardDisplayAnimated(cards) {
                 // Trigger rare effects after flip completes
                 flipTl.eventCallback('onComplete', () => {
                     triggerRareCardEffects(element, data);
+
+                    // Add shader on hover for revealed cards
+                    if (typeof initShaderCanvas === 'function') {
+                        element.addEventListener('mouseenter', () => {
+                            initShaderCanvas(element, data);
+                        });
+                        element.addEventListener('mouseleave', () => {
+                            destroyShaderCanvas();
+                        });
+                    }
 
                     flipped++;
                     // Show continue button after all cards flipped
@@ -987,6 +1007,14 @@ async function openFocusMode(cardData) {
     cardWrapper.innerHTML = '';
     cardWrapper.appendChild(focusedCard);
 
+    // Initialize WebGL shader overlay for high-quality effects
+    if (typeof initShaderCanvas === 'function') {
+        // Small delay to ensure card is rendered
+        setTimeout(() => {
+            initShaderCanvas(focusedCard, cardData);
+        }, 100);
+    }
+
     // Load lore data
     const lore = await loadLoreData(cardData.characterId);
 
@@ -1137,6 +1165,11 @@ function handleFocusMouseLeave(e) {
  * Close the focus mode overlay
  */
 function closeFocusMode() {
+    // Clean up WebGL shader
+    if (typeof destroyShaderCanvas === 'function') {
+        destroyShaderCanvas();
+    }
+
     const overlay = document.getElementById('card-focus-overlay');
     overlay.hidden = true;
     document.body.style.overflow = '';

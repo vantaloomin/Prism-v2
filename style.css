@@ -249,11 +249,17 @@ body {
     transition: all var(--transition-normal);
     box-shadow: 0 4px 20px var(--accent-glow);
     margin-top: 20px;
+    position: relative;
+    z-index: 200;
 }
 
 .continue-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.continue-button[hidden] {
+    display: none !important;
 }
 
 /* ============================================
