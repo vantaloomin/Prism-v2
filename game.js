@@ -788,15 +788,9 @@ function loadGame() {
 function resetSave() {
     if (confirm('Are you sure you want to delete all your progress? This cannot be undone!')) {
         localStorage.removeItem(CONFIG.STORAGE_KEY);
-        gameState = {
-            credits: CONFIG.STARTING_CREDITS,
-            inventory: [],
-            stats: { packsOpened: 0, totalCards: 0 }
-        };
-        updateCreditsDisplay();
-        renderGallery();
-        showPackShop();
         console.log('Save data reset!');
+        // Force full page refresh to reinitialize all state
+        location.reload();
     }
 }
 
