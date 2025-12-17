@@ -164,103 +164,105 @@ function createCardFlipAnimation(cardElement, cardData) {
  * @param {HTMLElement} cardElement - The card element
  * @param {Object} cardData - Card data with rarity info
  */
+/**
+ * Trigger special effects based on card probability (Tiered System)
+ * @param {HTMLElement} cardElement - The card element
+ * @param {Object} cardData - Card data with combinedProb
+ */
 function triggerRareCardEffects(cardElement, cardData) {
-    const rarityLevel = getRarityEffectLevel(cardData.rarity.id);
+    // If combinedProb exists, use it. Otherwise fallback to old rarity (for backward compat)
+    const prob = cardData.combinedProb || 1.0;
+    const tier = getGlowTier(prob);
 
-    if (rarityLevel === 0) return; // Common cards, no special effects
+    if (tier.name === 'Common') return;
 
-    // Screen shake for SR+
-    if (rarityLevel >= 2) {
-        screenShake(rarityLevel);
+    // Apply effects based on calculated tier
+    const intensity = tier.intensity;
+
+    // Screen shake for Epic+
+    if (intensity >= 2) {
+        screenShake(intensity);
     }
 
-    // Glow pulse for the card
-    cardGlowPulse(cardElement, cardData.rarity.id);
+    // Glow pulse for the card (all Non-Commons)
+    cardGlowPulse(cardElement, tier);
 
-    // Screen flash for UR
-    if (rarityLevel >= 4) {
+    // Screen flash for God Roll
+    if (tier.name === 'God Roll') {
+        screenFlash();
+        createGodRollParticles(cardElement); // Extra particle effect
+    } else if (intensity >= 4) {
         screenFlash();
     }
 }
 
 /**
- * Get effect intensity level based on rarity
- * @param {string} rarityId - Rarity ID
- * @returns {number} 0-4 intensity level
+ * Get Glow Tier based on probability
+ * @param {number} prob - Combined probability
+ * @returns {Object} Tier config { name, color, intensity }
  */
-function getRarityEffectLevel(rarityId) {
-    const levels = { 'c': 0, 'r': 1, 'sr': 2, 'ssr': 3, 'ur': 4 };
-    return levels[rarityId] ?? 0;
-}
-
-/**
- * Shake the entire screen
- * @param {number} intensity - Shake intensity (1-4)
- */
-function screenShake(intensity = 1) {
-    const container = document.querySelector('.app-container');
-    const strength = intensity * 3;
-
-    gsap.to(container, {
-        x: strength,
-        duration: 0.05,
-        repeat: 5,
-        yoyo: true,
-        ease: "power2.inOut",
-        onComplete: () => gsap.set(container, { x: 0 })
-    });
-}
-
-/**
- * Flash the screen white briefly
- */
-function screenFlash() {
-    const flash = document.createElement('div');
-    flash.style.cssText = `
-        position: fixed;
-        inset: 0;
-        background: white;
-        pointer-events: none;
-        z-index: 9999;
-    `;
-    document.body.appendChild(flash);
-
-    gsap.fromTo(flash,
-        { opacity: 0.8 },
-        {
-            opacity: 0,
-            duration: 0.4,
-            ease: "power2.out",
-            onComplete: () => flash.remove()
-        }
-    );
+function getGlowTier(prob) {
+    if (prob < 0.0001) return { name: 'God Roll', color: 'rainbow', intensity: 5 };
+    if (prob < 0.0004) return { name: 'Mythic', color: 'rgba(250, 204, 21, 1.0)', intensity: 4 }; // Gold
+    if (prob < 0.002) return { name: 'Legendary', color: 'rgba(217, 70, 239, 0.9)', intensity: 3 }; // Pink/Purple
+    if (prob < 0.01) return { name: 'Epic', color: 'rgba(59, 130, 246, 0.9)', intensity: 2 }; // Blue
+    if (prob < 0.02) return { name: 'Rare', color: 'rgba(34, 197, 94, 0.8)', intensity: 1 }; // Green
+    if (prob < 0.1) return { name: 'Uncommon', color: 'rgba(255, 255, 255, 0.6)', intensity: 1 }; // Subtle White
+    return { name: 'Common', color: null, intensity: 0 };
 }
 
 /**
  * Pulse glow effect on a card
  * @param {HTMLElement} cardElement - Card element
- * @param {string} rarityId - Rarity for color
+ * @param {Object} tier - Tier object with color info
  */
-function cardGlowPulse(cardElement, rarityId) {
-    const colors = {
-        'r': 'rgba(34, 197, 94, 0.8)',
-        'sr': 'rgba(59, 130, 246, 0.8)',
-        'ssr': 'rgba(168, 85, 247, 0.8)',
-        'ur': 'rgba(250, 204, 21, 0.9)'
-    };
+function cardGlowPulse(cardElement, tier) {
+    if (!tier.color) return;
 
-    const color = colors[rarityId] || 'rgba(139, 92, 246, 0.6)';
+    // God Roll Rainbow Effect
+    if (tier.name === 'God Roll') {
+        gsap.to(cardElement, {
+            boxShadow: "0 0 60px 20px rgba(255, 0, 0, 0.8)",
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            keyframes: {
+                "0%": { boxShadow: "0 0 60px 20px rgba(255, 0, 0, 0.8)" },
+                "20%": { boxShadow: "0 0 60px 20px rgba(255, 165, 0, 0.8)" },
+                "40%": { boxShadow: "0 0 60px 20px rgba(255, 255, 0, 0.8)" },
+                "60%": { boxShadow: "0 0 60px 20px rgba(0, 255, 0, 0.8)" },
+                "80%": { boxShadow: "0 0 60px 20px rgba(0, 0, 255, 0.8)" },
+                "100%": { boxShadow: "0 0 60px 20px rgba(238, 130, 238, 0.8)" }
+            }
+        });
+        return;
+    }
 
+    // Standard single-color pulse
     gsap.fromTo(cardElement,
-        { boxShadow: `0 0 0px 0px ${color}` },
+        { boxShadow: `0 0 0px 0px ${tier.color}` },
         {
-            boxShadow: `0 0 40px 15px ${color}`,
+            boxShadow: `0 0 40px 15px ${tier.color}`,
             duration: AnimConfig.rare.glowPulseDuration,
             repeat: 2,
             yoyo: true,
             ease: "power2.inOut"
         }
     );
+}
+
+/**
+ * Create particle explosion for God Rolls
+ * @param {HTMLElement} element - Target element
+ */
+function createGodRollParticles(element) {
+    // Simple placeholder for particle system
+    // Could be expanded with more GSAP physics later
+    gsap.to(element, {
+        rotation: 360,
+        duration: 1,
+        ease: "back.out(1.7)"
+    });
 }
 
 // ============================================

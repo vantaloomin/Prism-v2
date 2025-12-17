@@ -180,6 +180,10 @@ function generateCard(packType) {
     // Get the full rarity data object (not just the ID)
     const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
 
+    // Calculate combined probability (Rarity % * Frame % * Holo %)
+    // This represents the true statistical rarity of this specific card combo
+    const combinedProb = rarity.prob * frame.prob * holo.prob;
+
     return {
         id: generateCardId(),
         characterId: character.id,
@@ -188,6 +192,7 @@ function generateCard(packType) {
         rarity: rarity,
         frame: frame,
         holo: holo,
+        combinedProb: combinedProb,
         backgroundPath: `assets/backgrounds/${character.bg}.webp`,
         characterPath: `assets/${packType}/${character.id}.webp`,
         obtainedAt: Date.now()
