@@ -373,14 +373,23 @@ body {
     pointer-events: none;
 }
 
-/* Z-4: Holo Overlay Layer */
+/* Z-4: Holo Overlay Layer - oversized to hide edges */
 .card-layer-holo {
     position: absolute;
-    inset: 0;
+    /* Make much larger than card to hide pattern edges */
+    inset: -50%;
+    width: 200%;
+    height: 200%;
     z-index: 4;
     pointer-events: none;
     opacity: 0;
     transition: opacity var(--transition-normal);
+    border-radius: var(--card-radius);
+}
+
+/* Clip holo effects to card bounds */
+.card-front {
+    overflow: hidden;
 }
 
 .card:hover .card-layer-holo {
@@ -675,9 +684,14 @@ body {
     transition: none;
 }
 
-/* Interactive holo - reacts to mouse position */
+/* Interactive holo - reacts to mouse position, visible immediately */
 .focus-card-wrapper .card .card-layer-holo {
     opacity: 1 !important;
+    transition: none !important;
+    /* Keep oversized for edge hiding */
+    inset: -50%;
+    width: 200%;
+    height: 200%;
     /* Use CSS custom properties for light position */
     --light-x: 50%;
     --light-y: 50%;

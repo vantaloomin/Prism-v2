@@ -164,17 +164,17 @@
    ============================================ */
 
 /* Shiny - Light follows mouse position */
-.focus-card-wrapper .holo-shiny .card-layer-holo {
-    animation: none;
+.focus-card-wrapper .card.holo-shiny .card-layer-holo {
+    animation: none !important;
     background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%),
             rgba(255, 255, 255, 0.5) 0%,
             rgba(255, 255, 255, 0.2) 20%,
-            transparent 50%);
+            transparent 50%) !important;
 }
 
 /* Rainbow - Gradient follows light position */
-.focus-card-wrapper .holo-rainbow .card-layer-holo {
-    animation: none;
+.focus-card-wrapper .card.holo-rainbow .card-layer-holo {
+    animation: none !important;
     background: conic-gradient(from calc(atan2(var(--light-y, 50%) - 50%, var(--light-x, 50%) - 50%)),
             rgba(255, 0, 0, 0.3),
             rgba(255, 127, 0, 0.3),
@@ -182,43 +182,49 @@
             rgba(0, 255, 0, 0.3),
             rgba(0, 0, 255, 0.3),
             rgba(139, 0, 255, 0.3),
-            rgba(255, 0, 0, 0.3));
+            rgba(255, 0, 0, 0.3)) !important;
     filter: hue-rotate(calc((var(--light-x, 50) - 50) * 3.6deg));
 }
 
 /* Pearl - Shimmer follows light */
-.focus-card-wrapper .holo-pearl .card-layer-holo {
-    animation: none;
+.focus-card-wrapper .card.holo-pearl .card-layer-holo {
+    animation: none !important;
     background: radial-gradient(ellipse at var(--light-x, 50%) var(--light-y, 50%),
             rgba(255, 200, 220, 0.5) 0%,
             rgba(200, 230, 255, 0.3) 30%,
             rgba(255, 180, 200, 0.2) 60%,
-            transparent 80%);
+            transparent 80%) !important;
 }
 
 /* Fractal - Pattern rotates toward light */
-.focus-card-wrapper .holo-fractal .card-layer-holo {
-    animation: none;
-    background: repeating-conic-gradient(from calc((var(--light-x, 50) - 50) * 1deg),
-            rgba(139, 92, 246, 0.2) 0deg 15deg,
+.focus-card-wrapper .card.holo-fractal .card-layer-holo {
+    animation: none !important;
+    mix-blend-mode: screen;
+    opacity: 0.9 !important;
+    background:
+        repeating-conic-gradient(from calc((var(--light-x, 50) - 50) * 2deg),
+            rgba(139, 92, 246, 0.5) 0deg 15deg,
             transparent 15deg 30deg,
-            rgba(236, 72, 153, 0.2) 30deg 45deg,
-            transparent 45deg 60deg);
+            rgba(236, 72, 153, 0.5) 30deg 45deg,
+            transparent 45deg 60deg),
+        radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%),
+            rgba(139, 92, 246, 0.6) 0%,
+            transparent 50%) !important;
 }
 
 /* Void - Dark core follows mouse */
-.focus-card-wrapper .holo-void .card-layer-holo {
-    animation: none;
+.focus-card-wrapper .card.holo-void .card-layer-holo {
+    animation: none !important;
     background: radial-gradient(ellipse at var(--light-x, 50%) var(--light-y, 50%),
             rgba(20, 0, 40, 0.9) 0%,
             rgba(40, 0, 80, 0.6) 30%,
             rgba(0, 0, 0, 0.3) 60%,
-            transparent 80%);
+            transparent 80%) !important;
 }
 
-.focus-card-wrapper .holo-void .card-layer-holo::before {
-    animation: none;
+.focus-card-wrapper .card.holo-void .card-layer-holo::before {
+    animation: none !important;
     background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%),
             rgba(139, 92, 246, 0.5) 0%,
-            transparent 40%);
+            transparent 40%) !important;
 }

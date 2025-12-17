@@ -42,51 +42,52 @@ const HOLO_TABLE = [
 ];
 
 // Character pools - 15 characters per pack
-// bg = background ID (backgrounds are shared across characters)
+// Each character has a fixed rarity (not random!)
+// bg = background ID, rarity = fixed rarity tier
 const CHARACTER_POOLS = {
     waifu: [
         // Common (6)
-        { id: 'w01', name: 'The Village Herbalist', bg: 'bg_garden' },
-        { id: 'w02', name: 'The Novice Cleric', bg: 'bg_temple' },
-        { id: 'w03', name: 'The Steel Vanguard', bg: 'bg_castle' },
-        { id: 'w04', name: 'The Elven Scribe', bg: 'bg_forest' },
-        { id: 'w05', name: 'The Dwarven Smith', bg: 'bg_forge' },
-        { id: 'w06', name: 'The Nekomimi Baker', bg: 'bg_village' },
+        { id: 'w01', name: 'The Village Herbalist', bg: 'bg_garden', rarity: 'c' },
+        { id: 'w02', name: 'The Novice Cleric', bg: 'bg_temple', rarity: 'c' },
+        { id: 'w03', name: 'The Steel Vanguard', bg: 'bg_castle', rarity: 'c' },
+        { id: 'w04', name: 'The Elven Scribe', bg: 'bg_forest', rarity: 'c' },
+        { id: 'w05', name: 'The Dwarven Smith', bg: 'bg_forge', rarity: 'c' },
+        { id: 'w06', name: 'The Nekomimi Baker', bg: 'bg_village', rarity: 'c' },
         // Rare (4)
-        { id: 'w07', name: 'The Royal Duelist', bg: 'bg_castle' },
-        { id: 'w08', name: 'The Forest Ranger', bg: 'bg_forest' },
-        { id: 'w09', name: 'The Kitsune Diviner', bg: 'bg_shrine' },
-        { id: 'w10', name: 'The Tavern Brawler', bg: 'bg_tavern' },
+        { id: 'w07', name: 'The Royal Duelist', bg: 'bg_castle', rarity: 'r' },
+        { id: 'w08', name: 'The Forest Ranger', bg: 'bg_forest', rarity: 'r' },
+        { id: 'w09', name: 'The Kitsune Diviner', bg: 'bg_shrine', rarity: 'r' },
+        { id: 'w10', name: 'The Tavern Brawler', bg: 'bg_tavern', rarity: 'r' },
         // Super Rare (3)
-        { id: 'w11', name: 'The Shadow Assassin', bg: 'bg_night' },
-        { id: 'w12', name: 'The Dancer of the Dunes', bg: 'bg_desert' },
-        { id: 'w13', name: 'The Barbarian Queen', bg: 'bg_mountain' },
+        { id: 'w11', name: 'The Shadow Assassin', bg: 'bg_night', rarity: 'sr' },
+        { id: 'w12', name: 'The Dancer of the Dunes', bg: 'bg_desert', rarity: 'sr' },
+        { id: 'w13', name: 'The Barbarian Queen', bg: 'bg_mountain', rarity: 'sr' },
         // SSR (1)
-        { id: 'w14', name: 'The Dragon Sorceress', bg: 'bg_volcano' },
+        { id: 'w14', name: 'The Dragon Sorceress', bg: 'bg_volcano', rarity: 'ssr' },
         // UR (1)
-        { id: 'w15', name: 'The Goddess of Love', bg: 'bg_celestial' }
+        { id: 'w15', name: 'The Goddess of Love', bg: 'bg_celestial', rarity: 'ur' }
     ],
     husbando: [
         // Common (6)
-        { id: 'h01', name: 'The City Watchman', bg: 'bg_city' },
-        { id: 'h02', name: 'The Traveling Merchant', bg: 'bg_road' },
-        { id: 'h03', name: 'The Court Mage', bg: 'bg_castle' },
-        { id: 'h04', name: 'The Halfling Bard', bg: 'bg_tavern' },
-        { id: 'h05', name: 'The Stable Master', bg: 'bg_village' },
-        { id: 'h06', name: 'The Alchemist', bg: 'bg_laboratory' },
+        { id: 'h01', name: 'The City Watchman', bg: 'bg_city', rarity: 'c' },
+        { id: 'h02', name: 'The Traveling Merchant', bg: 'bg_road', rarity: 'c' },
+        { id: 'h03', name: 'The Court Mage', bg: 'bg_castle', rarity: 'c' },
+        { id: 'h04', name: 'The Halfling Bard', bg: 'bg_tavern', rarity: 'c' },
+        { id: 'h05', name: 'The Stable Master', bg: 'bg_village', rarity: 'c' },
+        { id: 'h06', name: 'The Alchemist', bg: 'bg_laboratory', rarity: 'c' },
         // Rare (4)
-        { id: 'h07', name: 'The Elven Ranger', bg: 'bg_forest' },
-        { id: 'h08', name: 'The Pirate First Mate', bg: 'bg_ocean' },
-        { id: 'h09', name: 'The Martial Monk', bg: 'bg_dojo' },
-        { id: 'h10', name: 'The Wolf-Kin Warrior', bg: 'bg_snow' },
+        { id: 'h07', name: 'The Elven Ranger', bg: 'bg_forest', rarity: 'r' },
+        { id: 'h08', name: 'The Pirate First Mate', bg: 'bg_ocean', rarity: 'r' },
+        { id: 'h09', name: 'The Martial Monk', bg: 'bg_dojo', rarity: 'r' },
+        { id: 'h10', name: 'The Wolf-Kin Warrior', bg: 'bg_snow', rarity: 'r' },
         // Super Rare (3)
-        { id: 'h11', name: 'The Gladiator Champion', bg: 'bg_arena' },
-        { id: 'h12', name: 'The Orc Warlord', bg: 'bg_battlefield' },
-        { id: 'h13', name: 'The Dark Elf Warlock', bg: 'bg_ruins' },
+        { id: 'h11', name: 'The Gladiator Champion', bg: 'bg_arena', rarity: 'sr' },
+        { id: 'h12', name: 'The Orc Warlord', bg: 'bg_battlefield', rarity: 'sr' },
+        { id: 'h13', name: 'The Dark Elf Warlock', bg: 'bg_ruins', rarity: 'sr' },
         // SSR (1)
-        { id: 'h14', name: 'The Demon Lord', bg: 'bg_inferno' },
+        { id: 'h14', name: 'The Demon Lord', bg: 'bg_inferno', rarity: 'ssr' },
         // UR (1)
-        { id: 'h15', name: 'The Sun God Avatar', bg: 'bg_celestial' }
+        { id: 'h15', name: 'The Sun God Avatar', bg: 'bg_celestial', rarity: 'ur' }
     ]
 };
 
@@ -156,16 +157,28 @@ function generateCardId() {
 }
 
 /**
- * Generate a single card with all three axes rolled
+ * Generate a single card with proper rarity-based character selection
+ * First rolls rarity, then picks a character of that rarity tier
  * @param {string} packType - 'waifu' or 'husbando'
  * @returns {Object} Complete card data
  */
 function generateCard(packType) {
-    const rarity = rollRarity();
+    // Roll for rarity tier first
+    const rarityRoll = rollRarity();
     const frame = rollFrame();
     const holo = rollHolo();
+
+    // Get all characters of this rarity from the pool
     const pool = CHARACTER_POOLS[packType];
-    const character = pool[Math.floor(Math.random() * pool.length)];
+    const eligibleCharacters = pool.filter(c => c.rarity === rarityRoll.id);
+
+    // Pick a random character from eligible pool
+    // If no characters of that rarity exist (shouldn't happen), fallback to full pool
+    const characterPool = eligibleCharacters.length > 0 ? eligibleCharacters : pool;
+    const character = characterPool[Math.floor(Math.random() * characterPool.length)];
+
+    // Get the full rarity data object (not just the ID)
+    const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
 
     return {
         id: generateCardId(),
