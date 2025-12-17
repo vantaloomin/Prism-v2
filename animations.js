@@ -265,6 +265,51 @@ function createGodRollParticles(element) {
     });
 }
 
+/**
+ * Shake the entire screen
+ * @param {number} intensity - Shake intensity (1-5)
+ */
+function screenShake(intensity = 1) {
+    const container = document.querySelector('.app-container');
+    if (!container) return;
+
+    const strength = intensity * 3;
+
+    gsap.to(container, {
+        x: strength,
+        duration: 0.05,
+        repeat: 5,
+        yoyo: true,
+        ease: "power2.inOut",
+        onComplete: () => gsap.set(container, { x: 0 })
+    });
+}
+
+/**
+ * Flash the screen white briefly
+ */
+function screenFlash() {
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: white;
+        pointer-events: none;
+        z-index: 9999;
+    `;
+    document.body.appendChild(flash);
+
+    gsap.fromTo(flash,
+        { opacity: 0.8 },
+        {
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => flash.remove()
+        }
+    );
+}
+
 // ============================================
 // HOLO EFFECT ANIMATIONS
 // ============================================
