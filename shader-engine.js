@@ -176,38 +176,99 @@ vec4 holoRainbow(vec2 uv) {
 }
 
 vec4 holoPearl(vec2 uv) {
-    // Enhanced iridescent pearl with flowing colors (slowed down, no mouse reactivity)
-    
-    // Multiple interference layers at different scales (slowed down)
-    float thickness1 = snoise(uv * 4.0 + u_time * 0.06) * 0.5 + 0.5;
-    float thickness2 = snoise(uv * 8.0 - u_time * 0.04) * 0.3;
-    float thickness = thickness1 + thickness2;
-    
-    // Add distance influence from center (no mouse reactivity)
+    // Premium pearlescent with soap bubble, oil slick, and luster layers
     vec2 center = vec2(0.5, 0.5);
-    thickness += distance(uv, center) * 0.3;
+    float dist = distance(uv, center);
     
-    // Multiple interference frequencies
-    float interference1 = sin(thickness * 15.0) * 0.5 + 0.5;
-    float interference2 = sin(thickness * 25.0 + 1.5) * 0.3 + 0.3;
+    // ============================================
+    // LAYER 1: Soap Bubble Thin-Film Interference
+    // Multiple frequency bands create rainbow shifts
+    // ============================================
+    float filmThickness = snoise(uv * 3.0 + u_time * 0.04) * 0.5 + 0.5;
+    filmThickness += snoise(uv * 6.0 - u_time * 0.03) * 0.25;
+    filmThickness += dist * 0.4; // Thickness varies with position
     
-    // Create rich pearl colors
-    vec3 pink = vec3(1.0, 0.7, 0.85);
-    vec3 cyan = vec3(0.7, 0.95, 1.0);
-    vec3 gold = vec3(1.0, 0.9, 0.7);
+    // Multiple interference frequencies for rich color banding
+    float band1 = sin(filmThickness * 18.0) * 0.5 + 0.5;
+    float band2 = sin(filmThickness * 28.0 + 2.0) * 0.5 + 0.5;
+    float band3 = sin(filmThickness * 42.0 + 4.0) * 0.5 + 0.5;
     
-    vec3 pearl = mix(pink, cyan, interference1);
-    pearl = mix(pearl, gold, interference2 * 0.5);
+    // Soap bubble rainbow colors
+    vec3 bubbleColor = vec3(0.0);
+    bubbleColor += vec3(1.0, 0.4, 0.7) * band1;  // Magenta-pink
+    bubbleColor += vec3(0.4, 0.9, 1.0) * band2;  // Cyan
+    bubbleColor += vec3(0.6, 1.0, 0.5) * band3 * 0.6;  // Lime accent
+    bubbleColor = mix(bubbleColor, vec3(1.0, 0.95, 0.98), 0.3); // Soften with white
     
-    // Add subtle moving highlight (slowed down)
-    float highlight = sin(uv.x * 5.0 - uv.y * 3.0 + u_time * 0.6) * 0.5 + 0.5;
-    highlight = pow(highlight, 3.0) * 0.3;
-    pearl += vec3(highlight);
+    // ============================================
+    // LAYER 2: Oil Slick Flowing Waves
+    // Animated color flow across the surface
+    // ============================================
+    vec2 flowUV = uv;
+    flowUV.x += sin(uv.y * 4.0 + u_time * 0.08) * 0.05;
+    flowUV.y += cos(uv.x * 3.0 + u_time * 0.06) * 0.04;
     
-    // Soft glow at edges
-    float edgeGlow = pow(1.0 - abs(uv.x - 0.5) * 2.0, 2.0) * pow(1.0 - abs(uv.y - 0.5) * 2.0, 2.0);
+    float oilFlow1 = snoise(flowUV * 5.0 + vec2(u_time * 0.05, 0.0));
+    float oilFlow2 = snoise(flowUV * 7.0 - vec2(0.0, u_time * 0.04));
+    float oilPattern = (oilFlow1 + oilFlow2) * 0.5 + 0.5;
     
-    float intensity = 0.35 + highlight * 0.1 + edgeGlow * 0.1;
+    // Oil slick spectral colors
+    float oilHue = fract(oilPattern * 0.8 + u_time * 0.02);
+    vec3 oilColor = hsl2rgb(vec3(oilHue, 0.7, 0.55));
+    
+    // Add metallic sheen to oil
+    float sheen = pow(oilPattern, 2.0) * 0.4;
+    oilColor += vec3(sheen);
+    
+    // ============================================
+    // LAYER 3: Depth Luster Layers
+    // Stacked semi-transparent layers for richness
+    // ============================================
+    // Deep base layer
+    vec3 deepLayer = vec3(0.9, 0.7, 0.85); // Warm pearl base
+    float deepGlow = pow(1.0 - dist * 1.2, 2.0) * 0.5;
+    deepLayer *= (0.8 + deepGlow);
+    
+    // Mid luster layer with gentle movement
+    float midLuster = sin(uv.x * 8.0 + uv.y * 6.0 - u_time * 0.1) * 0.5 + 0.5;
+    midLuster = pow(midLuster, 2.0);
+    vec3 midLayer = mix(vec3(1.0, 0.85, 0.9), vec3(0.85, 0.95, 1.0), midLuster);
+    
+    // Top shimmer layer - bright highlights
+    float topShimmer = sin(uv.x * 12.0 - uv.y * 8.0 + u_time * 0.15) * 0.5 + 0.5;
+    topShimmer = pow(topShimmer, 4.0) * 0.6;
+    vec3 topLayer = vec3(1.0, 0.98, 0.95) * topShimmer;
+    
+    // ============================================
+    // COMBINE ALL LAYERS
+    // ============================================
+    // Start with deep luster base
+    vec3 pearl = deepLayer * 0.4;
+    
+    // Add soap bubble interference
+    pearl += bubbleColor * 0.35;
+    
+    // Blend in oil slick flow
+    pearl = mix(pearl, oilColor, 0.25);
+    
+    // Add mid luster
+    pearl += midLayer * 0.2;
+    
+    // Top shimmer highlights
+    pearl += topLayer;
+    
+    // Edge enhancement - brighter at edges for "nacre" look
+    float edgeFactor = 1.0 - pow(1.0 - dist * 1.3, 3.0);
+    edgeFactor = clamp(edgeFactor, 0.0, 1.0);
+    pearl += vec3(0.95, 0.9, 1.0) * edgeFactor * 0.15;
+    
+    // Soft center glow
+    float centerGlow = pow(max(0.0, 1.0 - dist * 2.0), 3.0) * 0.2;
+    pearl += vec3(1.0, 0.95, 0.98) * centerGlow;
+    
+    // Final intensity - richer overall presence
+    float intensity = 0.45 + topShimmer * 0.15 + centerGlow * 0.1 + edgeFactor * 0.1;
+    
     return vec4(pearl, intensity);
 }
 
