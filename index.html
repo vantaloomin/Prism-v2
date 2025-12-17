@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Prism - Gacha Collection</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">✦ Project Prism ✦</h1>
+            <div class="credits-display">
+                <span class="credits-icon">💎</span>
+                <span id="credits-amount">1000</span>
+                <span class="credits-label">Credits</span>
+            </div>
+        </header>
+
+        <!-- Game Stage -->
+        <main class="game-stage" id="game-stage">
+            <div class="pack-shop" id="pack-shop">
+                <h2 class="shop-title">✧ Pack Shop ✧</h2>
+                <div class="pack-buttons">
+                    <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu">
+                        <div class="pack-icon">🌸</div>
+                        <div class="pack-name">Waifu Pack</div>
+                        <div class="pack-cost">💎 100</div>
+                    </button>
+                    <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando">
+                        <div class="pack-icon">⚔️</div>
+                        <div class="pack-name">Husbando Pack</div>
+                        <div class="pack-cost">💎 100</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card Display Area -->
+            <div class="card-display-area" id="card-display-area"></div>
+
+            <!-- Pack Animation Container -->
+            <div class="pack-animation-container" id="pack-animation-container" hidden>
+                <div class="pack-wrapper">
+                    <div class="pack-image" id="pack-image"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Collection Gallery -->
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <h2 class="gallery-title">✧ My Collection ✧</h2>
+                <span class="card-count">(<span id="collection-count">0</span> cards)</span>
+                <button class="reset-button" id="btn-reset">Reset Save</button>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
