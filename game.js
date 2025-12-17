@@ -200,6 +200,60 @@ function generateCard(packType) {
 }
 
 /**
+ * Generate a DEBUG card with forced high-tier stats
+ * @returns {Object} Complete card data
+ */
+function generateDebugCard() {
+    // FORCE High Rarity (SR+)
+    const rarityRoll = Math.random();
+    let rarityId = 'ur';
+    if (rarityRoll < 0.15) rarityId = 'sr';
+    else if (rarityRoll < 0.20) rarityId = 'ssr';
+    // 80% chance for UR
+
+    // FORCE Rare Frame
+    const frameRoll = Math.random();
+    const frameId = frameRoll < 0.5 ? 'gold' : 'rainbow';
+
+    // FORCE Rare Holo
+    const holoRoll = Math.random();
+    const holoId = holoRoll < 0.5 ? 'fractal' : 'void';
+
+    // Pick random character from random pool matching rarity
+    // Since 'debug' isn't a pool key, we pick waifu or husbando randomly
+    const poolKey = Math.random() < 0.5 ? 'waifu' : 'husbando';
+    const pool = CHARACTER_POOLS[poolKey];
+
+    // Since we forced rarity ID, find chars matching it
+    const eligible = pool.filter(c => c.rarity === rarityId);
+    const character = eligible.length > 0
+        ? eligible[Math.floor(Math.random() * eligible.length)]
+        : pool[0]; // Fallback
+
+    // Get full data objects
+    const rarity = RARITY_TABLE.find(r => r.id === rarityId);
+    const frame = FRAME_TABLE.find(f => f.id === frameId);
+    const holo = HOLO_TABLE.find(h => h.id === holoId);
+
+    // Calculate probability (it will be extremely low -> high tier glow)
+    const combinedProb = rarity.prob * frame.prob * holo.prob;
+
+    return {
+        id: generateCardId(),
+        characterId: character.id,
+        name: character.name,
+        packType: poolKey, // Store actual source
+        rarity: rarity,
+        frame: frame,
+        holo: holo,
+        combinedProb: combinedProb,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/${poolKey}/${character.id}.webp`,
+        obtainedAt: Date.now()
+    };
+}
+
+/**
  * Open a pack and generate cards
  * @param {string} packType - 'waifu' or 'husbando'
  * @returns {Array} Array of generated cards
@@ -207,7 +261,11 @@ function generateCard(packType) {
 function openPack(packType) {
     const cards = [];
     for (let i = 0; i < CONFIG.PACK_SIZE; i++) {
-        cards.push(generateCard(packType));
+        if (packType === 'debug') {
+            cards.push(generateDebugCard());
+        } else {
+            cards.push(generateCard(packType));
+        }
     }
     return cards;
 }
@@ -499,9 +557,11 @@ function updateCreditsDisplay() {
     // Disable buttons if not enough credits
     const waifuBtn = document.getElementById('btn-waifu-pack');
     const husbandoBtn = document.getElementById('btn-husbando-pack');
+    const debugBtn = document.getElementById('btn-debug-pack');
 
-    waifuBtn.disabled = gameState.credits < CONFIG.PACK_COST;
-    husbandoBtn.disabled = gameState.credits < CONFIG.PACK_COST;
+    if (waifuBtn) waifuBtn.disabled = gameState.credits < CONFIG.PACK_COST;
+    if (husbandoBtn) husbandoBtn.disabled = gameState.credits < CONFIG.PACK_COST;
+    if (debugBtn) debugBtn.disabled = gameState.credits < CONFIG.PACK_COST;
 }
 
 // ============================================
@@ -543,11 +603,7 @@ async function handlePackPurchase(packType) {
         `${c.name} [${c.rarity.id.toUpperCase()}/${c.frame.id}/${c.holo.id}]`
     ));
 
-    // Check if we have any rare cards for special effects
-    const bestRarity = cards.reduce((best, card) => {
-        const level = getRarityEffectLevel(card.rarity.id);
-        return level > best.level ? { level, card } : best;
-    }, { level: 0, card: null });
+
 
     // Pack click triggers GSAP animation sequence
     packImage.onclick = async () => {
@@ -829,6 +885,10 @@ function init() {
 
     document.getElementById('btn-husbando-pack').addEventListener('click', () => {
         handlePackPurchase('husbando');
+    });
+
+    document.getElementById('btn-debug-pack').addEventListener('click', () => {
+        handlePackPurchase('debug');
     });
 
     document.getElementById('btn-reset').addEventListener('click', resetSave);
