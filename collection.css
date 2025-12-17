@@ -73,6 +73,10 @@
     gap: 20px;
     background: var(--bg-secondary);
     padding: 30px;
+    padding-top: 45px;
+    /* Extra space for stacked card effect */
+    padding-right: 45px;
+    /* Extra space for stacked card effect */
     border-radius: 16px;
     border: 3px solid var(--bg-tertiary);
 }
@@ -80,12 +84,6 @@
 /* Collection card wrapper for count badge */
 .collection-card-wrapper {
     position: relative;
-}
-
-/* Space for stacked card effect (prevents clipping) */
-.collection-card-wrapper.has-duplicates {
-    margin-top: 12px;
-    margin-right: 12px;
 }
 
 .collection-card-wrapper .card {
