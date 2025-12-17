@@ -54,10 +54,12 @@
 .focus-card-wrapper .card .card-layer-holo {
     opacity: 1 !important;
     transition: none !important;
-    /* Keep oversized for edge hiding */
-    inset: -50%;
+    /* Keep oversized for edge hiding, anchored top-left */
+    top: 0;
+    left: 0;
     width: 200%;
     height: 200%;
+    transform-origin: top left;
     /* Use CSS custom properties for light position */
     --light-x: 50%;
     --light-y: 50%;
