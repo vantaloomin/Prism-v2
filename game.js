@@ -578,10 +578,16 @@ function renderCardDisplayAnimated(cards) {
     const displayArea = document.getElementById('card-display-area');
     displayArea.innerHTML = '';
 
-    // Create card elements
+    // Create card row container for horizontal layout
+    const cardRow = document.createElement('div');
+    cardRow.className = 'card-row';
+    cardRow.style.cssText = 'display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;';
+    displayArea.appendChild(cardRow);
+
+    // Create card elements inside the row
     const cardElements = cards.map((cardData, index) => {
         const cardElement = createCardElement(cardData, true); // Face down
-        displayArea.appendChild(cardElement);
+        cardRow.appendChild(cardElement);
         return { element: cardElement, data: cardData, index };
     });
 
