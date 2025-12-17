@@ -257,12 +257,26 @@ function renderCardDisplay(cards) {
     const displayArea = document.getElementById('card-display-area');
     displayArea.innerHTML = '';
 
+    // Create card container
+    const cardRow = document.createElement('div');
+    cardRow.className = 'card-row';
+    cardRow.style.cssText = 'display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;';
+
     cards.forEach((cardData, index) => {
         const cardElement = createCardElement(cardData, true);
         cardElement.classList.add('dealing');
         cardElement.style.animationDelay = `${index * 0.15}s`;
-        displayArea.appendChild(cardElement);
+        cardRow.appendChild(cardElement);
     });
+
+    displayArea.appendChild(cardRow);
+
+    // Add continue button
+    const continueBtn = document.createElement('button');
+    continueBtn.className = 'continue-button';
+    continueBtn.textContent = '✦ Continue ✦';
+    continueBtn.onclick = showPackShop;
+    displayArea.appendChild(continueBtn);
 }
 
 /**

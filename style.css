@@ -227,10 +227,29 @@ body {
 
 .card-display-area {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
     padding: 20px 0;
+}
+
+.continue-button {
+    background: linear-gradient(145deg, var(--accent-primary), #7c3aed);
+    border: none;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 20px var(--accent-glow);
+    margin-top: 20px;
+}
+
+.continue-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px var(--accent-glow);
 }
 
 /* ============================================
