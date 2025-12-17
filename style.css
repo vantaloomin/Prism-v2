@@ -275,6 +275,7 @@ body {
     perspective: 1000px;
     cursor: pointer;
     border-radius: var(--card-radius);
+    overflow: hidden;
 }
 
 .card-inner {
