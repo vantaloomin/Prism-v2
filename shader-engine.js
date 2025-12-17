@@ -465,6 +465,12 @@ function initShaderCanvas(cardElement, cardData) {
         cardElement.appendChild(canvas);
     }
 
+    // Hide CSS holo and frame tint layers (we're replacing them with WebGL)
+    const holoLayer = cardElement.querySelector('.card-layer-holo');
+    const frameTint = cardElement.querySelector('.card-bg-tint');
+    if (holoLayer) holoLayer.style.display = 'none';
+    if (frameTint) frameTint.style.display = 'none';
+
     // Set canvas size for crisp rendering
     const rect = cardElement.getBoundingClientRect();
     canvas.width = Math.floor(rect.width * window.devicePixelRatio);
@@ -505,8 +511,18 @@ function destroyShaderCanvas() {
         activeShaderEngine = null;
     }
 
-    // Also remove any shader canvas elements
-    document.querySelectorAll('.shader-canvas').forEach(el => el.remove());
+    // Restore CSS holo layers and remove shader canvases
+    document.querySelectorAll('.shader-canvas').forEach(el => {
+        // Find parent card and restore its CSS layers
+        const card = el.closest('.card');
+        if (card) {
+            const holoLayer = card.querySelector('.card-layer-holo');
+            const frameTint = card.querySelector('.card-bg-tint');
+            if (holoLayer) holoLayer.style.display = '';
+            if (frameTint) frameTint.style.display = '';
+        }
+        el.remove();
+    });
 }
 
 console.log('✦ WebGL Shader Engine loaded (Overlay Mode) ✦');
