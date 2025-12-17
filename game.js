@@ -1007,11 +1007,11 @@ async function openFocusMode(cardData) {
     cardWrapper.innerHTML = '';
     cardWrapper.appendChild(focusedCard);
 
-    // Initialize WebGL shader overlay for high-quality effects
+    // Initialize WebGL shader overlay for high-quality effects (with mouse tracking in Focus)
     if (typeof initShaderCanvas === 'function') {
         // Small delay to ensure card is rendered
         setTimeout(() => {
-            initShaderCanvas(focusedCard, cardData);
+            initShaderCanvas(focusedCard, cardData, true); // focusMode = true for mouse tracking
         }, 100);
     }
 

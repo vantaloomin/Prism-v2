@@ -164,27 +164,36 @@ vec4 holoFractal(vec2 uv) {
 }
 
 vec4 holoVoid(vec2 uv) {
-    // Swirling dark vortex with purple glow
-    vec2 center = vec2(0.5, 0.5);
+    // Vortex centered on mouse position, extends beyond card
+    vec2 center = u_mouse;
     vec2 toCenter = uv - center;
     float dist = length(toCenter);
-    float angle = atan(toCenter.y, toCenter.x) + u_time;
     
-    // Accretion disk
-    float disk = sin(angle * 6.0) * 0.5 + 0.5;
-    disk *= smoothstep(0.1, 0.25, dist) * smoothstep(0.5, 0.3, dist);
+    // Angle from mouse - add subtle animation based on distance
+    float angle = atan(toCenter.y, toCenter.x) + u_time * 0.3 + dist * 3.0;
     
+    // Larger accretion disk that extends beyond edges
+    float disk = sin(angle * 8.0) * 0.5 + 0.5;
+    disk *= smoothstep(0.0, 0.15, dist) * smoothstep(1.2, 0.2, dist);
+    
+    // Swirling color mix
     vec3 voidColor = mix(
-        vec3(0.4, 0.0, 0.6),
-        vec3(0.8, 0.2, 0.5),
+        vec3(0.3, 0.0, 0.5),  // Deep purple
+        vec3(1.0, 0.3, 0.6),  // Hot pink
         disk
     );
     
-    // Dark center
-    float darkness = smoothstep(0.2, 0.0, dist);
-    voidColor *= (1.0 - darkness * 0.5);
+    // Add cyan accent
+    voidColor += vec3(0.0, 0.4, 0.5) * pow(disk, 2.0) * 0.5;
     
-    float intensity = disk * 0.6 + darkness * 0.3;
+    // Dark core at mouse position
+    float darkness = smoothstep(0.15, 0.0, dist);
+    voidColor *= (1.0 - darkness * 0.8);
+    
+    // Intensity extends to edges
+    float intensity = disk * 0.7 + darkness * 0.4;
+    intensity *= smoothstep(1.5, 0.0, dist); // Fade out far from mouse
+    
     return vec4(voidColor, intensity);
 }
 
@@ -439,8 +448,11 @@ let activeShaderEngine = null;
 
 /**
  * Initialize shader canvas for a card element
+ * @param {HTMLElement} cardElement - The card DOM element
+ * @param {Object} cardData - Card data with frame and holo info
+ * @param {boolean} focusMode - If true, enable mouse tracking (for Focus view only)
  */
-function initShaderCanvas(cardElement, cardData) {
+function initShaderCanvas(cardElement, cardData, focusMode = false) {
     // Clean up existing
     if (activeShaderEngine) {
         activeShaderEngine.destroy();
@@ -481,23 +493,26 @@ function initShaderCanvas(cardElement, cardData) {
     activeShaderEngine.setCardData(cardData.frame.id, cardData.holo.id);
     activeShaderEngine.startAnimation();
 
-    // Mouse tracking
-    const handleMouseMove = (e) => {
-        if (!activeShaderEngine) return;
-        const rect = cardElement.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = 1.0 - (e.clientY - rect.top) / rect.height;
-        activeShaderEngine.setMouse(x, y);
-    };
+    // Only enable mouse tracking in Focus Mode
+    if (focusMode) {
+        const handleMouseMove = (e) => {
+            if (!activeShaderEngine) return;
+            const rect = cardElement.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = 1.0 - (e.clientY - rect.top) / rect.height;
+            activeShaderEngine.setMouse(x, y);
+        };
 
-    const handleMouseLeave = () => {
-        if (activeShaderEngine) {
-            activeShaderEngine.setMouse(0.5, 0.5);
-        }
-    };
+        const handleMouseLeave = () => {
+            if (activeShaderEngine) {
+                activeShaderEngine.setMouse(0.5, 0.5);
+            }
+        };
 
-    cardElement.addEventListener('mousemove', handleMouseMove);
-    cardElement.addEventListener('mouseleave', handleMouseLeave);
+        cardElement.addEventListener('mousemove', handleMouseMove);
+        cardElement.addEventListener('mouseleave', handleMouseLeave);
+    }
+    // In non-focus mode, mouse stays centered (0.5, 0.5)
 
     return activeShaderEngine;
 }
