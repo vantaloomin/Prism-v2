@@ -82,13 +82,92 @@
     position: relative;
 }
 
+/* Space for stacked card effect (prevents clipping) */
+.collection-card-wrapper.has-duplicates {
+    margin-top: 12px;
+    margin-right: 12px;
+}
+
 .collection-card-wrapper .card {
     width: 100%;
     aspect-ratio: 2 / 3;
+    position: relative;
+    z-index: 3;
 }
 
 .collection-card-wrapper .card-inner {
     transform: rotateY(180deg);
+}
+
+/* ============================================
+   STACKED CARD EFFECT FOR DUPLICATES
+   Shows visual "depth" for multiple copies
+   ============================================ */
+
+/* Base pseudo-element styles for stack shadows */
+.collection-card-wrapper.stack-2 .card::before,
+.collection-card-wrapper.stack-3 .card::before,
+.collection-card-wrapper.stack-3 .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--card-radius, 12px);
+    background: linear-gradient(145deg, #1a1a2e 0%, #2d2d44 100%);
+    border: 3px solid var(--frame-white, #e8e8e8);
+    pointer-events: none;
+}
+
+/* Stack of 2: Single shadow card behind */
+.collection-card-wrapper.stack-2 .card::before {
+    z-index: -1;
+    transform: translate(6px, -6px);
+    opacity: 0.7;
+}
+
+/* Stack of 3+: Two shadow cards behind */
+.collection-card-wrapper.stack-3 .card::before {
+    z-index: -1;
+    transform: translate(6px, -6px);
+    opacity: 0.8;
+}
+
+.collection-card-wrapper.stack-3 .card::after {
+    z-index: -2;
+    transform: translate(12px, -12px);
+    opacity: 0.5;
+}
+
+/* Frame-specific border colors for stacked shadows */
+.collection-card-wrapper .card.frame-white::before,
+.collection-card-wrapper .card.frame-white::after {
+    border-color: var(--frame-white, #e8e8e8);
+}
+
+.collection-card-wrapper .card.frame-blue::before,
+.collection-card-wrapper .card.frame-blue::after {
+    border-color: var(--frame-blue, #60a5fa);
+}
+
+.collection-card-wrapper .card.frame-red::before,
+.collection-card-wrapper .card.frame-red::after {
+    border-color: var(--frame-red, #f87171);
+}
+
+.collection-card-wrapper .card.frame-gold::before,
+.collection-card-wrapper .card.frame-gold::after {
+    border-color: var(--frame-gold, #fbbf24);
+}
+
+.collection-card-wrapper .card.frame-rainbow::before,
+.collection-card-wrapper .card.frame-rainbow::after {
+    border-color: var(--frame-gold, #a855f7);
+    background: linear-gradient(145deg, #2d1f3d 0%, #3d2d54 100%);
+}
+
+.collection-card-wrapper .card.frame-black::before,
+.collection-card-wrapper .card.frame-black::after {
+    border-color: var(--frame-black, #374151);
+    background: linear-gradient(145deg, #0d0d15 0%, #1a1a25 100%);
 }
 
 /* Duplicate count badge */

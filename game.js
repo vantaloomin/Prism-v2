@@ -503,6 +503,13 @@ function renderCollection(page = null) {
         const wrapper = document.createElement('div');
         wrapper.className = 'collection-card-wrapper';
 
+        // Add stack classes for duplicate visual effect
+        if (group.count === 2) {
+            wrapper.classList.add('has-duplicates', 'stack-2');
+        } else if (group.count >= 3) {
+            wrapper.classList.add('has-duplicates', 'stack-3');
+        }
+
         const cardElement = createCardElement(group.card, false);
         wrapper.appendChild(cardElement);
 
