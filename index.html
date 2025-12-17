@@ -60,6 +60,21 @@
             </div>
             <div class="gallery-grid" id="gallery-grid"></div>
         </section>
+
+        <!-- Card Focus Overlay -->
+        <div class="card-focus-overlay" id="card-focus-overlay" hidden>
+            <div class="focus-backdrop"></div>
+            <div class="focus-container">
+                <div class="focus-card-wrapper" id="focus-card-wrapper">
+                    <!-- Focused card will be cloned here -->
+                </div>
+                <div class="focus-info" id="focus-info">
+                    <!-- Card info will go here -->
+                </div>
+            </div>
+            <button class="focus-close-btn" id="focus-close-btn">✕ Close</button>
+            <div class="focus-hint">Move mouse to interact with holographic effects</div>
+        </div>
     </div>
 
     <script src="game.js"></script>

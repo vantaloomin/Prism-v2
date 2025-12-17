@@ -14,30 +14,31 @@ const CONFIG = {
 };
 
 // Probability tables from PRD (values are cumulative thresholds)
+// prob = actual probability for odds calculation
 const RARITY_TABLE = [
-    { id: 'c', name: 'Common', threshold: 0.50, color: '#9ca3af' },
-    { id: 'r', name: 'Rare', threshold: 0.80, color: '#3b82f6' },
-    { id: 'sr', name: 'Super Rare', threshold: 0.94, color: '#a855f7' },
-    { id: 'ssr', name: 'Super Special Rare', threshold: 0.99, color: '#f59e0b' },
-    { id: 'ur', name: 'Ultra Rare', threshold: 1.00, color: '#ef4444' }
+    { id: 'c', name: 'Common', threshold: 0.50, prob: 0.50, color: '#9ca3af' },
+    { id: 'r', name: 'Rare', threshold: 0.80, prob: 0.30, color: '#3b82f6' },
+    { id: 'sr', name: 'Super Rare', threshold: 0.94, prob: 0.14, color: '#a855f7' },
+    { id: 'ssr', name: 'Super Special Rare', threshold: 0.99, prob: 0.05, color: '#f59e0b' },
+    { id: 'ur', name: 'Ultra Rare', threshold: 1.00, prob: 0.01, color: '#ef4444' }
 ];
 
 const FRAME_TABLE = [
-    { id: 'white', name: 'White', threshold: 0.500 },
-    { id: 'blue', name: 'Blue', threshold: 0.800 },
-    { id: 'red', name: 'Red', threshold: 0.950 },
-    { id: 'gold', name: 'Gold', threshold: 0.9855 },
-    { id: 'rainbow', name: 'Rainbow', threshold: 0.9955 },
-    { id: 'black', name: 'Black', threshold: 1.000 }
+    { id: 'white', name: 'White', threshold: 0.500, prob: 0.50 },
+    { id: 'blue', name: 'Blue', threshold: 0.800, prob: 0.30 },
+    { id: 'red', name: 'Red', threshold: 0.950, prob: 0.15 },
+    { id: 'gold', name: 'Gold', threshold: 0.9855, prob: 0.0355 },
+    { id: 'rainbow', name: 'Rainbow', threshold: 0.9955, prob: 0.01 },
+    { id: 'black', name: 'Black', threshold: 1.000, prob: 0.0045 }
 ];
 
 const HOLO_TABLE = [
-    { id: 'none', name: 'None', threshold: 0.60 },
-    { id: 'shiny', name: 'Shiny', threshold: 0.80 },
-    { id: 'rainbow', name: 'Rainbow', threshold: 0.90 },
-    { id: 'pearl', name: 'Pearlescent', threshold: 0.98 },
-    { id: 'fractal', name: 'Fractal', threshold: 0.9955 },
-    { id: 'void', name: 'Void', threshold: 1.000 }
+    { id: 'none', name: 'None', threshold: 0.60, prob: 0.60 },
+    { id: 'shiny', name: 'Shiny', threshold: 0.80, prob: 0.20 },
+    { id: 'rainbow', name: 'Rainbow', threshold: 0.90, prob: 0.10 },
+    { id: 'pearl', name: 'Pearlescent', threshold: 0.98, prob: 0.08 },
+    { id: 'fractal', name: 'Fractal', threshold: 0.9955, prob: 0.0155 },
+    { id: 'void', name: 'Void', threshold: 1.000, prob: 0.0045 }
 ];
 
 // Character pools - will be populated with actual assets later
@@ -219,14 +220,23 @@ function createCardElement(cardData, faceDown = true) {
         </div>
     `;
 
-    // Add flip interaction
-    card.addEventListener('click', () => {
+    // Add flip interaction (or focus mode if already flipped)
+    card.addEventListener('click', (e) => {
+        // Don't trigger if we're in focus mode
+        if (document.getElementById('card-focus-overlay').hidden === false) {
+            return;
+        }
+
         if (!card.classList.contains('is-flipped')) {
+            // Card is face-down, flip it
             card.classList.add('is-flipped');
             // Check for special reveals
             if (cardData.rarity.id === 'ur' || cardData.holo.id === 'void') {
                 triggerSpecialReveal(card, cardData);
             }
+        } else {
+            // Card is already face-up, open focus mode
+            openFocusMode(cardData);
         }
     });
 
@@ -545,8 +555,149 @@ function init() {
         }
     });
 
+    // Card focus overlay close button
+    document.getElementById('focus-close-btn').addEventListener('click', closeFocusMode);
+    document.getElementById('card-focus-overlay').addEventListener('click', (e) => {
+        if (e.target.classList.contains('focus-backdrop')) {
+            closeFocusMode();
+        }
+    });
+
+    // Escape key to close focus mode
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeFocusMode();
+        }
+    });
+
     console.log('✦ Project Prism initialized! ✦');
     console.log('Debug: Run testRngDistribution(1000) to test RNG');
+}
+
+// ============================================
+// CARD FOCUS MODE
+// ============================================
+
+let focusedCardData = null;
+
+/**
+ * Open card focus mode to inspect a card
+ * @param {Object} cardData - The card data to display
+ */
+function openFocusMode(cardData) {
+    focusedCardData = cardData;
+
+    const overlay = document.getElementById('card-focus-overlay');
+    const cardWrapper = document.getElementById('focus-card-wrapper');
+    const infoPanel = document.getElementById('focus-info');
+
+    // Create the focused card element
+    const focusedCard = createCardElement(cardData, false);
+    focusedCard.classList.add('is-flipped'); // Always show front
+
+    // Clear and add card
+    cardWrapper.innerHTML = '';
+    cardWrapper.appendChild(focusedCard);
+
+    // Populate info panel
+    infoPanel.innerHTML = `
+        <h3>${cardData.name}</h3>
+        <div class="focus-info-row">
+            <span class="focus-info-label">Rarity</span>
+            <span class="focus-info-value rarity-${cardData.rarity.id}">${cardData.rarity.name}</span>
+        </div>
+        <div class="focus-info-row">
+            <span class="focus-info-label">Frame</span>
+            <span class="focus-info-value">${cardData.frame.name}</span>
+        </div>
+        <div class="focus-info-row">
+            <span class="focus-info-label">Holographic</span>
+            <span class="focus-info-value">${cardData.holo.name}</span>
+        </div>
+        <div class="focus-info-row">
+            <span class="focus-info-label">Pack Type</span>
+            <span class="focus-info-value">${cardData.packType}</span>
+        </div>
+        <div class="focus-info-row focus-info-odds">
+            <span class="focus-info-label">Combo Odds</span>
+            <span class="focus-info-value">${calculateOddsString(cardData)}</span>
+        </div>
+        <div class="focus-info-row">
+            <span class="focus-info-label">Card ID</span>
+            <span class="focus-info-value" style="font-size: 0.75rem; font-family: monospace;">${cardData.id.slice(-12)}</span>
+        </div>
+    `;
+
+    // Show overlay
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    // Add mouse tracking for interactive holo
+    focusedCard.addEventListener('mousemove', handleFocusMouseMove);
+    focusedCard.addEventListener('mouseleave', handleFocusMouseLeave);
+}
+
+/**
+ * Handle mouse movement over focused card for interactive effects
+ * @param {MouseEvent} e 
+ */
+function handleFocusMouseMove(e) {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+
+    // Calculate mouse position as percentage (0-100)
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    // Update CSS custom properties for light position
+    card.style.setProperty('--light-x', `${x}%`);
+    card.style.setProperty('--light-y', `${y}%`);
+
+    // Calculate tilt angles (max 15 degrees)
+    const tiltX = ((y - 50) / 50) * -15;
+    const tiltY = ((x - 50) / 50) * 15;
+
+    // Apply 3D transform
+    card.classList.add('tilt-active');
+    card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+    // Update holo layer position if it exists
+    const holoLayer = card.querySelector('.card-layer-holo');
+    if (holoLayer) {
+        holoLayer.style.setProperty('--light-x', `${x}%`);
+        holoLayer.style.setProperty('--light-y', `${y}%`);
+    }
+}
+
+/**
+ * Reset card when mouse leaves
+ * @param {MouseEvent} e 
+ */
+function handleFocusMouseLeave(e) {
+    const card = e.currentTarget;
+    card.classList.remove('tilt-active');
+    card.style.transform = '';
+    card.style.setProperty('--light-x', '50%');
+    card.style.setProperty('--light-y', '50%');
+}
+
+/**
+ * Close the focus mode overlay
+ */
+function closeFocusMode() {
+    const overlay = document.getElementById('card-focus-overlay');
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    focusedCardData = null;
+}
+
+/**
+ * Find card data by ID from inventory
+ * @param {string} cardId 
+ * @returns {Object|null}
+ */
+function findCardById(cardId) {
+    return gameState.inventory.find(card => card.id === cardId) || null;
 }
 
 // Start the game when DOM is ready
@@ -555,3 +706,5 @@ document.addEventListener('DOMContentLoaded', init);
 // Expose debug utilities to global scope for console access
 window.testRngDistribution = testRngDistribution;
 window.gameState = gameState;
+window.openFocusMode = openFocusMode;
+
