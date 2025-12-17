@@ -796,12 +796,33 @@ function switchTab(tabId) {
 // ============================================
 
 let focusedCardData = null;
+let loreCache = null;
+
+/**
+ * Load lore data from JSON file
+ * @param {string} characterId - Character ID (e.g., 'w01', 'h15')
+ * @returns {Object|null} Lore data for the character
+ */
+async function loadLoreData(characterId) {
+    // Load cache if not loaded
+    if (!loreCache) {
+        try {
+            const response = await fetch('assets/lore/characters.json');
+            loreCache = await response.json();
+        } catch (error) {
+            console.warn('Could not load lore data:', error);
+            loreCache = {};
+        }
+    }
+
+    return loreCache[characterId] || null;
+}
 
 /**
  * Open card focus mode to inspect a card
  * @param {Object} cardData - The card data to display
  */
-function openFocusMode(cardData) {
+async function openFocusMode(cardData) {
     focusedCardData = cardData;
 
     const overlay = document.getElementById('card-focus-overlay');
@@ -816,34 +837,98 @@ function openFocusMode(cardData) {
     cardWrapper.innerHTML = '';
     cardWrapper.appendChild(focusedCard);
 
-    // Populate info panel
+    // Load lore data
+    const lore = await loadLoreData(cardData.characterId);
+
+    // Populate info panel with tabs
     infoPanel.innerHTML = `
         <h3>${cardData.name}</h3>
-        <div class="focus-info-row">
-            <span class="focus-info-label">Rarity</span>
-            <span class="focus-info-value rarity-${cardData.rarity.id}">${cardData.rarity.name}</span>
+        
+        <!-- Tab Buttons -->
+        <div class="focus-info-tabs">
+            <button class="focus-tab-btn active" data-tab="stats">
+                <span class="tab-icon">📊</span> Stats
+            </button>
+            <button class="focus-tab-btn" data-tab="lore">
+                <span class="tab-icon">📜</span> Lore
+            </button>
         </div>
-        <div class="focus-info-row">
-            <span class="focus-info-label">Frame</span>
-            <span class="focus-info-value">${cardData.frame.name}</span>
+        
+        <!-- Stats Tab Content -->
+        <div class="focus-tab-content active" id="focus-tab-stats">
+            <div class="focus-info-row">
+                <span class="focus-info-label">Rarity</span>
+                <span class="focus-info-value rarity-${cardData.rarity.id}">${cardData.rarity.name}</span>
+            </div>
+            <div class="focus-info-row">
+                <span class="focus-info-label">Frame</span>
+                <span class="focus-info-value">${cardData.frame.name}</span>
+            </div>
+            <div class="focus-info-row">
+                <span class="focus-info-label">Holographic</span>
+                <span class="focus-info-value">${cardData.holo.name}</span>
+            </div>
+            <div class="focus-info-row">
+                <span class="focus-info-label">Pack Type</span>
+                <span class="focus-info-value">${cardData.packType}</span>
+            </div>
+            <div class="focus-info-row focus-info-odds">
+                <span class="focus-info-label">Combo Odds</span>
+                <span class="focus-info-value">${calculateOddsString(cardData)}</span>
+            </div>
+            <div class="focus-info-row">
+                <span class="focus-info-label">Card ID</span>
+                <span class="focus-info-value" style="font-size: 0.75rem; font-family: monospace;">${cardData.id.slice(-12)}</span>
+            </div>
         </div>
-        <div class="focus-info-row">
-            <span class="focus-info-label">Holographic</span>
-            <span class="focus-info-value">${cardData.holo.name}</span>
-        </div>
-        <div class="focus-info-row">
-            <span class="focus-info-label">Pack Type</span>
-            <span class="focus-info-value">${cardData.packType}</span>
-        </div>
-        <div class="focus-info-row focus-info-odds">
-            <span class="focus-info-label">Combo Odds</span>
-            <span class="focus-info-value">${calculateOddsString(cardData)}</span>
-        </div>
-        <div class="focus-info-row">
-            <span class="focus-info-label">Card ID</span>
-            <span class="focus-info-value" style="font-size: 0.75rem; font-family: monospace;">${cardData.id.slice(-12)}</span>
+        
+        <!-- Lore Tab Content -->
+        <div class="focus-tab-content" id="focus-tab-lore">
+            ${lore ? `
+                <div class="focus-lore-quote">${lore.quote}</div>
+                
+                <div class="focus-lore-section">
+                    <div class="focus-lore-section-title">Origin</div>
+                    <div class="focus-lore-section-content">${lore.origin}</div>
+                </div>
+                
+                <div class="focus-lore-section">
+                    <div class="focus-lore-section-title">Story</div>
+                    <div class="focus-lore-section-content">${lore.story}</div>
+                </div>
+                
+                <div class="focus-lore-section">
+                    <div class="focus-lore-section-title">Abilities</div>
+                    <div class="focus-lore-abilities">
+                        ${lore.abilities.split(', ').map(ability =>
+        `<span class="focus-lore-ability">${ability}</span>`
+    ).join('')}
+                    </div>
+                </div>
+            ` : `
+                <div class="focus-lore-section">
+                    <div class="focus-lore-section-content" style="text-align: center; color: var(--text-muted);">
+                        Lore data not available for this character.
+                    </div>
+                </div>
+            `}
         </div>
     `;
+
+    // Bind tab switching
+    infoPanel.querySelectorAll('.focus-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+
+            // Update buttons
+            infoPanel.querySelectorAll('.focus-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update content
+            infoPanel.querySelectorAll('.focus-tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`focus-tab-${tabId}`).classList.add('active');
+        });
+    });
 
     // Show overlay
     overlay.hidden = false;

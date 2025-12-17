@@ -1,0 +1,212 @@
+{
+  "w01": {
+    "title": "The Village Herbalist",
+    "quote": "\"Even the wolves hesitate to tread on her garden, knowing the peace she brings to the woods is worth more than a meal.\"",
+    "origin": "Born in the quiet hamlet of Willowmere, she discovered her gift for herbal magic at a young age.",
+    "story": "What began as gathering herbs for her grandmother's remedies grew into a deep connection with the natural world. Now she tends to the village, healing ailments both physical and spiritual with her carefully prepared tinctures.",
+    "abilities": "Nature Attunement, Healing Touch, Potion Brewing"
+  },
+  "w02": {
+    "title": "The Novice Cleric",
+    "quote": "\"She prays so loudly the stained glass rattles, yet she has never seen the world outside the rectory walls.\"",
+    "origin": "Raised in the Temple of the Dawn, she took her vows at the earliest age permitted.",
+    "story": "Though still learning the ways of divine magic, her unwavering devotion has already caught the attention of the High Priestess. She believes that even the smallest prayer can move mountains.",
+    "abilities": "Divine Light, Minor Healing, Blessing of Protection"
+  },
+  "w03": {
+    "title": "The Steel Vanguard",
+    "quote": "\"They say her heart is made of the same iron as her breastplate; neither has ever been pierced by an enemy blade.\"",
+    "origin": "Forged in the crucible of the Northern Border Wars.",
+    "story": "She rose through the ranks not through noble birth, but through sheer determination and an unbreakable will. Her armor bears the dents of a hundred battles, each one a life saved.",
+    "abilities": "Defensive Stance, Shield Bash, Rally Cry"
+  },
+  "w04": {
+    "title": "The Elven Scribe",
+    "quote": "\"She knows the history of every dynasty for the last three thousand years, yet she still cannot find her quill when it is tucked behind her ear.\"",
+    "origin": "From the ancient libraries of Silverleaf Grove.",
+    "story": "She has spent three centuries cataloging the histories of mortal kingdoms, watching empires rise and fall from behind her quill. Her chronicles are considered the definitive record of the realm.",
+    "abilities": "Ancient Knowledge, Scroll Mastery, Memory Perfect"
+  },
+  "w05": {
+    "title": "The Dwarven Smith",
+    "quote": "\"The sparks from her anvil are the only stars to be seen in the deep mines, and she burns brighter than any of them.\"",
+    "origin": "Heir to the legendary Ironforge clan.",
+    "story": "She broke tradition by leaving the mountain halls to study surface metalworking techniques. Now she combines dwarven craftsmanship with exotic materials to create weapons of unparalleled quality.",
+    "abilities": "Master Crafting, Flame Mastery, Rune Enchantment"
+  },
+  "w06": {
+    "title": "The Nekomimi Baker",
+    "quote": "\"Her kneading technique is legendary, though customers do occasionally find a whisker in the sourdough.\"",
+    "origin": "Wandered into the village from the Eastern Provinces.",
+    "story": "With ears that twitch at every sound and an uncanny ability to predict what customers want, she has made the village bakery famous across three kingdoms. Her secret ingredient? A dash of feline intuition.",
+    "abilities": "Culinary Magic, Comfort Aura, Swift Reflexes"
+  },
+  "w07": {
+    "title": "The Royal Duelist",
+    "quote": "\"She fights not to kill, but to humiliate. A pristine uniform at the end of a match is her greatest trophy.\"",
+    "origin": "Champion of the Queen's Court.",
+    "story": "Undefeated in sixty-seven official duels, she serves as the Crown's judicial champion. Her blade has decided matters of law, honor, and succession—always with lethal grace.",
+    "abilities": "Perfect Stance, Riposte, Blade Dance"
+  },
+  "w08": {
+    "title": "The Forest Ranger",
+    "quote": "\"To track her is to chase the wind; by the time you spot the fletching of her arrow, she is already three trees away.\"",
+    "origin": "Guardian of the Emerald Expanse.",
+    "story": "She patrols the ancient woods where the boundary between the mortal realm and fae territories grows thin. Her arrows never miss, guided by the whispers of the trees themselves.",
+    "abilities": "Eagle Eye, Nature's Ally, Shadow Step"
+  },
+  "w09": {
+    "title": "The Kitsune Diviner",
+    "quote": "\"Never ask a fox for the truth unless you are prepared to trade your secrets for a riddle that haunts you.\"",
+    "origin": "Last daughter of the Nine-Tailed Shrine.",
+    "story": "Her three tails mark her as a fox spirit of considerable age and power. She offers prophecies to those brave enough to seek her out, though her answers often come wrapped in riddles.",
+    "abilities": "Future Sight, Illusion Weaving, Spirit Fox Form"
+  },
+  "w10": {
+    "title": "The Tavern Brawler",
+    "quote": "\"The local carpenter owes his entire fortune to the number of tables she breaks on a typical Friday night.\"",
+    "origin": "Rose to fame in the fighting pits of Port Crimson.",
+    "story": "What started as fighting for coin became a legend. She never uses weapons—claims they're unsporting. Her bare-knuckle style has humbled knights and monsters alike.",
+    "abilities": "Iron Fists, Thick Skin, Battle Fury"
+  },
+  "w11": {
+    "title": "The Shadow Assassin",
+    "quote": "\"She is a whisper in the dark, a cold touch on the neck, and then... absolute silence.\"",
+    "origin": "Trained in the Obsidian Citadel.",
+    "story": "She is whispered about in courts and back alleys alike—a phantom who has never failed a contract. None have seen her face and lived to describe it.",
+    "abilities": "Shadow Meld, Death Strike, Poison Mastery"
+  },
+  "w12": {
+    "title": "The Dancer of the Dunes",
+    "quote": "\"Kings have traded entire cities just to secure front-row seats to the Dance of the Seven Veils.\"",
+    "origin": "Chosen vessel of the Sand Goddess.",
+    "story": "Her dance summons sandstorms and parts dunes. What appears as performance is actually powerful elemental magic, passed down through an unbroken line of sacred dancers.",
+    "abilities": "Sand Dance, Desert Wind, Mirage Step"
+  },
+  "w13": {
+    "title": "The Barbarian Queen",
+    "quote": "\"She wears the bitter northern frost as comfortably as a southern lady wears silk, and she cuts twice as deep.\"",
+    "origin": "United the warring Mountain Clans through blood and fire.",
+    "story": "She carved her throne from the bones of those who underestimated her. Now she leads the largest horde the north has ever seen, her war cry echoing across frozen peaks.",
+    "abilities": "Berserker Rage, War Cry, Indomitable Will"
+  },
+  "w14": {
+    "title": "The Dragon Sorceress",
+    "quote": "\"Her scales are harder than diamond, and her vanity is twice as unbreakable as her scales.\"",
+    "origin": "Born from the pact between a mortal witch and an elder wyrm.",
+    "story": "Half-human, half-dragon, she commands power that terrifies even archmages. The scales that mark her skin shimmer with contained flames, and her eyes hold the wisdom of ages.",
+    "abilities": "Dragon Fire, Draconic Form, Ancient Magic"
+  },
+  "w15": {
+    "title": "The Goddess of Love",
+    "quote": "\"To look upon her is to forget one's own name; mortals simply break under the weight of such perfection.\"",
+    "origin": "Descended from the Celestial Realm.",
+    "story": "She walks among mortals to remind them of love's true nature—not possession, but liberation. Her mere presence can mend broken hearts or kindle flames that burn for eternity.",
+    "abilities": "Divine Love, Heart's Truth, Eternal Bond"
+  },
+  "h01": {
+    "title": "The City Watchman",
+    "quote": "\"He stands as still as a statue, and honestly, the pigeons can't tell the difference either.\"",
+    "origin": "Veteran of the Capital Guard.",
+    "story": "Twenty years walking the midnight streets have taught him every shadow, every shortcut, every criminal's trick. He's the one they send when things get complicated.",
+    "abilities": "Street Wisdom, Night Vision, Calm Authority"
+  },
+  "h02": {
+    "title": "The Traveling Merchant",
+    "quote": "\"If you have a coin, he has a ware. If you have two coins, he has a 'rare ancient artifact' made just yesterday.\"",
+    "origin": "Former member of the Silk Road Consortium.",
+    "story": "His cart has been through thirty kingdoms, and he's survived bandits, wars, and worse. There's nothing he can't acquire—for the right price.",
+    "abilities": "Silver Tongue, Trade Secrets, Hidden Inventory"
+  },
+  "h03": {
+    "title": "The Court Mage",
+    "quote": "\"He spends more time conversing with ancient spirits in the ether than he does acknowledging the King he supposedly serves.\"",
+    "origin": "Graduated top of his class at the Arcane Academy.",
+    "story": "He advises the throne on matters magical and mundane, but his true research remains hidden in tower chambers that none may enter. Some say he seeks immortality itself.",
+    "abilities": "Arcane Mastery, Court Intrigue, Spell Weaving"
+  },
+  "h04": {
+    "title": "The Halfling Bard",
+    "quote": "\"He has been kicked out of every tavern in the kingdom, usually by jealous husbands who didn't appreciate his ballads.\"",
+    "origin": "Born in the wandering Sweetwater Caravan.",
+    "story": "His songs have started revolutions and ended wars. He travels with adventurers, chronicling their deeds—and occasionally saving them with a well-timed ballad.",
+    "abilities": "Inspiring Song, Tale Spinning, Lucky Charm"
+  },
+  "h05": {
+    "title": "The Stable Master",
+    "quote": "\"The horses listen to him better than the knights who ride them do; he speaks a language of patience they understand.\"",
+    "origin": "Raised among the wild herds of the Eastern Plains.",
+    "story": "He speaks to horses in a language older than words. Under his care, the kingdom's cavalry has become legendary, and even the wildest stallions become gentle.",
+    "abilities": "Animal Bond, Horse Whisper, Wild Empathy"
+  },
+  "h06": {
+    "title": "The Alchemist",
+    "quote": "\"His neighbors worry less about the explosions and more about the maniacal laughter that usually follows them.\"",
+    "origin": "Self-taught genius from the Undercity.",
+    "story": "His explosions have destroyed three laboratories, but his discoveries have saved thousands. He walks the line between brilliant and mad with gleeful abandon.",
+    "abilities": "Potion Craft, Explosive Mixtures, Transmutation"
+  },
+  "h07": {
+    "title": "The Elven Ranger",
+    "quote": "\"He speaks the language of the leaves, a dialect far older and wiser than Common tongue.\"",
+    "origin": "Sentinel of the Twilight Forest.",
+    "story": "He has guarded the same stretch of ancient woodland since before the human kingdoms existed. His arrows find evil hearts across impossible distances.",
+    "abilities": "Eternal Vigilance, Perfect Shot, Forest Soul"
+  },
+  "h08": {
+    "title": "The Pirate First Mate",
+    "quote": "\"The sea is the only mistress he has ever remained faithful to, though certainly not for lack of trying.\"",
+    "origin": "Former naval officer turned privateer.",
+    "story": "He left the navy when they hanged an innocent crew. Now he sails under the black flag, but his code of honor remains unbroken. He only takes from those who deserve to lose.",
+    "abilities": "Sea Legs, Cutlass Mastery, Loyal Crew"
+  },
+  "h09": {
+    "title": "The Martial Monk",
+    "quote": "\"His body is a temple, and he defends the gates with a disciplined fury that belies his silent vows.\"",
+    "origin": "Trained at the Monastery of the Frozen Peak.",
+    "story": "He spent thirty years in meditation before throwing his first punch. Now his strikes carry the weight of absolute certainty, and his defense is like trying to hit flowing water.",
+    "abilities": "Inner Peace, Flowing Strike, Iron Body"
+  },
+  "h10": {
+    "title": "The Wolf-Kin Warrior",
+    "quote": "\"Loyalty is written in his blood, but so is the hunger to chase down anything that runs from him.\"",
+    "origin": "Born under the Blood Moon, blessed by the Wolf Spirit.",
+    "story": "He walks between worlds—human enough to wear armor, wolf enough to hunt by moonlight. His pack considers him their greatest hunter, and his enemies consider him their worst nightmare.",
+    "abilities": "Pack Tactics, Lunar Strength, Predator Senses"
+  },
+  "h11": {
+    "title": "The Gladiator Champion",
+    "quote": "\"The crowd does not cheer for blood; they cheer for the flex of his bicep as he delivers the final blow.\"",
+    "origin": "Rose from slave to legend in the Grand Colosseum.",
+    "story": "He won his freedom in the arena, but chose to stay. Now he fights for those who cannot—a symbol that even chains can be broken with enough determination.",
+    "abilities": "Crowd Favorite, Combat Veteran, Unbreakable Spirit"
+  },
+  "h12": {
+    "title": "The Orc Warlord",
+    "quote": "\"Civilization is a cage. He is the hammer that breaks the bars.\"",
+    "origin": "First Orc to unite the Scattered Tribes.",
+    "story": "He has fought against every stereotype of his people, proving that orcs can build as well as break. His confederation has brought peace to lands that knew only war.",
+    "abilities": "War Leader, Tribal Unity, Devastating Charge"
+  },
+  "h13": {
+    "title": "The Dark Elf Warlock",
+    "quote": "\"He promised power for a price, but looking into his eyes, many forgot to ask what the cost would be until it was too late.\"",
+    "origin": "Exiled from the Underdark for seeking forbidden knowledge.",
+    "story": "He bargained with entities that would drive lesser minds to madness. The power he gained cost him everything—his home, his kin, his left eye. He considers it a fair trade.",
+    "abilities": "Shadow Pact, Eldritch Blast, Dark Vision"
+  },
+  "h14": {
+    "title": "The Demon Lord",
+    "quote": "\"He does not need to conquer kingdoms with armies; he simply walks in, and the desperate fall to their knees.\"",
+    "origin": "Ancient ruler of the Seventh Hell.",
+    "story": "He walks the mortal plane not to conquer, but to observe. What he finds has begun to change him in ways that concern his demonic kin. Some say he's developing... mercy.",
+    "abilities": "Hellfire Command, Demonic Presence, Soul Sight"
+  },
+  "h15": {
+    "title": "The Sun God Avatar",
+    "quote": "\"He is not merely bright; he is the sun itself, and we are but moths drawn helplessly to the incineration.\"",
+    "origin": "Physical manifestation of the Solar Divine.",
+    "story": "When the darkness grew too deep, the Sun God himself descended. He has taken mortal form to walk among his worshippers, his radiance humbled but never diminished.",
+    "abilities": "Solar Radiance, Divine Judgment, Eternal Light"
+  }
+}

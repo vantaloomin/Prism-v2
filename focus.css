@@ -85,18 +85,113 @@
     background: var(--bg-secondary);
     border-radius: 16px;
     padding: 30px;
-    min-width: 280px;
-    max-width: 350px;
+    min-width: 320px;
+    max-width: 380px;
     border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
 .focus-info h3 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
+    font-size: 1.6rem;
+    margin-bottom: 15px;
     background: linear-gradient(135deg, var(--accent-primary), #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* Info Panel Tabs */
+.focus-info-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    background: var(--bg-tertiary);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.focus-tab-btn {
+    flex: 1;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.focus-tab-btn:hover {
+    color: var(--text-primary);
+}
+
+.focus-tab-btn.active {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.focus-tab-btn .tab-icon {
+    font-size: 1rem;
+}
+
+/* Tab Content Containers */
+.focus-tab-content {
+    display: none;
+}
+
+.focus-tab-content.active {
+    display: block;
+}
+
+/* Lore Content */
+.focus-lore-quote {
+    font-style: italic;
+    color: var(--accent-secondary);
+    font-size: 1rem;
+    padding: 15px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 3px solid var(--accent-primary);
+}
+
+.focus-lore-section {
+    margin-bottom: 15px;
+}
+
+.focus-lore-section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.focus-lore-section-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.focus-lore-abilities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.focus-lore-ability {
+    background: var(--bg-tertiary);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
 .focus-info-row {
