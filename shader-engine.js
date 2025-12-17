@@ -99,68 +99,157 @@ vec3 hsl2rgb(vec3 c) {
 // ============================================
 
 vec4 holoNone(vec2 uv) {
-    // Subtle gloss highlight following mouse
+    // Enhanced gloss varnish with subtle moving reflection
     float highlight = pow(max(0.0, 1.0 - distance(uv, u_mouse) * 2.0), 4.0);
-    return vec4(1.0, 1.0, 1.0, highlight * 0.15);
+    
+    // Subtle ambient light sweep
+    float ambientSweep = sin(uv.x * 3.0 + uv.y * 2.0 - u_time * 0.5) * 0.5 + 0.5;
+    ambientSweep = pow(ambientSweep, 4.0) * 0.1;
+    
+    // Very subtle noise texture for realism
+    float glossNoise = snoise(uv * 30.0) * 0.02;
+    
+    float totalIntensity = highlight * 0.2 + ambientSweep + glossNoise;
+    return vec4(1.0, 1.0, 1.0, totalIntensity);
 }
 
 vec4 holoShiny(vec2 uv) {
-    // Classic diagonal sweep
-    float sweep = sin((uv.x + uv.y) * 15.0 - u_time * 3.0);
-    sweep = smoothstep(0.0, 0.1, sweep) * smoothstep(0.2, 0.1, sweep);
+    // Enhanced classic foil with multiple sweep layers
     
-    // Follow mouse
+    // Primary diagonal sweep
+    float sweep1 = sin((uv.x + uv.y) * 12.0 - u_time * 2.5);
+    sweep1 = smoothstep(0.0, 0.15, sweep1) * smoothstep(0.3, 0.15, sweep1);
+    
+    // Secondary perpendicular sweep (slower)
+    float sweep2 = sin((uv.x - uv.y) * 8.0 - u_time * 1.5);
+    sweep2 = smoothstep(0.0, 0.2, sweep2) * smoothstep(0.4, 0.2, sweep2) * 0.5;
+    
+    // Combine sweeps
+    float totalSweep = sweep1 + sweep2;
+    
+    // Add subtle sparkle noise
+    float sparkle = pow(snoise(uv * 40.0 + u_time * 0.5) * 0.5 + 0.5, 8.0) * 0.3;
+    
+    // Mouse proximity boost
     float mouseDist = 1.0 - distance(uv, u_mouse);
-    sweep *= pow(max(0.0, mouseDist), 2.0) * 2.0;
+    float mouseBoost = pow(max(0.0, mouseDist), 2.0);
     
-    return vec4(1.0, 1.0, 1.0, sweep * 0.5);
+    // Slight color tint based on position
+    vec3 foilColor = mix(vec3(1.0, 1.0, 1.0), vec3(1.0, 0.95, 0.85), uv.y);
+    
+    float intensity = (totalSweep + sparkle) * (0.4 + mouseBoost * 0.4);
+    return vec4(foilColor, intensity);
 }
 
 vec4 holoRainbow(vec2 uv) {
-    // Prismatic diffraction based on angle from mouse
-    vec2 toMouse = uv - u_mouse;
-    float angle = atan(toMouse.y, toMouse.x);
-    float dist = length(toMouse);
+    // Enhanced prismatic diffraction with waves and bands
+    vec2 center = u_mouse;
+    vec2 toCenter = uv - center;
+    float angle = atan(toCenter.y, toCenter.x);
+    float dist = length(toCenter);
     
-    float hue = (angle / 6.28318 + 0.5) + u_time * 0.1;
-    vec3 rainbow = hsl2rgb(vec3(hue, 0.9, 0.6));
+    // Primary rainbow from angle
+    float hue1 = (angle / 6.28318 + 0.5) + u_time * 0.08;
     
-    float intensity = smoothstep(0.8, 0.0, dist) * 0.4;
+    // Secondary rainbow bands based on distance
+    float hue2 = fract(dist * 3.0 - u_time * 0.2);
     
+    // Blend between angle and distance rainbows
+    float blendFactor = sin(u_time * 0.5) * 0.3 + 0.5;
+    float finalHue = mix(hue1, hue2, blendFactor * 0.4);
+    
+    vec3 rainbow = hsl2rgb(vec3(finalHue, 0.85, 0.55));
+    
+    // Add shimmer waves
+    float shimmer = sin(dist * 20.0 - u_time * 3.0) * 0.5 + 0.5;
+    shimmer = pow(shimmer, 2.0);
+    rainbow += vec3(shimmer * 0.2);
+    
+    // Add noise texture
+    float colorNoise = snoise(uv * 15.0 + u_time * 0.2) * 0.1;
+    rainbow += vec3(colorNoise);
+    
+    float intensity = smoothstep(1.0, 0.0, dist) * 0.5 + shimmer * 0.15;
     return vec4(rainbow, intensity);
 }
 
 vec4 holoPearl(vec2 uv) {
-    // Iridescent shimmer
-    float thickness = snoise(uv * 5.0 + u_time * 0.2) * 0.5 + 0.5;
-    thickness += distance(uv, u_mouse) * 0.5;
+    // Enhanced iridescent pearl with flowing colors
     
-    float interference = sin(thickness * 20.0) * 0.5 + 0.5;
+    // Multiple interference layers at different scales
+    float thickness1 = snoise(uv * 4.0 + u_time * 0.15) * 0.5 + 0.5;
+    float thickness2 = snoise(uv * 8.0 - u_time * 0.1) * 0.3;
+    float thickness = thickness1 + thickness2;
     
-    vec3 pearl = mix(
-        vec3(1.0, 0.7, 0.85),
-        vec3(0.7, 0.9, 1.0),
-        interference
-    );
+    // Add distance influence
+    thickness += distance(uv, u_mouse) * 0.3;
     
-    float intensity = 0.35;
+    // Multiple interference frequencies
+    float interference1 = sin(thickness * 15.0) * 0.5 + 0.5;
+    float interference2 = sin(thickness * 25.0 + 1.5) * 0.3 + 0.3;
+    
+    // Create rich pearl colors
+    vec3 pink = vec3(1.0, 0.7, 0.85);
+    vec3 cyan = vec3(0.7, 0.95, 1.0);
+    vec3 gold = vec3(1.0, 0.9, 0.7);
+    
+    vec3 pearl = mix(pink, cyan, interference1);
+    pearl = mix(pearl, gold, interference2 * 0.5);
+    
+    // Add subtle moving highlight
+    float highlight = sin(uv.x * 5.0 - uv.y * 3.0 + u_time * 1.5) * 0.5 + 0.5;
+    highlight = pow(highlight, 3.0) * 0.3;
+    pearl += vec3(highlight);
+    
+    // Soft glow at edges
+    float edgeGlow = pow(1.0 - abs(uv.x - 0.5) * 2.0, 2.0) * pow(1.0 - abs(uv.y - 0.5) * 2.0, 2.0);
+    
+    float intensity = 0.35 + highlight * 0.1 + edgeGlow * 0.1;
     return vec4(pearl, intensity);
 }
 
 vec4 holoFractal(vec2 uv) {
-    // Crystal facets
-    float vor = voronoi(uv * 10.0);
-    float edges = 1.0 - smoothstep(0.0, 0.15, vor);
+    // Geometric crystal facets with animation and texture
+    float scale = 8.0;
+    vec2 cell = floor(uv * scale);
+    vec2 local = fract(uv * scale);
     
-    // Rainbow through crystals
-    float hue = vor + u_time * 0.1;
-    vec3 crystal = hsl2rgb(vec3(hue, 0.7, 0.6));
+    // Create sharp geometric lines
+    float edge1 = abs(local.x - local.y);
+    float edge2 = abs(local.x + local.y - 1.0);
+    float edge3 = abs(local.x - 0.5);
+    float edge4 = abs(local.y - 0.5);
     
-    float sparkle = pow(1.0 - vor, 12.0);
-    crystal += vec3(sparkle) * 0.8;
+    // Combine edges for faceted look
+    float minEdge = min(min(edge1, edge2), min(edge3, edge4));
+    float facetEdge = smoothstep(0.0, 0.08, minEdge);
     
-    float intensity = edges * 0.6 + sparkle * 0.4;
-    return vec4(crystal, intensity * 0.5);
+    // Animated light sweep across facets
+    float sweep = sin(uv.x * 5.0 + uv.y * 3.0 - u_time * 2.0) * 0.5 + 0.5;
+    sweep = pow(sweep, 3.0); // Sharpen the sweep
+    
+    // Add noise texture for depth
+    float noise = snoise(uv * 20.0 + u_time * 0.3) * 0.15;
+    
+    // Animated prismatic color - shifts over time with sweep influence
+    float cellHue = fract((cell.x * 0.1 + cell.y * 0.15) + u_time * 0.1 + sweep * 0.2);
+    vec3 prismColor = hsl2rgb(vec3(cellHue, 0.7, 0.5 + sweep * 0.2));
+    
+    // Add subtle color variation from noise
+    prismColor += vec3(noise * 0.5, noise * 0.3, noise * 0.4);
+    
+    // Bright white edges with pulsing intensity
+    float edgePulse = 0.7 + sin(u_time * 3.0 + (cell.x + cell.y) * 0.5) * 0.3;
+    vec3 edgeGlow = vec3(1.0, 0.95, 0.9) * (1.0 - facetEdge) * edgePulse;
+    
+    // Light sweep highlight
+    vec3 sweepGlow = vec3(1.0, 0.9, 0.8) * sweep * (1.0 - facetEdge) * 0.5;
+    
+    // Combine: prismatic fill + edge highlights + sweep + texture
+    vec3 fractalColor = prismColor * facetEdge + edgeGlow + sweepGlow;
+    
+    float intensity = (1.0 - facetEdge) * 0.7 + sweep * 0.3 + 0.15;
+    return vec4(fractalColor, intensity * 0.55);
 }
 
 vec4 holoVoid(vec2 uv) {
