@@ -474,6 +474,28 @@ function sleep(ms) {
 }
 
 /**
+ * Calculate the combined odds of a card's rarity/frame/holo combo
+ * @param {Object} cardData - The card data object
+ * @returns {string} Formatted odds string like "1 : 5,000,000"
+ */
+function calculateOddsString(cardData) {
+    const rarityProb = cardData.rarity.prob;
+    const frameProb = cardData.frame.prob;
+    const holoProb = cardData.holo.prob;
+
+    // Combined probability = multiply all three
+    const combinedProb = rarityProb * frameProb * holoProb;
+
+    // Convert to 1:X odds
+    const odds = Math.round(1 / combinedProb);
+
+    // Format with commas for readability
+    const formattedOdds = odds.toLocaleString();
+
+    return `1 : ${formattedOdds}`;
+}
+
+/**
  * Test RNG distribution (debug utility)
  * @param {number} iterations - Number of packs to simulate
  */
