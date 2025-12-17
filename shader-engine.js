@@ -619,13 +619,15 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
         canvas.className = 'shader-canvas';
         canvas.style.cssText = `
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 150%;
             pointer-events: none;
             z-index: 50;
             border-radius: inherit;
             mix-blend-mode: screen;
+            transform-origin: top left;
         `;
         cardElement.appendChild(canvas);
     }
