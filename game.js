@@ -41,31 +41,52 @@ const HOLO_TABLE = [
     { id: 'void', name: 'Void', threshold: 1.000, prob: 0.0045 }
 ];
 
-// Character pools - will be populated with actual assets later
+// Character pools - 15 characters per pack
+// bg = background ID (backgrounds are shared across characters)
 const CHARACTER_POOLS = {
     waifu: [
-        { id: 'w01', name: 'Sakura' },
-        { id: 'w02', name: 'Luna' },
-        { id: 'w03', name: 'Aria' },
-        { id: 'w04', name: 'Yuki' },
-        { id: 'w05', name: 'Hana' },
-        { id: 'w06', name: 'Miku' },
-        { id: 'w07', name: 'Rei' },
-        { id: 'w08', name: 'Nana' },
-        { id: 'w09', name: 'Sora' },
-        { id: 'w10', name: 'Kira' }
+        // Common (6)
+        { id: 'w01', name: 'The Village Herbalist', bg: 'bg_garden' },
+        { id: 'w02', name: 'The Novice Cleric', bg: 'bg_temple' },
+        { id: 'w03', name: 'The Steel Vanguard', bg: 'bg_castle' },
+        { id: 'w04', name: 'The Elven Scribe', bg: 'bg_forest' },
+        { id: 'w05', name: 'The Dwarven Smith', bg: 'bg_forge' },
+        { id: 'w06', name: 'The Nekomimi Baker', bg: 'bg_village' },
+        // Rare (4)
+        { id: 'w07', name: 'The Royal Duelist', bg: 'bg_castle' },
+        { id: 'w08', name: 'The Forest Ranger', bg: 'bg_forest' },
+        { id: 'w09', name: 'The Kitsune Diviner', bg: 'bg_shrine' },
+        { id: 'w10', name: 'The Tavern Brawler', bg: 'bg_tavern' },
+        // Super Rare (3)
+        { id: 'w11', name: 'The Shadow Assassin', bg: 'bg_night' },
+        { id: 'w12', name: 'The Dancer of the Dunes', bg: 'bg_desert' },
+        { id: 'w13', name: 'The Barbarian Queen', bg: 'bg_mountain' },
+        // SSR (1)
+        { id: 'w14', name: 'The Dragon Sorceress', bg: 'bg_volcano' },
+        // UR (1)
+        { id: 'w15', name: 'The Goddess of Love', bg: 'bg_celestial' }
     ],
     husbando: [
-        { id: 'h01', name: 'Kaito' },
-        { id: 'h02', name: 'Ryu' },
-        { id: 'h03', name: 'Zen' },
-        { id: 'h04', name: 'Akira' },
-        { id: 'h05', name: 'Hiro' },
-        { id: 'h06', name: 'Dante' },
-        { id: 'h07', name: 'Leon' },
-        { id: 'h08', name: 'Kai' },
-        { id: 'h09', name: 'Shin' },
-        { id: 'h10', name: 'Nova' }
+        // Common (6)
+        { id: 'h01', name: 'The City Watchman', bg: 'bg_city' },
+        { id: 'h02', name: 'The Traveling Merchant', bg: 'bg_road' },
+        { id: 'h03', name: 'The Court Mage', bg: 'bg_castle' },
+        { id: 'h04', name: 'The Halfling Bard', bg: 'bg_tavern' },
+        { id: 'h05', name: 'The Stable Master', bg: 'bg_village' },
+        { id: 'h06', name: 'The Alchemist', bg: 'bg_laboratory' },
+        // Rare (4)
+        { id: 'h07', name: 'The Elven Ranger', bg: 'bg_forest' },
+        { id: 'h08', name: 'The Pirate First Mate', bg: 'bg_ocean' },
+        { id: 'h09', name: 'The Martial Monk', bg: 'bg_dojo' },
+        { id: 'h10', name: 'The Wolf-Kin Warrior', bg: 'bg_snow' },
+        // Super Rare (3)
+        { id: 'h11', name: 'The Gladiator Champion', bg: 'bg_arena' },
+        { id: 'h12', name: 'The Orc Warlord', bg: 'bg_battlefield' },
+        { id: 'h13', name: 'The Dark Elf Warlock', bg: 'bg_ruins' },
+        // SSR (1)
+        { id: 'h14', name: 'The Demon Lord', bg: 'bg_inferno' },
+        // UR (1)
+        { id: 'h15', name: 'The Sun God Avatar', bg: 'bg_celestial' }
     ]
 };
 
@@ -154,7 +175,8 @@ function generateCard(packType) {
         rarity: rarity,
         frame: frame,
         holo: holo,
-        imagePath: `assets/${packType}/${character.id}.webp`,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/${packType}/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
@@ -197,18 +219,21 @@ function createCardElement(cardData, faceDown = true) {
             
             <!-- Card Front (Layered) -->
             <div class="card-face card-front">
-                <!-- Z-1: Background -->
-                <div class="card-layer-bg" style="background: linear-gradient(135deg, #1a1a2e, #2d2d44);"></div>
-                
-                <!-- Z-2: Character Art -->
-                <div class="card-layer-character">
-                    <img src="${cardData.imagePath}" alt="${cardData.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 140%22><rect fill=%22%23333%22 width=%22100%22 height=%22140%22/><text x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2212%22>${cardData.name}</text></svg>'">
+                <!-- Z-1: Background Image (frame hue affects this) -->
+                <div class="card-layer-bg">
+                    <img src="${cardData.backgroundPath}" alt="Background" class="card-bg-img" onerror="this.style.display='none'">
+                    <div class="card-bg-tint"></div>
                 </div>
                 
-                <!-- Z-3: Frame -->
+                <!-- Z-2: Character Art (no tint, sits on top of background) -->
+                <div class="card-layer-character">
+                    <img src="${cardData.characterPath}" alt="${cardData.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 150%22><text x=%2250%22 y=%2275%22 text-anchor=%22middle%22 fill=%22%23888%22 font-size=%2210%22>${cardData.name}</text></svg>'">
+                </div>
+                
+                <!-- Z-3: Frame (border only, sits on top of character) -->
                 <div class="card-layer-frame"></div>
                 
-                <!-- Z-4: Holo Overlay -->
+                <!-- Z-4: Holo Overlay (covers entire card) -->
                 <div class="card-layer-holo"></div>
                 
                 <!-- Z-5: Stats/UI -->
