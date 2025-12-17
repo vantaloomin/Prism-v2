@@ -1,0 +1,61 @@
+/* ============================================
+   PROJECT PRISM - TAB NAVIGATION
+   Tab switching and navigation styles
+   ============================================ */
+
+.tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-size: 1rem;
+}
+
+.tab-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.tab-btn.active {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.tab-icon {
+    font-size: 1.3rem;
+}
+
+.tab-label {
+    font-weight: 600;
+}
+
+.tab-badge {
+    background: var(--accent-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Tab Content Visibility */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
