@@ -1,0 +1,159 @@
+/* ============================================
+   PROJECT PRISM - HOLOGRAPHIC EFFECTS
+   Overlay effects and animations for card holos
+   ============================================ */
+
+/* No Holo - Standard matte finish */
+.holo-none .card-layer-holo {
+    display: none;
+}
+
+/* ============================================
+   SHINY - Diagonal white sheen sweep
+   ============================================ */
+.holo-shiny .card-layer-holo {
+    background: linear-gradient(135deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 45%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.1) 55%,
+            transparent 100%);
+    animation: shine-sweep 2s ease-in-out infinite;
+}
+
+@keyframes shine-sweep {
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(200%) rotate(45deg);
+    }
+}
+
+/* ============================================
+   RAINBOW - Prismatic foil effect
+   ============================================ */
+.holo-rainbow .card-layer-holo {
+    background: linear-gradient(135deg,
+            rgba(255, 0, 0, 0.2),
+            rgba(255, 127, 0, 0.2),
+            rgba(255, 255, 0, 0.2),
+            rgba(0, 255, 0, 0.2),
+            rgba(0, 0, 255, 0.2),
+            rgba(139, 0, 255, 0.2));
+    mix-blend-mode: overlay;
+    animation: holo-rainbow-shift 4s linear infinite;
+}
+
+@keyframes holo-rainbow-shift {
+
+    0%,
+    100% {
+        filter: hue-rotate(0deg);
+        opacity: 0.6;
+    }
+
+    50% {
+        filter: hue-rotate(360deg);
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   PEARLESCENT - Pink/Green oil slick shimmer
+   ============================================ */
+.holo-pearl .card-layer-holo {
+    background: linear-gradient(135deg,
+            rgba(255, 182, 193, 0.3),
+            rgba(176, 224, 230, 0.3),
+            rgba(255, 182, 193, 0.3));
+    mix-blend-mode: screen;
+    animation: pearl-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes pearl-shimmer {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ============================================
+   FRACTAL - Geometric crystal patterns
+   ============================================ */
+.holo-fractal .card-layer-holo {
+    background:
+        repeating-conic-gradient(from 0deg,
+            rgba(139, 92, 246, 0.1) 0deg 30deg,
+            transparent 30deg 60deg);
+    mix-blend-mode: color-dodge;
+    animation: fractal-rotate 10s linear infinite;
+}
+
+@keyframes fractal-rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   VOID - Dark matter / sucking particle effect
+   The rarest and most dramatic effect
+   ============================================ */
+.holo-void .card-layer-holo {
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 40%,
+            rgba(20, 0, 40, 0.6) 70%,
+            rgba(40, 0, 80, 0.8) 100%);
+    mix-blend-mode: multiply;
+    animation: void-pulse 2s ease-in-out infinite;
+}
+
+.holo-void .card-layer-holo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%,
+            rgba(139, 92, 246, 0.3) 0%,
+            transparent 50%);
+    animation: void-core 3s ease-in-out infinite;
+}
+
+@keyframes void-pulse {
+
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes void-core {
+
+    0%,
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}

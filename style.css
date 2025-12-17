@@ -33,9 +33,11 @@
     --frame-rainbow: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff);
     --frame-black: #1a1a1a;
 
-    /* Sizing */
-    --card-width: 180px;
-    --card-height: 252px;
+    /* Sizing - 2:3 aspect ratio, max 992x1488 */
+    --card-max-width: 992px;
+    --card-max-height: 1488px;
+    --card-width: clamp(140px, 18vw, var(--card-max-width));
+    --card-aspect-ratio: 2 / 3;
     --card-radius: 12px;
 
     /* Transitions */
@@ -258,7 +260,9 @@ body {
 
 .card {
     width: var(--card-width);
-    height: var(--card-height);
+    aspect-ratio: var(--card-aspect-ratio);
+    max-width: var(--card-max-width);
+    max-height: var(--card-max-height);
     position: relative;
     perspective: 1000px;
     cursor: pointer;
@@ -395,52 +399,7 @@ body {
     backdrop-filter: blur(4px);
 }
 
-/* ============================================
-   FRAME STYLES
-   ============================================ */
-
-.frame-white .card-layer-frame {
-    border-color: var(--frame-white);
-}
-
-.frame-blue .card-layer-frame {
-    border-color: var(--frame-blue);
-    box-shadow: inset 0 0 20px rgba(96, 165, 250, 0.3);
-}
-
-.frame-red .card-layer-frame {
-    border-color: var(--frame-red);
-    box-shadow: inset 0 0 20px rgba(248, 113, 113, 0.3);
-}
-
-.frame-gold .card-layer-frame {
-    border-color: var(--frame-gold);
-    box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.3);
-}
-
-.frame-black .card-layer-frame {
-    border-color: var(--frame-black);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
-}
-
-.frame-rainbow .card-layer-frame {
-    border: 4px solid transparent;
-    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
-        linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff) border-box;
-    animation: rainbow-shift 3s linear infinite;
-}
-
-@keyframes rainbow-shift {
-
-    0%,
-    100% {
-        filter: hue-rotate(0deg);
-    }
-
-    50% {
-        filter: hue-rotate(180deg);
-    }
-}
+/* Frame styles moved to frames.css */
 
 /* ============================================
    RARITY STYLES
@@ -481,123 +440,7 @@ body {
     }
 }
 
-/* ============================================
-   HOLO EFFECTS
-   ============================================ */
-
-.holo-none .card-layer-holo {
-    display: none;
-}
-
-.holo-shiny .card-layer-holo {
-    background: linear-gradient(135deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.1) 45%,
-            rgba(255, 255, 255, 0.4) 50%,
-            rgba(255, 255, 255, 0.1) 55%,
-            transparent 100%);
-    animation: shine-sweep 2s ease-in-out infinite;
-}
-
-@keyframes shine-sweep {
-    0% {
-        transform: translateX(-100%) rotate(45deg);
-    }
-
-    100% {
-        transform: translateX(200%) rotate(45deg);
-    }
-}
-
-.holo-rainbow .card-layer-holo {
-    background: linear-gradient(135deg,
-            rgba(255, 0, 0, 0.2),
-            rgba(255, 127, 0, 0.2),
-            rgba(255, 255, 0, 0.2),
-            rgba(0, 255, 0, 0.2),
-            rgba(0, 0, 255, 0.2),
-            rgba(139, 0, 255, 0.2));
-    mix-blend-mode: overlay;
-    animation: holo-shift 4s linear infinite;
-}
-
-@keyframes holo-shift {
-
-    0%,
-    100% {
-        filter: hue-rotate(0deg);
-        opacity: 0.6;
-    }
-
-    50% {
-        filter: hue-rotate(360deg);
-        opacity: 0.8;
-    }
-}
-
-.holo-pearl .card-layer-holo {
-    background: linear-gradient(135deg,
-            rgba(255, 182, 193, 0.3),
-            rgba(176, 224, 230, 0.3),
-            rgba(255, 182, 193, 0.3));
-    mix-blend-mode: screen;
-    animation: pearl-shimmer 3s ease-in-out infinite;
-}
-
-@keyframes pearl-shimmer {
-
-    0%,
-    100% {
-        opacity: 0.4;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-}
-
-.holo-fractal .card-layer-holo {
-    background:
-        repeating-conic-gradient(from 0deg,
-            rgba(139, 92, 246, 0.1) 0deg 30deg,
-            transparent 30deg 60deg);
-    mix-blend-mode: color-dodge;
-    animation: fractal-rotate 10s linear infinite;
-}
-
-@keyframes fractal-rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.holo-void .card-layer-holo {
-    background: radial-gradient(ellipse at center,
-            transparent 0%,
-            rgba(0, 0, 0, 0.3) 40%,
-            rgba(20, 0, 40, 0.6) 70%,
-            rgba(40, 0, 80, 0.8) 100%);
-    mix-blend-mode: multiply;
-    animation: void-pulse 2s ease-in-out infinite;
-}
-
-@keyframes void-pulse {
-
-    0%,
-    100% {
-        opacity: 0.7;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-}
+/* Holo effects moved to holos.css */
 
 /* ============================================
    PACK ANIMATION
@@ -741,7 +584,7 @@ body {
 .gallery-grid .card {
     width: 100%;
     height: auto;
-    aspect-ratio: 2.5 / 3.5;
+    aspect-ratio: 2 / 3;
 }
 
 .gallery-grid .card-inner {
@@ -786,8 +629,27 @@ body {
         gap: 10px;
     }
 
-    .card {
-        --card-width: 140px;
-        --card-height: 196px;
+    :root {
+        --card-width: clamp(100px, 28vw, 200px);
+    }
+}
+
+@media (min-width: 1400px) {
+    :root {
+        --card-width: clamp(200px, 15vw, 400px);
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+@media (min-width: 2000px) {
+    :root {
+        --card-width: clamp(300px, 12vw, 500px);
+    }
+
+    .app-container {
+        max-width: 1800px;
     }
 }

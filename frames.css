@@ -1,0 +1,71 @@
+/* ============================================
+   PROJECT PRISM - FRAME STYLES
+   Colored borders and effects for card frames
+   ============================================ */
+
+/* Base Frame Colors */
+.frame-white .card-layer-frame {
+    border-color: var(--frame-white);
+}
+
+.frame-blue .card-layer-frame {
+    border-color: var(--frame-blue);
+    box-shadow: inset 0 0 20px rgba(96, 165, 250, 0.3);
+}
+
+.frame-red .card-layer-frame {
+    border-color: var(--frame-red);
+    box-shadow: inset 0 0 20px rgba(248, 113, 113, 0.3);
+}
+
+.frame-gold .card-layer-frame {
+    border-color: var(--frame-gold);
+    box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.frame-black .card-layer-frame {
+    border-color: var(--frame-black);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Rainbow Frame - Animated gradient border */
+.frame-rainbow .card-layer-frame {
+    border: 4px solid transparent;
+    background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+        linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff) border-box;
+    animation: rainbow-border-shift 3s linear infinite;
+}
+
+@keyframes rainbow-border-shift {
+
+    0%,
+    100% {
+        filter: hue-rotate(0deg);
+    }
+
+    50% {
+        filter: hue-rotate(180deg);
+    }
+}
+
+/* Frame Glow Effects for Rare Cards */
+.rarity-ssr .card-layer-frame {
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+.rarity-ur .card-layer-frame {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    animation: ur-frame-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ur-frame-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.8), 0 0 50px rgba(239, 68, 68, 0.4);
+    }
+}
