@@ -328,34 +328,162 @@ function renderCardDisplay(cards) {
 }
 
 /**
- * Render the gallery grid
+ * Get sort order value for rarity (Common first → UR last, like a binder)
  */
-function renderGallery() {
-    const galleryGrid = document.getElementById('gallery-grid');
-    const countElement = document.getElementById('collection-count');
+function getRaritySortOrder(rarityId) {
+    const order = { 'c': 0, 'r': 1, 'sr': 2, 'ssr': 3, 'ur': 4 };
+    return order[rarityId] ?? -1;
+}
 
-    countElement.textContent = gameState.inventory.length;
+/**
+ * Get sort order value for frame (White first → Black last)
+ */
+function getFrameSortOrder(frameId) {
+    const order = { 'white': 0, 'blue': 1, 'red': 2, 'gold': 3, 'rainbow': 4, 'black': 5 };
+    return order[frameId] ?? -1;
+}
+
+/**
+ * Get sort order value for holo (None first → Void last)
+ */
+function getHoloSortOrder(holoId) {
+    const order = { 'none': 0, 'shiny': 1, 'rainbow': 2, 'pearl': 3, 'fractal': 4, 'void': 5 };
+    return order[holoId] ?? -1;
+}
+
+/**
+ * Generate a unique key for grouping duplicate cards
+ */
+function getCardGroupKey(card) {
+    return `${card.characterId}_${card.frame.id}_${card.holo.id}`;
+}
+
+/**
+ * Render the collection view with sorted, grouped cards
+ */
+function renderCollection(page = null) {
+    const container = document.getElementById('collection-container');
+    const uniqueCount = document.getElementById('unique-count');
+    const totalCount = document.getElementById('total-count');
+    const badge = document.getElementById('collection-badge');
+
+    // Cards per page (5 columns × 4 rows = 20)
+    const CARDS_PER_PAGE = 20;
+
+    // Update counts
+    totalCount.textContent = gameState.inventory.length;
+    badge.textContent = gameState.inventory.length;
 
     if (gameState.inventory.length === 0) {
-        galleryGrid.innerHTML = `
-            <div class="gallery-empty" style="grid-column: 1 / -1;">
-                <div class="gallery-empty-icon">📦</div>
-                <p>No cards yet. Open a pack to start your collection!</p>
+        container.innerHTML = `
+            <div class="binder-grid">
+                <div class="gallery-empty" style="grid-column: 1 / -1;">
+                    <div class="gallery-empty-icon">📦</div>
+                    <p>No cards yet. Open a pack to start your collection!</p>
+                </div>
             </div>
         `;
+        uniqueCount.textContent = '0';
         return;
     }
 
-    galleryGrid.innerHTML = '';
-
-    // Show newest first
-    const sortedInventory = [...gameState.inventory].reverse();
-
-    sortedInventory.forEach(cardData => {
-        const cardElement = createCardElement(cardData, false);
-        galleryGrid.appendChild(cardElement);
+    // Group cards by unique combo (character + frame + holo)
+    const cardGroups = {};
+    gameState.inventory.forEach(card => {
+        const key = getCardGroupKey(card);
+        if (!cardGroups[key]) {
+            cardGroups[key] = {
+                card: card,
+                count: 0
+            };
+        }
+        cardGroups[key].count++;
     });
+
+    // Convert to array and sort (Common → UR, White → Black, None → Void)
+    const sortedGroups = Object.values(cardGroups);
+    sortedGroups.sort((a, b) => {
+        // Sort by rarity
+        const rarityDiff = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
+        if (rarityDiff !== 0) return rarityDiff;
+
+        // Then by frame
+        const frameDiff = getFrameSortOrder(a.card.frame.id) - getFrameSortOrder(b.card.frame.id);
+        if (frameDiff !== 0) return frameDiff;
+
+        // Then by holo
+        const holoDiff = getHoloSortOrder(a.card.holo.id) - getHoloSortOrder(b.card.holo.id);
+        if (holoDiff !== 0) return holoDiff;
+
+        // Finally by name
+        return a.card.name.localeCompare(b.card.name);
+    });
+
+    uniqueCount.textContent = sortedGroups.length;
+
+    // Pagination
+    const totalPages = Math.ceil(sortedGroups.length / CARDS_PER_PAGE);
+    const currentPage = page !== null ? page : (collectionState.currentPage || 1);
+    collectionState.currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
+    const startIdx = (collectionState.currentPage - 1) * CARDS_PER_PAGE;
+    const endIdx = Math.min(startIdx + CARDS_PER_PAGE, sortedGroups.length);
+    const pageGroups = sortedGroups.slice(startIdx, endIdx);
+
+    // Render binder grid
+    container.innerHTML = '';
+
+    const grid = document.createElement('div');
+    grid.className = 'binder-grid';
+
+    pageGroups.forEach(group => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'collection-card-wrapper';
+
+        const cardElement = createCardElement(group.card, false);
+        wrapper.appendChild(cardElement);
+
+        // Add count badge if duplicates
+        if (group.count > 1) {
+            const countBadge = document.createElement('span');
+            countBadge.className = 'card-count-badge';
+            countBadge.textContent = `×${group.count}`;
+            wrapper.appendChild(countBadge);
+        }
+
+        grid.appendChild(wrapper);
+    });
+
+    // Render pagination controls if more than one page (at top)
+    if (totalPages > 1) {
+        const pagination = document.createElement('div');
+        pagination.className = 'pagination-controls';
+        pagination.innerHTML = `
+            <button class="pagination-btn" id="page-prev" ${collectionState.currentPage <= 1 ? 'disabled' : ''}>◀</button>
+            <div class="pagination-info">
+                <span class="pagination-page">Page ${collectionState.currentPage} of ${totalPages}</span>
+                <span class="pagination-range">${startIdx + 1}-${endIdx} of ${sortedGroups.length}</span>
+            </div>
+            <button class="pagination-btn" id="page-next" ${collectionState.currentPage >= totalPages ? 'disabled' : ''}>▶</button>
+        `;
+        container.appendChild(pagination);
+
+        // Bind pagination handlers
+        document.getElementById('page-prev').addEventListener('click', () => {
+            renderCollection(collectionState.currentPage - 1);
+        });
+        document.getElementById('page-next').addEventListener('click', () => {
+            renderCollection(collectionState.currentPage + 1);
+        });
+    }
+
+    container.appendChild(grid);
 }
+
+// Collection state for pagination
+const collectionState = {
+    currentPage: 1
+};
 
 /**
  * Update the credits display
@@ -421,9 +549,9 @@ async function handlePackPurchase(packType) {
         gameState.stats.packsOpened++;
         gameState.stats.totalCards += cards.length;
 
-        // Save and update gallery
+        // Save and update collection
         saveGame();
-        renderGallery();
+        renderCollection();
     };
 }
 
@@ -594,7 +722,15 @@ function init() {
 
     // Update UI
     updateCreditsDisplay();
-    renderGallery();
+    renderCollection();
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            switchTab(tabId);
+        });
+    });
 
     // Bind event listeners
     document.getElementById('btn-waifu-pack').addEventListener('click', () => {
@@ -632,6 +768,27 @@ function init() {
 
     console.log('✦ Project Prism initialized! ✦');
     console.log('Debug: Run testRngDistribution(1000) to test RNG');
+}
+
+/**
+ * Switch between tabs
+ * @param {string} tabId - 'shop' or 'collection'
+ */
+function switchTab(tabId) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `tab-content-${tabId}`);
+    });
+
+    // Refresh collection when switching to it
+    if (tabId === 'collection') {
+        renderCollection();
+    }
 }
 
 // ============================================

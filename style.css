@@ -122,6 +122,67 @@ body {
 }
 
 /* ============================================
+   TAB NAVIGATION
+   ============================================ */
+
+.tab-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-size: 1rem;
+}
+
+.tab-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.tab-btn.active {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.tab-icon {
+    font-size: 1.3rem;
+}
+
+.tab-label {
+    font-weight: 600;
+}
+
+.tab-badge {
+    background: var(--accent-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ============================================
    GAME STAGE
    ============================================ */
 
@@ -631,6 +692,197 @@ body {
     font-size: 3rem;
     margin-bottom: 15px;
     opacity: 0.5;
+}
+
+/* ============================================
+   COLLECTION VIEW - Binder Style
+   ============================================ */
+
+/* Full width breakout for collection */
+#tab-content-collection {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    max-width: 1800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.collection-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.collection-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--bg-secondary);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.stat-divider {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Binder-style grid */
+.collection-container {
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.binder-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    background: var(--bg-secondary);
+    padding: 30px;
+    border-radius: 16px;
+    border: 3px solid var(--bg-tertiary);
+}
+
+/* Collection card wrapper for count badge */
+.collection-card-wrapper {
+    position: relative;
+}
+
+.collection-card-wrapper .card {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+}
+
+.collection-card-wrapper .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Duplicate count badge */
+.card-count-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--accent-secondary);
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    z-index: 10;
+    border: 2px solid var(--accent-secondary);
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: var(--bg-tertiary);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 120px;
+}
+
+.pagination-page {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pagination-range {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Page dots */
+.pagination-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.pagination-dot.active {
+    background: var(--accent-primary);
+    transform: scale(1.2);
+}
+
+.pagination-dot:hover:not(.active) {
+    background: var(--text-muted);
 }
 
 /* ============================================
