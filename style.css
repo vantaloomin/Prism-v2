@@ -448,23 +448,21 @@ body {
 
 /* Name plate container - sits at bottom with rarity inside */
 .card-name {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     background: rgba(0, 0, 0, 0.8);
-    padding: 10px 12px 10px 45px;
-    /* Extra left padding for rarity badge */
-    text-align: center;
+    padding: 8px 12px;
     font-size: 0.8rem;
     font-weight: 600;
     backdrop-filter: blur(4px);
     border-radius: 0;
-    /* Full width at bottom */
 }
 
-/* Rarity badge - positioned in lower left corner of name plate */
+/* Rarity badge - inline with name */
 .card-rarity {
-    position: absolute;
-    left: 6px;
-    bottom: 6px;
+    flex-shrink: 0;
     padding: 3px 8px;
     border-radius: 10px;
     font-size: 0.6rem;

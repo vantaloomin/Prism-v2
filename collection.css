@@ -155,7 +155,7 @@ body.animations-paused .card-layer-tint-overlay {
     width: 100%;
     aspect-ratio: 2 / 3;
     position: relative;
-    z-index: 3;
+    /* No z-index here - allows ::before/::after with z-index:-1 to appear behind */
 }
 
 .collection-card-wrapper .card-inner {
@@ -165,12 +165,13 @@ body.animations-paused .card-layer-tint-overlay {
 /* ============================================
    STACKED CARD EFFECT FOR DUPLICATES
    Shows visual "depth" for multiple copies
+   Pseudo-elements on WRAPPER (not card) to avoid overflow:hidden clipping
    ============================================ */
 
-/* Base pseudo-element styles for stack shadows */
-.collection-card-wrapper.stack-2 .card::before,
-.collection-card-wrapper.stack-3 .card::before,
-.collection-card-wrapper.stack-3 .card::after {
+/* Base pseudo-element styles for stack shadows - on wrapper, not card */
+.collection-card-wrapper.stack-2::before,
+.collection-card-wrapper.stack-3::before,
+.collection-card-wrapper.stack-3::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -181,71 +182,42 @@ body.animations-paused .card-layer-tint-overlay {
 }
 
 /* Stack of 2: Single shadow card behind */
-.collection-card-wrapper.stack-2 .card::before {
-    z-index: -1;
+.collection-card-wrapper.stack-2::before {
+    z-index: 0;
     transform: translate(6px, -6px);
     opacity: 0.7;
 }
 
 /* Stack of 3+: Two shadow cards behind */
-.collection-card-wrapper.stack-3 .card::before {
-    z-index: -1;
+.collection-card-wrapper.stack-3::before {
+    z-index: 0;
     transform: translate(6px, -6px);
     opacity: 0.8;
 }
 
-.collection-card-wrapper.stack-3 .card::after {
-    z-index: -2;
+.collection-card-wrapper.stack-3::after {
+    z-index: -1;
     transform: translate(12px, -12px);
     opacity: 0.5;
 }
 
-/* Frame-specific border colors for stacked shadows */
-.collection-card-wrapper .card.frame-white::before,
-.collection-card-wrapper .card.frame-white::after {
-    border-color: var(--frame-white, #e8e8e8);
-}
+/* Note: Frame-specific border colors for stacks removed since pseudo-elements
+   are now on wrapper (which doesn't have frame class). Default white border used. */
 
-.collection-card-wrapper .card.frame-blue::before,
-.collection-card-wrapper .card.frame-blue::after {
-    border-color: var(--frame-blue, #60a5fa);
-}
-
-.collection-card-wrapper .card.frame-red::before,
-.collection-card-wrapper .card.frame-red::after {
-    border-color: var(--frame-red, #f87171);
-}
-
-.collection-card-wrapper .card.frame-gold::before,
-.collection-card-wrapper .card.frame-gold::after {
-    border-color: var(--frame-gold, #fbbf24);
-}
-
-.collection-card-wrapper .card.frame-rainbow::before,
-.collection-card-wrapper .card.frame-rainbow::after {
-    border-color: var(--frame-gold, #a855f7);
-    background: linear-gradient(145deg, #2d1f3d 0%, #3d2d54 100%);
-}
-
-.collection-card-wrapper .card.frame-black::before,
-.collection-card-wrapper .card.frame-black::after {
-    border-color: var(--frame-black, #374151);
-    background: linear-gradient(145deg, #0d0d15 0%, #1a1a25 100%);
-}
-
-/* Duplicate count badge */
+/* Duplicate count badge - bottom right corner */
 .card-count-badge {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    background: rgba(0, 0, 0, 0.9);
-    color: var(--accent-secondary);
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 0.85rem;
+    bottom: 0;
+    right: 0;
+    background: rgba(139, 92, 246, 0.9);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: var(--card-radius, 12px);
+    font-size: 0.75rem;
     font-weight: 700;
-    z-index: 10;
-    border: 2px solid var(--accent-secondary);
+    z-index: 65;
 }
 
 /* ============================================
