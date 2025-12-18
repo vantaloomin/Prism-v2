@@ -312,6 +312,9 @@ function createCardElement(cardData, faceDown = true) {
                 <!-- Z-4: Holo Overlay (covers entire card) -->
                 <div class="card-layer-holo"></div>
                 
+                <!-- Z-4.5: Frame Tint Overlay (above holo, masked to protect character) -->
+                <div class="card-layer-tint-overlay"></div>
+                
                 <!-- Z-5: Stats/UI -->
                 <div class="card-layer-stats">
                     <span class="card-rarity">${cardData.rarity.id.toUpperCase()}</span>

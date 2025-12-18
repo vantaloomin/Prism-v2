@@ -23,7 +23,7 @@
 }
 
 .frame-blue .card-bg-tint {
-    background: rgba(96, 165, 250, 0.15);
+    background: rgba(96, 165, 250, 0.30);
 }
 
 /* Red Frame - Warm temperature tint */
@@ -33,7 +33,7 @@
 }
 
 .frame-red .card-bg-tint {
-    background: rgba(248, 113, 113, 0.15);
+    background: rgba(248, 113, 113, 0.30);
 }
 
 /* Gold Frame - Metallic luster tint */
@@ -43,7 +43,7 @@
 }
 
 .frame-gold .card-bg-tint {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(255, 215, 0, 0.2));
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(255, 215, 0, 0.35));
 }
 
 /* Black Frame - High contrast, darkened */
@@ -53,7 +53,7 @@
 }
 
 .frame-black .card-bg-tint {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.45);
 }
 
 /* Rainbow Frame - Animated gradient border and tint */
@@ -66,11 +66,11 @@
 
 .frame-rainbow .card-bg-tint {
     background: linear-gradient(135deg,
-            rgba(255, 107, 107, 0.1),
-            rgba(254, 202, 87, 0.1),
-            rgba(72, 219, 251, 0.1),
-            rgba(255, 159, 243, 0.1),
-            rgba(84, 160, 255, 0.1));
+            rgba(255, 107, 107, 0.2),
+            rgba(254, 202, 87, 0.2),
+            rgba(72, 219, 251, 0.2),
+            rgba(255, 159, 243, 0.2),
+            rgba(84, 160, 255, 0.2));
     animation: rainbow-tint-shift 3s linear infinite;
 }
 
@@ -96,6 +96,47 @@
     50% {
         filter: hue-rotate(180deg);
     }
+}
+
+/* ============================================
+   TINT OVERLAY (Above Holo Layer)
+   These ensure frame hue shows through holo effects
+   ============================================ */
+
+/* White Frame - No tint overlay */
+.frame-white .card-layer-tint-overlay {
+    background: transparent;
+}
+
+/* Blue Frame - Cool tint overlay */
+.frame-blue .card-layer-tint-overlay {
+    background: rgba(96, 165, 250, 0.35);
+}
+
+/* Red Frame - Warm tint overlay */
+.frame-red .card-layer-tint-overlay {
+    background: rgba(248, 113, 113, 0.35);
+}
+
+/* Gold Frame - Metallic tint overlay */
+.frame-gold .card-layer-tint-overlay {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(255, 215, 0, 0.4));
+}
+
+/* Black Frame - Dark tint overlay */
+.frame-black .card-layer-tint-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Rainbow Frame - Animated tint overlay */
+.frame-rainbow .card-layer-tint-overlay {
+    background: linear-gradient(135deg,
+            rgba(255, 107, 107, 0.25),
+            rgba(254, 202, 87, 0.25),
+            rgba(72, 219, 251, 0.25),
+            rgba(255, 159, 243, 0.25),
+            rgba(84, 160, 255, 0.25));
+    animation: rainbow-tint-shift 3s linear infinite;
 }
 
 /* ============================================

@@ -348,11 +348,12 @@ body {
     object-fit: cover;
 }
 
-/* Tint overlay - frame color affects this, NOT character art */
+/* Tint overlay - frame color affects background only */
 .card-bg-tint {
     position: absolute;
     inset: 0;
     pointer-events: none;
+    mix-blend-mode: multiply;
 }
 
 /* Z-2: Character Art Layer (NO tint applied here) */
@@ -406,6 +407,19 @@ body {
 
 .card:hover .card-layer-holo {
     opacity: 1;
+}
+
+/* Z-4.5: Tint Overlay Layer - sits above holo, masked to protect character */
+.card-layer-tint-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    border-radius: var(--card-radius);
+    /* Radial mask: transparent center (character), solid edges (background) */
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 55%, transparent 0%, transparent 60%, black 80%);
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 55%, transparent 0%, transparent 60%, black 80%);
+    mix-blend-mode: color;
 }
 
 /* Z-5: Stats/UI Layer */
