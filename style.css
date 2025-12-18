@@ -372,7 +372,19 @@ body {
     max-width: 100%;
     max-height: 95%;
     object-fit: contain;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    /* Multi-layered drop shadow for depth/parallax effect */
+    filter:
+        drop-shadow(3px 6px 4px rgba(0, 0, 0, 0.5)) drop-shadow(6px 12px 8px rgba(0, 0, 0, 0.3)) drop-shadow(10px 20px 15px rgba(0, 0, 0, 0.15));
+    /* Slight offset to enhance parallax feel */
+    transform: translateY(-2px);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Enhanced depth on hover */
+.card:hover .card-layer-character img {
+    transform: translateY(-4px) scale(1.01);
+    filter:
+        drop-shadow(4px 8px 5px rgba(0, 0, 0, 0.55)) drop-shadow(8px 16px 10px rgba(0, 0, 0, 0.35)) drop-shadow(14px 28px 20px rgba(0, 0, 0, 0.2));
 }
 
 /* Z-3: Frame Layer */
@@ -422,36 +434,43 @@ body {
     mix-blend-mode: color;
 }
 
-/* Z-5: Stats/UI Layer */
+/* Z-5: Stats/UI Layer - Above shader canvas (z-50) */
 .card-layer-stats {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 60;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;
+    justify-content: flex-end;
+    padding: 0;
     pointer-events: none;
 }
 
-.card-rarity {
-    align-self: flex-end;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
+/* Name plate container - sits at bottom with rarity inside */
 .card-name {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 8px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px 12px 10px 45px;
+    /* Extra left padding for rarity badge */
     text-align: center;
     font-size: 0.8rem;
     font-weight: 600;
-    border-radius: 6px;
     backdrop-filter: blur(4px);
+    border-radius: 0;
+    /* Full width at bottom */
+}
+
+/* Rarity badge - positioned in lower left corner of name plate */
+.card-rarity {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Frame styles moved to frames.css */

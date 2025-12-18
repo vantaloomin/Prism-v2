@@ -115,21 +115,26 @@ vec4 holoNone(vec2 uv) {
 }
 
 vec4 holoShiny(vec2 uv) {
-    // Enhanced classic foil with multiple sweep layers (slowed down, no mouse reactivity)
+    // Enhanced classic foil with multiple sweep layers
+    // Slowed down 20% more, lowered brightness 10%, added vertical movement
     
-    // Primary diagonal sweep (slowed down)
-    float sweep1 = sin((uv.x + uv.y) * 12.0 - u_time * 1.0);
+    // Primary diagonal sweep (slowed 20% more: 1.0 -> 0.8)
+    float sweep1 = sin((uv.x + uv.y) * 12.0 - u_time * 0.8);
     sweep1 = smoothstep(0.0, 0.15, sweep1) * smoothstep(0.3, 0.15, sweep1);
     
-    // Secondary perpendicular sweep (slowed down)
-    float sweep2 = sin((uv.x - uv.y) * 8.0 - u_time * 0.6);
+    // Secondary perpendicular sweep (slowed 20% more: 0.6 -> 0.48)
+    float sweep2 = sin((uv.x - uv.y) * 8.0 - u_time * 0.48);
     sweep2 = smoothstep(0.0, 0.2, sweep2) * smoothstep(0.4, 0.2, sweep2) * 0.5;
     
+    // NEW: Vertical sweep for added movement
+    float vertSweep = sin(uv.y * 15.0 - u_time * 0.6) * 0.5 + 0.5;
+    vertSweep = pow(vertSweep, 3.0) * 0.3;
+    
     // Combine sweeps
-    float totalSweep = sweep1 + sweep2;
+    float totalSweep = sweep1 + sweep2 + vertSweep;
     
     // Add subtle sparkle noise (slowed down)
-    float sparkle = pow(snoise(uv * 40.0 + u_time * 0.2) * 0.5 + 0.5, 8.0) * 0.3;
+    float sparkle = pow(snoise(uv * 40.0 + u_time * 0.16) * 0.5 + 0.5, 8.0) * 0.25;
     
     // Static center-based boost (no mouse reactivity)
     vec2 center = vec2(0.5, 0.5);
@@ -139,40 +144,47 @@ vec4 holoShiny(vec2 uv) {
     // Slight color tint based on position
     vec3 foilColor = mix(vec3(1.0, 1.0, 1.0), vec3(1.0, 0.95, 0.85), uv.y);
     
-    float intensity = (totalSweep + sparkle) * (0.4 + centerBoost * 0.4);
-    return vec4(foilColor, intensity);
+    // Lowered brightness by 10%: 1.3 -> 1.17
+    float intensity = (totalSweep + sparkle) * (0.55 + centerBoost * 0.45);
+    return vec4(foilColor, intensity * 1.17);
 }
 
 vec4 holoRainbow(vec2 uv) {
-    // Enhanced prismatic diffraction with waves and bands (slowed down, no mouse reactivity)
-    vec2 center = vec2(0.5, 0.5);
-    vec2 toCenter = uv - center;
-    float angle = atan(toCenter.y, toCenter.x);
-    float dist = length(toCenter);
+    // Prismatic sweep emanating from bottom-left corner
+    // Sweeps up and right across the card
     
-    // Primary rainbow from angle (slowed down)
-    float hue1 = (angle / 6.28318 + 0.5) + u_time * 0.03;
+    // Origin point: bottom-left, slightly outside card
+    vec2 origin = vec2(-0.1, 1.1);
+    vec2 toOrigin = uv - origin;
+    float angle = atan(toOrigin.y, toOrigin.x);
+    float dist = length(toOrigin);
     
-    // Secondary rainbow bands based on distance (slowed down)
-    float hue2 = fract(dist * 3.0 - u_time * 0.08);
+    // Rainbow hue based on angle from origin (sweeps up-right)
+    float hue1 = (angle / 6.28318 + 0.5) + u_time * 0.04;
     
-    // Blend between angle and distance rainbows (slowed down)
+    // Secondary wave bands based on distance from origin
+    float hue2 = fract(dist * 2.0 - u_time * 0.1);
+    
+    // Blend hues
     float blendFactor = sin(u_time * 0.2) * 0.3 + 0.5;
-    float finalHue = mix(hue1, hue2, blendFactor * 0.4);
+    float finalHue = mix(hue1, hue2, blendFactor * 0.5);
     
     vec3 rainbow = hsl2rgb(vec3(finalHue, 0.85, 0.55));
     
-    // Add shimmer waves (slowed down)
-    float shimmer = sin(dist * 20.0 - u_time * 1.2) * 0.5 + 0.5;
+    // Sweep waves emanating from origin
+    float shimmer = sin(dist * 12.0 - u_time * 1.5) * 0.5 + 0.5;
     shimmer = pow(shimmer, 2.0);
     rainbow += vec3(shimmer * 0.2);
     
-    // Add noise texture (slowed down)
+    // Add noise texture
     float colorNoise = snoise(uv * 15.0 + u_time * 0.08) * 0.1;
     rainbow += vec3(colorNoise);
     
-    float intensity = smoothstep(1.0, 0.0, dist) * 0.5 + shimmer * 0.15;
-    return vec4(rainbow, intensity);
+    // Intensity based on sweep pattern - stronger near sweep lines
+    float sweepIntensity = smoothstep(1.8, 0.0, dist) * 0.6;
+    float intensity = 0.4 + shimmer * 0.25 + sweepIntensity;
+    
+    return vec4(rainbow, intensity * 1.1);
 }
 
 vec4 holoPearl(vec2 uv) {
@@ -266,14 +278,14 @@ vec4 holoPearl(vec2 uv) {
     float centerGlow = pow(max(0.0, 1.0 - dist * 2.0), 3.0) * 0.2;
     pearl += vec3(1.0, 0.95, 0.98) * centerGlow;
     
-    // Final intensity - richer overall presence
-    float intensity = 0.45 + topShimmer * 0.15 + centerGlow * 0.1 + edgeFactor * 0.1;
+    // Final intensity - reduced opacity by 10%: 1.2 -> 1.08
+    float intensity = 0.50 + topShimmer * 0.18 + centerGlow * 0.12 + edgeFactor * 0.12;
     
-    return vec4(pearl, intensity);
+    return vec4(pearl, intensity * 1.08);
 }
 
 vec4 holoFractal(vec2 uv) {
-    // Geometric crystal facets with animation and texture (slowed down)
+    // Geometric crystal facets with cyberpunk color accents
     float scale = 8.0;
     vec2 cell = floor(uv * scale);
     vec2 local = fract(uv * scale);
@@ -288,46 +300,52 @@ vec4 holoFractal(vec2 uv) {
     float minEdge = min(min(edge1, edge2), min(edge3, edge4));
     float facetEdge = smoothstep(0.0, 0.08, minEdge);
     
-    // Animated light sweep across facets (slowed down)
+    // Animated light sweep across facets
     float sweep = sin(uv.x * 5.0 + uv.y * 3.0 - u_time * 0.8) * 0.5 + 0.5;
-    sweep = pow(sweep, 3.0); // Sharpen the sweep
+    sweep = pow(sweep, 3.0);
     
-    // Add noise texture for depth (slowed down)
+    // Add noise texture for depth
     float noise = snoise(uv * 20.0 + u_time * 0.12) * 0.15;
     
-    // Animated prismatic color - shifts over time with sweep influence (slowed down)
+    // Cyberpunk color scheme: cyan, magenta, electric blue accents
     float cellHue = fract((cell.x * 0.1 + cell.y * 0.15) + u_time * 0.04 + sweep * 0.2);
-    vec3 prismColor = hsl2rgb(vec3(cellHue, 0.7, 0.5 + sweep * 0.2));
+    // Bias towards cyan-magenta range (0.5-0.9 hue)
+    float cyberHue = 0.5 + cellHue * 0.4;
+    vec3 prismColor = hsl2rgb(vec3(cyberHue, 0.75, 0.45 + sweep * 0.15));
     
-    // Add subtle color variation from noise
-    prismColor += vec3(noise * 0.5, noise * 0.3, noise * 0.4);
+    // Add subtle neon accents
+    prismColor += vec3(0.0, noise * 0.3, noise * 0.4); // Cyan-ish noise
+    prismColor += vec3(noise * 0.2, 0.0, noise * 0.3) * 0.5; // Magenta accent
     
-    // Bright white edges with pulsing intensity (slowed down)
-    float edgePulse = 0.7 + sin(u_time * 1.2 + (cell.x + cell.y) * 0.5) * 0.3;
-    vec3 edgeGlow = vec3(1.0, 0.95, 0.9) * (1.0 - facetEdge) * edgePulse;
+    // Bright white edges with pulsing intensity
+    float edgePulse = 0.6 + sin(u_time * 1.2 + (cell.x + cell.y) * 0.5) * 0.25;
+    vec3 edgeGlow = vec3(0.9, 1.0, 1.0) * (1.0 - facetEdge) * edgePulse; // Slightly cyan edges
     
     // Light sweep highlight
-    vec3 sweepGlow = vec3(1.0, 0.9, 0.8) * sweep * (1.0 - facetEdge) * 0.5;
+    vec3 sweepGlow = vec3(1.0, 0.85, 0.95) * sweep * (1.0 - facetEdge) * 0.4;
     
     // Combine: prismatic fill + edge highlights + sweep + texture
     vec3 fractalColor = prismColor * facetEdge + edgeGlow + sweepGlow;
     
-    float intensity = (1.0 - facetEdge) * 0.7 + sweep * 0.3 + 0.15;
-    return vec4(fractalColor, intensity * 0.55);
+    // Lowered brightness by 10%: 0.7 -> 0.63
+    float intensity = (1.0 - facetEdge) * 0.7 + sweep * 0.35 + 0.15;
+    return vec4(fractalColor, intensity * 0.63);
 }
 
 vec4 holoVoid(vec2 uv) {
-    // Vortex centered on card center (slowed down, no mouse reactivity)
-    vec2 center = vec2(0.5, 0.5);
-    vec2 toCenter = uv - center;
-    float dist = length(toCenter);
+    // Vortex emanating from upper-right, spinning counter-clockwise
     
-    // Angle from center - add subtle animation based on distance (slowed down)
-    float angle = atan(toCenter.y, toCenter.x) + u_time * 0.12 + dist * 3.0;
+    // Origin: upper-right corner, slightly outside
+    vec2 origin = vec2(1.1, -0.1);
+    vec2 toOrigin = uv - origin;
+    float dist = length(toOrigin);
     
-    // Larger accretion disk that extends beyond edges
+    // Angle from origin - counter-clockwise rotation (negative time)
+    float angle = atan(toOrigin.y, toOrigin.x) - u_time * 0.15 + dist * 3.0;
+    
+    // Spiral disk pattern
     float disk = sin(angle * 8.0) * 0.5 + 0.5;
-    disk *= smoothstep(0.0, 0.15, dist) * smoothstep(1.2, 0.2, dist);
+    disk *= smoothstep(0.0, 0.2, dist) * smoothstep(1.8, 0.3, dist);
     
     // Swirling color mix
     vec3 voidColor = mix(
@@ -339,15 +357,15 @@ vec4 holoVoid(vec2 uv) {
     // Add cyan accent
     voidColor += vec3(0.0, 0.4, 0.5) * pow(disk, 2.0) * 0.5;
     
-    // Dark core at center
-    float darkness = smoothstep(0.15, 0.0, dist);
-    voidColor *= (1.0 - darkness * 0.8);
+    // Dark core near origin
+    float darkness = smoothstep(0.25, 0.0, dist);
+    voidColor *= (1.0 - darkness * 0.7);
     
-    // Intensity extends to edges
-    float intensity = disk * 0.7 + darkness * 0.4;
-    intensity *= smoothstep(1.5, 0.0, dist); // Fade out far from center
+    // Intensity - increased by 5%: 1.3 -> 1.365
+    float intensity = disk * 0.75 + darkness * 0.35;
+    intensity *= smoothstep(2.0, 0.0, dist);
     
-    return vec4(voidColor, intensity);
+    return vec4(voidColor, intensity * 1.365);
 }
 
 // ============================================
@@ -464,6 +482,7 @@ class ShaderEngine {
 
         if (!this.gl) {
             console.error('WebGL2 not supported');
+            this.isLost = true;
             return;
         }
 
@@ -475,12 +494,31 @@ class ShaderEngine {
         this.frameType = 0;
         this.holoType = 0;
         this.animationId = null;
+        this.isLost = false;
+
+        // Handle WebGL context loss
+        this.canvas.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            this.isLost = true;
+            this.stopAnimation();
+            console.warn('WebGL context lost for card shader');
+        });
+
+        this.canvas.addEventListener('webglcontextrestored', () => {
+            this.isLost = false;
+            this.init();
+            if (animationsEnabled) {
+                this.startAnimation();
+            }
+            console.log('WebGL context restored for card shader');
+        });
 
         this.init();
     }
 
     init() {
         const gl = this.gl;
+        if (!gl) return;
 
         // Compile shaders
         const vertShader = this.compileShader(gl.VERTEX_SHADER, VERTEX_SHADER);
@@ -539,6 +577,8 @@ class ShaderEngine {
 
     compileShader(type, source) {
         const gl = this.gl;
+        if (!gl) return null;
+
         const shader = gl.createShader(type);
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
@@ -567,7 +607,13 @@ class ShaderEngine {
 
     render() {
         const gl = this.gl;
-        if (!gl || !this.program) return;
+        if (!gl || !this.program || this.isLost) return;
+
+        // Check if context is actually lost
+        if (gl.isContextLost()) {
+            this.isLost = true;
+            return;
+        }
 
         const time = (Date.now() - this.startTime) / 1000.0;
 
@@ -586,7 +632,10 @@ class ShaderEngine {
     }
 
     startAnimation() {
+        if (this.isLost) return;
+
         const animate = () => {
+            if (this.isLost) return;
             this.render();
             this.animationId = requestAnimationFrame(animate);
         };
@@ -602,7 +651,7 @@ class ShaderEngine {
 
     destroy() {
         this.stopAnimation();
-        if (this.gl && this.program) {
+        if (this.gl && this.program && !this.isLost) {
             this.gl.deleteProgram(this.program);
         }
     }
@@ -610,25 +659,62 @@ class ShaderEngine {
 
 // ============================================
 // INTEGRATION HELPERS
+// Multi-instance support for collection view
 // ============================================
 
-let activeShaderEngine = null;
+let activeShaderEngines = new Map(); // Map<cardElement, ShaderEngine>
+let animationsEnabled = true;
+
+/**
+ * Check if animations are enabled
+ */
+function areAnimationsEnabled() {
+    return animationsEnabled;
+}
+
+/**
+ * Set animations enabled/disabled globally
+ * @param {boolean} enabled
+ */
+function setAnimationsEnabled(enabled) {
+    animationsEnabled = enabled;
+
+    // Toggle body class for CSS animations
+    document.body.classList.toggle('animations-paused', !enabled);
+
+    // Start/stop all active shader engines
+    activeShaderEngines.forEach((engine) => {
+        if (enabled) {
+            engine.startAnimation();
+        } else {
+            // Render one frame then stop
+            engine.render();
+            engine.stopAnimation();
+        }
+    });
+}
 
 /**
  * Initialize shader canvas for a card element
  * @param {HTMLElement} cardElement - The card DOM element
  * @param {Object} cardData - Card data with frame and holo info
  * @param {boolean} focusMode - If true, enable mouse tracking (for Focus view only)
+ * @returns {ShaderEngine} The created shader engine
  */
 function initShaderCanvas(cardElement, cardData, focusMode = false) {
-    // Clean up existing
-    if (activeShaderEngine) {
-        activeShaderEngine.destroy();
-        activeShaderEngine = null;
+    // Check if already has a shader
+    if (activeShaderEngines.has(cardElement)) {
+        return activeShaderEngines.get(cardElement);
     }
 
-    // Find or create canvas
-    let canvas = cardElement.querySelector('.shader-canvas');
+    // Find or create canvas - append to card-front to share stacking context
+    const cardFront = cardElement.querySelector('.card-front');
+    if (!cardFront) {
+        console.warn('No .card-front found for shader canvas');
+        return null;
+    }
+
+    let canvas = cardFront.querySelector('.shader-canvas');
     if (!canvas) {
         canvas = document.createElement('canvas');
         canvas.className = 'shader-canvas';
@@ -639,28 +725,26 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 50;
+            z-index: 5;
             border-radius: inherit;
             mix-blend-mode: screen;
             transform-origin: top left;
         `;
-        cardElement.appendChild(canvas);
+        cardFront.appendChild(canvas);
     }
 
-    // Hide CSS holo and frame tint layers (we're replacing them with WebGL)
     // Hide CSS holo layers (replaced by WebGL)
     const holoLayer = cardElement.querySelector('.card-layer-holo');
     const frameTint = cardElement.querySelector('.card-bg-tint');
 
     if (holoLayer) holoLayer.style.display = 'none';
 
-    // For Black frame, we keep the tint (shadow effect), otherwise hide it
-    // cardData.frame.id is 'black'
+    // For Black frame, keep the tint (shadow effect)
     if (frameTint) {
         if (cardData.frame.id !== 'black') {
             frameTint.style.display = 'none';
         } else {
-            frameTint.style.display = ''; // Ensure it's visible for black
+            frameTint.style.display = '';
         }
     }
 
@@ -670,55 +754,79 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
     canvas.height = Math.floor(rect.height * window.devicePixelRatio);
 
     // Create engine
-    activeShaderEngine = new ShaderEngine(canvas);
-    activeShaderEngine.setCardData(cardData.frame.id, cardData.holo.id);
-    activeShaderEngine.startAnimation();
+    const engine = new ShaderEngine(canvas);
+    engine.setCardData(cardData.frame.id, cardData.holo.id);
+
+    // Start or just render once based on animation state
+    if (animationsEnabled) {
+        engine.startAnimation();
+    } else {
+        engine.render();
+    }
+
+    // Store reference
+    activeShaderEngines.set(cardElement, engine);
 
     // Only enable mouse tracking in Focus Mode
     if (focusMode) {
         const handleMouseMove = (e) => {
-            if (!activeShaderEngine) return;
             const rect = cardElement.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width;
             const y = 1.0 - (e.clientY - rect.top) / rect.height;
-            activeShaderEngine.setMouse(x, y);
+            engine.setMouse(x, y);
         };
 
         const handleMouseLeave = () => {
-            if (activeShaderEngine) {
-                activeShaderEngine.setMouse(0.5, 0.5);
-            }
+            engine.setMouse(0.5, 0.5);
         };
 
         cardElement.addEventListener('mousemove', handleMouseMove);
         cardElement.addEventListener('mouseleave', handleMouseLeave);
     }
-    // In non-focus mode, mouse stays centered (0.5, 0.5)
 
-    return activeShaderEngine;
+    return engine;
 }
 
 /**
- * Destroy active shader engine
+ * Destroy shader canvas for a specific card element
+ * @param {HTMLElement} cardElement
  */
-function destroyShaderCanvas() {
-    if (activeShaderEngine) {
-        activeShaderEngine.destroy();
-        activeShaderEngine = null;
+function destroyShaderCanvasForCard(cardElement) {
+    const engine = activeShaderEngines.get(cardElement);
+    if (engine) {
+        engine.destroy();
+        activeShaderEngines.delete(cardElement);
     }
 
-    // Restore CSS holo layers and remove shader canvases
-    document.querySelectorAll('.shader-canvas').forEach(el => {
-        // Find parent card and restore its CSS layers
-        const card = el.closest('.card');
-        if (card) {
-            const holoLayer = card.querySelector('.card-layer-holo');
-            const frameTint = card.querySelector('.card-bg-tint');
-            if (holoLayer) holoLayer.style.display = '';
-            if (frameTint) frameTint.style.display = '';
-        }
-        el.remove();
-    });
+    const canvas = cardElement.querySelector('.shader-canvas');
+    if (canvas) {
+        canvas.remove();
+    }
+
+    // Restore CSS layers
+    const holoLayer = cardElement.querySelector('.card-layer-holo');
+    const frameTint = cardElement.querySelector('.card-bg-tint');
+    if (holoLayer) holoLayer.style.display = '';
+    if (frameTint) frameTint.style.display = '';
 }
 
-console.log('✦ WebGL Shader Engine loaded (Overlay Mode) ✦');
+/**
+ * Destroy all active shader engines
+ */
+function destroyShaderCanvas() {
+    activeShaderEngines.forEach((engine, cardElement) => {
+        engine.destroy();
+        const canvas = cardElement.querySelector('.shader-canvas');
+        if (canvas) canvas.remove();
+
+        // Restore CSS layers
+        const holoLayer = cardElement.querySelector('.card-layer-holo');
+        const frameTint = cardElement.querySelector('.card-bg-tint');
+        if (holoLayer) holoLayer.style.display = '';
+        if (frameTint) frameTint.style.display = '';
+    });
+    activeShaderEngines.clear();
+}
+
+console.log('✦ WebGL Shader Engine loaded (Multi-Instance Mode) ✦');
+

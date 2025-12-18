@@ -328,8 +328,10 @@ function createCardElement(cardData, faceDown = true) {
                 
                 <!-- Z-5: Stats/UI -->
                 <div class="card-layer-stats">
-                    <span class="card-rarity">${cardData.rarity.id.toUpperCase()}</span>
-                    <span class="card-name">${cardData.name}</span>
+                    <div class="card-name">
+                        <span class="card-rarity">${cardData.rarity.id.toUpperCase()}</span>
+                        ${cardData.name}
+                    </div>
                 </div>
             </div>
         </div>
@@ -527,15 +529,8 @@ function renderCollection(page = null) {
         const cardElement = createCardElement(group.card, false);
         wrapper.appendChild(cardElement);
 
-        // Add shader on hover for collection cards
-        if (typeof initShaderCanvas === 'function') {
-            cardElement.addEventListener('mouseenter', () => {
-                initShaderCanvas(cardElement, group.card);
-            });
-            cardElement.addEventListener('mouseleave', () => {
-                destroyShaderCanvas();
-            });
-        }
+        // Store card data reference for shader initialization
+        cardElement._cardData = group.card;
 
         // Add count badge if duplicates
         if (group.count > 1) {
@@ -572,6 +567,11 @@ function renderCollection(page = null) {
     }
 
     container.appendChild(grid);
+
+    // Initialize shaders for all visible cards after DOM is ready
+    requestAnimationFrame(() => {
+        initShadersForVisibleCards();
+    });
 }
 
 // Collection state for pagination
@@ -723,14 +723,9 @@ function renderCardDisplayAnimated(cards) {
                 flipTl.eventCallback('onComplete', () => {
                     triggerRareCardEffects(element, data);
 
-                    // Add shader on hover for revealed cards
+                    // Initialize shader immediately for revealed cards
                     if (typeof initShaderCanvas === 'function') {
-                        element.addEventListener('mouseenter', () => {
-                            initShaderCanvas(element, data);
-                        });
-                        element.addEventListener('mouseleave', () => {
-                            destroyShaderCanvas();
-                        });
+                        initShaderCanvas(element, data);
                     }
 
                     flipped++;
@@ -754,6 +749,11 @@ function renderCardDisplayAnimated(cards) {
  * Show the pack shop again
  */
 function showPackShop() {
+    // Clean up any active shaders before leaving
+    if (typeof destroyShaderCanvas === 'function') {
+        destroyShaderCanvas();
+    }
+
     const packShop = document.getElementById('pack-shop');
     const displayArea = document.getElementById('card-display-area');
 
@@ -967,6 +967,16 @@ function init() {
         }
     });
 
+    // Animation toggle
+    const animToggle = document.getElementById('toggle-animations');
+    if (animToggle) {
+        animToggle.addEventListener('change', (e) => {
+            if (typeof setAnimationsEnabled === 'function') {
+                setAnimationsEnabled(e.target.checked);
+            }
+        });
+    }
+
     console.log('✦ Project Prism initialized! ✦');
     console.log('Debug: Run testRngDistribution(1000) to test RNG');
 }
@@ -989,7 +999,26 @@ function switchTab(tabId) {
     // Refresh collection when switching to it
     if (tabId === 'collection') {
         renderCollection();
+    } else {
+        // Clean up shaders when leaving collection
+        if (typeof destroyShaderCanvas === 'function') {
+            destroyShaderCanvas();
+        }
     }
+}
+
+/**
+ * Initialize shaders for all visible cards in the collection
+ */
+function initShadersForVisibleCards() {
+    if (typeof initShaderCanvas !== 'function') return;
+
+    const cards = document.querySelectorAll('.binder-grid .card');
+    cards.forEach(cardElement => {
+        if (cardElement._cardData) {
+            initShaderCanvas(cardElement, cardElement._cardData);
+        }
+    });
 }
 
 // ============================================
