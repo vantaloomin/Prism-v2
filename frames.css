@@ -49,11 +49,14 @@
 /* Black Frame - High contrast, darkened */
 .frame-black .card-layer-frame {
     border-color: var(--frame-black);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+    border-width: 6px;
+    /* Thick border */
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
 }
 
 .frame-black .card-bg-tint {
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.65);
+    /* Increased shadow effect */
 }
 
 /* Rainbow Frame - Animated gradient border and tint */

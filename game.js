@@ -9,6 +9,8 @@
 const CONFIG = {
     PACK_COST: 100,
     PACK_SIZE: 5,
+    FRAME_DEBUG_COST: 50,
+    HOLO_DEBUG_COST: 150,
     STARTING_CREDITS: 1000,
     STORAGE_KEY: 'prism_save_data'
 };
@@ -200,70 +202,79 @@ function generateCard(packType) {
 }
 
 /**
- * Generate a DEBUG card with forced high-tier stats
- * @returns {Object} Complete card data
+ * Generate a DEBUG card for Frame Testing
+ * All Kitsune Diviner ('w09'), specified frame, no holo
  */
-function generateDebugCard() {
-    // FORCE High Rarity (SR+)
-    const rarityRoll = Math.random();
-    let rarityId = 'ur';
-    if (rarityRoll < 0.15) rarityId = 'sr';
-    else if (rarityRoll < 0.20) rarityId = 'ssr';
-    // 80% chance for UR
-
-    // FORCE Rare Frame
-    const frameRoll = Math.random();
-    const frameId = frameRoll < 0.5 ? 'gold' : 'rainbow';
-
-    // FORCE Rare Holo
-    const holoRoll = Math.random();
-    const holoId = holoRoll < 0.5 ? 'fractal' : 'void';
-
-    // Pick random character from random pool matching rarity
-    // Since 'debug' isn't a pool key, we pick waifu or husbando randomly
-    const poolKey = Math.random() < 0.5 ? 'waifu' : 'husbando';
-    const pool = CHARACTER_POOLS[poolKey];
-
-    // Since we forced rarity ID, find chars matching it
-    const eligible = pool.filter(c => c.rarity === rarityId);
-    const character = eligible.length > 0
-        ? eligible[Math.floor(Math.random() * eligible.length)]
-        : pool[0]; // Fallback
-
-    // Get full data objects
-    const rarity = RARITY_TABLE.find(r => r.id === rarityId);
+function generateFrameDebugCard(frameId) {
+    const character = CHARACTER_POOLS.waifu.find(c => c.id === 'w09');
+    const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
     const frame = FRAME_TABLE.find(f => f.id === frameId);
-    const holo = HOLO_TABLE.find(h => h.id === holoId);
-
-    // Calculate probability (it will be extremely low -> high tier glow)
-    const combinedProb = rarity.prob * frame.prob * holo.prob;
+    const holo = HOLO_TABLE.find(h => h.id === 'none');
 
     return {
         id: generateCardId(),
         characterId: character.id,
         name: character.name,
-        packType: poolKey, // Store actual source
+        packType: 'debug-frame',
         rarity: rarity,
         frame: frame,
         holo: holo,
-        combinedProb: combinedProb,
+        combinedProb: 0, // Debug
         backgroundPath: `assets/backgrounds/${character.bg}.webp`,
-        characterPath: `assets/${poolKey}/${character.id}.webp`,
+        characterPath: `assets/waifu/${character.id}.webp`,
+        obtainedAt: Date.now()
+    };
+}
+
+/**
+ * Generate a DEBUG card for Holo Testing
+ * All Kitsune Diviner ('w09'), white frame, specified holo
+ */
+function generateHoloDebugCard(holoId) {
+    const character = CHARACTER_POOLS.waifu.find(c => c.id === 'w09');
+    const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
+    const frame = FRAME_TABLE.find(f => f.id === 'white');
+    const holo = HOLO_TABLE.find(h => h.id === holoId);
+
+    return {
+        id: generateCardId(),
+        characterId: character.id,
+        name: character.name,
+        packType: 'debug-holo',
+        rarity: rarity,
+        frame: frame,
+        holo: holo,
+        combinedProb: 0, // Debug
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/waifu/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
 
 /**
  * Open a pack and generate cards
- * @param {string} packType - 'waifu' or 'husbando'
+ * @param {string} packType - 'waifu', 'husbando', 'debug', 'debug-frame', 'debug-holo'
  * @returns {Array} Array of generated cards
  */
 function openPack(packType) {
     const cards = [];
-    for (let i = 0; i < CONFIG.PACK_SIZE; i++) {
-        if (packType === 'debug') {
+
+    if (packType === 'debug-frame') {
+        const frames = ['white', 'blue', 'red', 'gold', 'rainbow', 'black'];
+        frames.forEach(frameId => {
+            cards.push(generateFrameDebugCard(frameId));
+        });
+    } else if (packType === 'debug-holo') {
+        const holos = ['none', 'shiny', 'rainbow', 'pearl', 'fractal', 'void'];
+        holos.forEach(holoId => {
+            cards.push(generateHoloDebugCard(holoId));
+        });
+    } else if (packType === 'debug') {
+        for (let i = 0; i < CONFIG.PACK_SIZE; i++) {
             cards.push(generateDebugCard());
-        } else {
+        }
+    } else {
+        for (let i = 0; i < CONFIG.PACK_SIZE; i++) {
             cards.push(generateCard(packType));
         }
     }
@@ -578,10 +589,14 @@ function updateCreditsDisplay() {
     const waifuBtn = document.getElementById('btn-waifu-pack');
     const husbandoBtn = document.getElementById('btn-husbando-pack');
     const debugBtn = document.getElementById('btn-debug-pack');
+    const frameDebugBtn = document.getElementById('btn-debug-frame-pack');
+    const holoDebugBtn = document.getElementById('btn-debug-holo-pack');
 
     if (waifuBtn) waifuBtn.disabled = gameState.credits < CONFIG.PACK_COST;
     if (husbandoBtn) husbandoBtn.disabled = gameState.credits < CONFIG.PACK_COST;
     if (debugBtn) debugBtn.disabled = gameState.credits < CONFIG.PACK_COST;
+    if (frameDebugBtn) frameDebugBtn.disabled = gameState.credits < CONFIG.FRAME_DEBUG_COST;
+    if (holoDebugBtn) holoDebugBtn.disabled = gameState.credits < CONFIG.HOLO_DEBUG_COST;
 }
 
 // ============================================
@@ -593,14 +608,18 @@ function updateCreditsDisplay() {
  * @param {string} packType - 'waifu' or 'husbando'
  */
 async function handlePackPurchase(packType) {
-    if (gameState.credits < CONFIG.PACK_COST) {
+    let cost = CONFIG.PACK_COST;
+    if (packType === 'debug-frame') cost = CONFIG.FRAME_DEBUG_COST;
+    if (packType === 'debug-holo') cost = CONFIG.HOLO_DEBUG_COST;
+
+    if (gameState.credits < cost) {
         console.log('Not enough credits!');
         bounceFeedback(document.getElementById('credits-amount'));
         return;
     }
 
     // Deduct credits
-    gameState.credits -= CONFIG.PACK_COST;
+    gameState.credits -= cost;
     updateCreditsDisplay();
 
     // Hide shop, show pack animation
@@ -913,6 +932,14 @@ function init() {
 
     document.getElementById('btn-debug-pack').addEventListener('click', () => {
         handlePackPurchase('debug');
+    });
+
+    document.getElementById('btn-debug-frame-pack').addEventListener('click', () => {
+        handlePackPurchase('debug-frame');
+    });
+
+    document.getElementById('btn-debug-holo-pack').addEventListener('click', () => {
+        handlePackPurchase('debug-holo');
     });
 
     document.getElementById('btn-reset').addEventListener('click', resetSave);

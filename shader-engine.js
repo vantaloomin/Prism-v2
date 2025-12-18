@@ -356,6 +356,7 @@ vec4 holoVoid(vec2 uv) {
 
 vec4 getFrameGlow(vec2 uv, int frameType) {
     // Calculate distance to edge for border glow
+    // uv is 0..1, so edgeDist is distance to nearest edge
     float edgeDist = min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y));
     float borderGlow = smoothstep(0.12, 0.0, edgeDist);
     
@@ -363,40 +364,54 @@ vec4 getFrameGlow(vec2 uv, int frameType) {
     float glowIntensity = 0.0;
     
     if (frameType == 0) {
-        // White - subtle clean glow
+        // White - Clean, no tint
         glowColor = vec3(1.0, 1.0, 1.0);
-        glowIntensity = borderGlow * 0.2;
+        glowIntensity = borderGlow * 0.3;
     }
     else if (frameType == 1) {
-        // Blue - icy shimmer
-        float shimmer = snoise(uv * 20.0 + u_time) * 0.5 + 0.5;
+        // Blue - Soft glow at inner edges (no fire/shimmer)
         glowColor = vec3(0.4, 0.7, 1.0);
-        glowIntensity = borderGlow * (0.4 + shimmer * 0.3);
+        glowIntensity = borderGlow * 0.6; // Steady, calm glow
     }
     else if (frameType == 2) {
-        // Red - pulsing magma
-        float pulse = sin(u_time * 3.0) * 0.3 + 0.7;
-        float flow = snoise(uv * 8.0 - vec2(0.0, u_time * 0.5)) * 0.5 + 0.5;
-        glowColor = mix(vec3(1.0, 0.2, 0.0), vec3(1.0, 0.6, 0.0), flow);
-        glowIntensity = borderGlow * pulse * 0.6;
+        // Red - Fire effect (moved from Blue, toned down height)
+        // Stronger vertical noise movement for fire (Upward flow = +time)
+        float fire = snoise(uv * vec2(10.0, 20.0) + vec2(0.0, u_time * 2.0)) * 0.5 + 0.5;
+        
+        // Toned down height: use a sharper smoothstep (0.12 * 0.8 ~= 0.09)
+        float sharpGlow = smoothstep(0.09, 0.0, edgeDist);
+        
+        glowColor = mix(vec3(1.0, 0.1, 0.0), vec3(1.0, 0.8, 0.2), fire);
+        glowIntensity = sharpGlow * (0.6 + fire * 0.4);
     }
     else if (frameType == 3) {
-        // Gold - luxurious shimmer
+        // Gold - Soft pulse added
         float shimmer = sin(uv.x * 30.0 + u_time * 2.0) * 0.5 + 0.5;
+        float pulse = sin(u_time * 2.0) * 0.15 + 0.85; // Soft 15% pulse
+        
         glowColor = mix(vec3(1.0, 0.8, 0.2), vec3(1.0, 0.95, 0.6), shimmer);
-        glowIntensity = borderGlow * 0.5;
+        glowIntensity = borderGlow * 0.5 * pulse;
     }
     else if (frameType == 4) {
-        // Rainbow - cycling colors
+        // Rainbow - Missing actual card border
         float hue = uv.x + uv.y + u_time * 0.3;
-        glowColor = hsl2rgb(vec3(hue, 0.9, 0.5));
-        glowIntensity = borderGlow * 0.6;
+        glowColor = hsl2rgb(vec3(hue, 0.9, 0.6));
+        
+        // Add a hard inner border line (~3px equivalent)
+        float borderLine = step(edgeDist, 0.015); 
+        
+        // Combine soft glow with hard border
+        // Border line is solid opacity, glow is fading
+        glowIntensity = max(borderGlow * 0.5, borderLine * 0.9);
     }
     else if (frameType == 5) {
-        // Black - void edge with purple accents
-        float pulse = sin(u_time * 2.0 + uv.y * 10.0) * 0.5 + 0.5;
-        glowColor = vec3(0.3, 0.0, 0.5) * pulse;
-        glowIntensity = borderGlow * 0.4;
+        // Black - Thicker border
+        // Increase smoothstep range for thickness
+        float thickGlow = smoothstep(0.18, 0.0, edgeDist);
+        
+        float pulse = sin(u_time * 1.5 + uv.y * 5.0) * 0.5 + 0.5;
+        glowColor = mix(vec3(0.1, 0.0, 0.2), vec3(0.3, 0.0, 0.5), pulse);
+        glowIntensity = thickGlow * 0.7;
     }
     
     return vec4(glowColor, glowIntensity);
@@ -621,8 +636,8 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
             position: absolute;
             top: 0;
             left: 0;
-            width: 150%;
-            height: 150%;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
             z-index: 50;
             border-radius: inherit;
@@ -633,10 +648,21 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
     }
 
     // Hide CSS holo and frame tint layers (we're replacing them with WebGL)
+    // Hide CSS holo layers (replaced by WebGL)
     const holoLayer = cardElement.querySelector('.card-layer-holo');
     const frameTint = cardElement.querySelector('.card-bg-tint');
+
     if (holoLayer) holoLayer.style.display = 'none';
-    if (frameTint) frameTint.style.display = 'none';
+
+    // For Black frame, we keep the tint (shadow effect), otherwise hide it
+    // cardData.frame.id is 'black'
+    if (frameTint) {
+        if (cardData.frame.id !== 'black') {
+            frameTint.style.display = 'none';
+        } else {
+            frameTint.style.display = ''; // Ensure it's visible for black
+        }
+    }
 
     // Set canvas size for crisp rendering
     const rect = cardElement.getBoundingClientRect();
