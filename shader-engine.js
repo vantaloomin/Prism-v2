@@ -150,41 +150,36 @@ vec4 holoShiny(vec2 uv) {
 }
 
 vec4 holoRainbow(vec2 uv) {
-    // Prismatic sweep emanating from bottom-left corner
-    // Sweeps up and right across the card
+    // Smoother, cleaner rainbow gradient
+    // Removed sharp radial bands and fract discontinuities
     
-    // Origin point: bottom-left, slightly outside card
-    vec2 origin = vec2(-0.1, 1.1);
-    vec2 toOrigin = uv - origin;
-    float angle = atan(toOrigin.y, toOrigin.x);
-    float dist = length(toOrigin);
+    // Base gradient flow - diagonal movement
+    float baseHue = uv.x * 0.4 + uv.y * 0.3 + u_time * 0.05;
     
-    // Rainbow hue based on angle from origin (sweeps up-right)
-    float hue1 = (angle / 6.28318 + 0.5) + u_time * 0.04;
+    // Large slow noise to warp the colors organically
+    float warp = snoise(uv * 2.5 + u_time * 0.05) * 0.2;
     
-    // Secondary wave bands based on distance from origin
-    float hue2 = fract(dist * 2.0 - u_time * 0.1);
+    // Combine for final hue
+    float finalHue = fract(baseHue + warp);
     
-    // Blend hues
-    float blendFactor = sin(u_time * 0.2) * 0.3 + 0.5;
-    float finalHue = mix(hue1, hue2, blendFactor * 0.5);
+    // Use slightly less saturated colors for a smoother look
+    vec3 rainbow = hsl2rgb(vec3(finalHue, 0.8, 0.6));
     
-    vec3 rainbow = hsl2rgb(vec3(finalHue, 0.85, 0.55));
+    // Add soft, large-scale shimmer waves (sine based, no pow)
+    float wave = sin((uv.x + uv.y) * 4.0 - u_time * 0.8) * 0.5 + 0.5;
     
-    // Sweep waves emanating from origin
-    float shimmer = sin(dist * 12.0 - u_time * 1.5) * 0.5 + 0.5;
-    shimmer = pow(shimmer, 2.0);
-    rainbow += vec3(shimmer * 0.2);
+    // Add subtle sparkle noise
+    float sparkle = snoise(uv * 20.0 + u_time * 0.1) * 0.1;
     
-    // Add noise texture
-    float colorNoise = snoise(uv * 15.0 + u_time * 0.08) * 0.1;
-    rainbow += vec3(colorNoise);
+    // Combine effects
+    // Screen blend the wave to keep it light
+    rainbow += vec3(wave * 0.15);
+    rainbow += vec3(sparkle);
     
-    // Intensity based on sweep pattern - stronger near sweep lines
-    float sweepIntensity = smoothstep(1.8, 0.0, dist) * 0.6;
-    float intensity = 0.4 + shimmer * 0.25 + sweepIntensity;
+    // Smooth intensity gradient - no sharp cutoffs
+    float intensity = 0.5 + wave * 0.2 + sparkle;
     
-    return vec4(rainbow, intensity * 1.1);
+    return vec4(rainbow, intensity * 0.9);
 }
 
 vec4 holoPearl(vec2 uv) {
@@ -415,12 +410,13 @@ vec4 getFrameGlow(vec2 uv, int frameType) {
         float hue = uv.x + uv.y + u_time * 0.3;
         glowColor = hsl2rgb(vec3(hue, 0.9, 0.6));
         
-        // Add a hard inner border line (~3px equivalent)
-        float borderLine = step(edgeDist, 0.015); 
+        // Add a soft inner border line (~3px equivalent)
+        // usage of smoothstep creates a 2px anti-aliased edge instead of 1px hard cut
+        float borderLine = smoothstep(0.016, 0.013, edgeDist); 
         
-        // Combine soft glow with hard border
+        // Combine soft glow with border
         // Border line is solid opacity, glow is fading
-        glowIntensity = max(borderGlow * 0.5, borderLine * 0.9);
+        glowIntensity = max(borderGlow * 0.5, borderLine * 0.85);
     }
     else if (frameType == 5) {
         // Black - Thicker border
