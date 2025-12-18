@@ -116,25 +116,25 @@ vec4 holoNone(vec2 uv) {
 
 vec4 holoShiny(vec2 uv) {
     // Enhanced classic foil with multiple sweep layers
-    // Slowed down 20% more, lowered brightness 10%, added vertical movement
+    // Slowed down 20% more, lowered brightness 10%
     
-    // Primary diagonal sweep (slowed 20% more: 1.0 -> 0.8)
-    float sweep1 = sin((uv.x + uv.y) * 12.0 - u_time * 0.8);
+    // Primary diagonal sweep (slowed 20%: 0.8 -> 0.64)
+    float sweep1 = sin((uv.x + uv.y) * 12.0 - u_time * 0.64);
     sweep1 = smoothstep(0.0, 0.15, sweep1) * smoothstep(0.3, 0.15, sweep1);
     
-    // Secondary perpendicular sweep (slowed 20% more: 0.6 -> 0.48)
-    float sweep2 = sin((uv.x - uv.y) * 8.0 - u_time * 0.48);
+    // Secondary perpendicular sweep (slowed 20%: 0.48 -> 0.384)
+    float sweep2 = sin((uv.x - uv.y) * 8.0 - u_time * 0.384);
     sweep2 = smoothstep(0.0, 0.2, sweep2) * smoothstep(0.4, 0.2, sweep2) * 0.5;
     
-    // NEW: Vertical sweep for added movement
-    float vertSweep = sin(uv.y * 15.0 - u_time * 0.6) * 0.5 + 0.5;
+    // Vertical sweep for added movement (slowed 20%: 0.6 -> 0.48)
+    float vertSweep = sin(uv.y * 15.0 - u_time * 0.48) * 0.5 + 0.5;
     vertSweep = pow(vertSweep, 3.0) * 0.3;
     
     // Combine sweeps
     float totalSweep = sweep1 + sweep2 + vertSweep;
     
-    // Add subtle sparkle noise (slowed down)
-    float sparkle = pow(snoise(uv * 40.0 + u_time * 0.16) * 0.5 + 0.5, 8.0) * 0.25;
+    // Add subtle sparkle noise (slowed 20%: 0.16 -> 0.128)
+    float sparkle = pow(snoise(uv * 40.0 + u_time * 0.128) * 0.5 + 0.5, 8.0) * 0.25;
     
     // Static center-based boost (no mouse reactivity)
     vec2 center = vec2(0.5, 0.5);
@@ -144,9 +144,9 @@ vec4 holoShiny(vec2 uv) {
     // Slight color tint based on position
     vec3 foilColor = mix(vec3(1.0, 1.0, 1.0), vec3(1.0, 0.95, 0.85), uv.y);
     
-    // Lowered brightness by 10%: 1.3 -> 1.17
+    // Reduced opacity by 10%: 1.17 -> 1.053
     float intensity = (totalSweep + sparkle) * (0.55 + centerBoost * 0.45);
-    return vec4(foilColor, intensity * 1.17);
+    return vec4(foilColor, intensity * 1.053);
 }
 
 vec4 holoRainbow(vec2 uv) {
@@ -306,61 +306,90 @@ vec4 holoFractal(vec2 uv) {
     float cellHue = fract((cell.x * 0.1 + cell.y * 0.15) + u_time * 0.04 + sweep * 0.2);
     // Bias towards cyan-magenta range (0.5-0.9 hue)
     float cyberHue = 0.5 + cellHue * 0.4;
-    vec3 prismColor = hsl2rgb(vec3(cyberHue, 0.75, 0.45 + sweep * 0.15));
+    vec3 prismColor = hsl2rgb(vec3(cyberHue, 0.9, 0.55 + sweep * 0.2)); // Boosted saturation & lightness
     
-    // Add subtle neon accents
-    prismColor += vec3(0.0, noise * 0.3, noise * 0.4); // Cyan-ish noise
-    prismColor += vec3(noise * 0.2, 0.0, noise * 0.3) * 0.5; // Magenta accent
+    // Add stronger neon accents
+    prismColor += vec3(0.0, noise * 0.4, noise * 0.5); // Stronger cyan-ish noise
+    prismColor += vec3(noise * 0.3, 0.0, noise * 0.4) * 0.6; // Stronger magenta accent
     
     // Bright white edges with pulsing intensity
-    float edgePulse = 0.6 + sin(u_time * 1.2 + (cell.x + cell.y) * 0.5) * 0.25;
+    float edgePulse = 0.7 + sin(u_time * 1.2 + (cell.x + cell.y) * 0.5) * 0.3;
     vec3 edgeGlow = vec3(0.9, 1.0, 1.0) * (1.0 - facetEdge) * edgePulse; // Slightly cyan edges
     
     // Light sweep highlight
-    vec3 sweepGlow = vec3(1.0, 0.85, 0.95) * sweep * (1.0 - facetEdge) * 0.4;
+    vec3 sweepGlow = vec3(1.0, 0.85, 0.95) * sweep * (1.0 - facetEdge) * 0.5;
     
     // Combine: prismatic fill + edge highlights + sweep + texture
     vec3 fractalColor = prismColor * facetEdge + edgeGlow + sweepGlow;
     
-    // Lowered brightness by 10%: 0.7 -> 0.63
-    float intensity = (1.0 - facetEdge) * 0.7 + sweep * 0.35 + 0.15;
-    return vec4(fractalColor, intensity * 0.63);
+    // Reduced intensity for card art visibility
+    float intensity = (1.0 - facetEdge) * 0.8 + sweep * 0.4 + 0.2;
+    return vec4(fractalColor, intensity * 0.55);
 }
 
 vec4 holoVoid(vec2 uv) {
-    // Vortex emanating from upper-right, spinning counter-clockwise
+    // Cosmic Nebula - Deep Space Vortex
+    // Anchor point at bottom-center of card, disk extends beyond top
     
-    // Origin: upper-right corner, slightly outside
-    vec2 origin = vec2(1.1, -0.1);
-    vec2 toOrigin = uv - origin;
-    float dist = length(toOrigin);
+    vec2 origin = vec2(0.5, 1.2); // Bottom center, slightly below card
+    vec2 delta = uv - origin;
+    float dist = length(delta);
+    float angle = atan(delta.y, delta.x);
     
-    // Angle from origin - counter-clockwise rotation (negative time)
-    float angle = atan(toOrigin.y, toOrigin.x) - u_time * 0.15 + dist * 3.0;
+    // Spiral arm pattern - rotating inward toward origin
+    float spiralAngle = angle - dist * 5.0 + u_time * 0.25;
+    float spiral = sin(spiralAngle * 4.0) * 0.5 + 0.5;
+    spiral = pow(spiral, 1.3);
     
-    // Spiral disk pattern
-    float disk = sin(angle * 8.0) * 0.5 + 0.5;
-    disk *= smoothstep(0.0, 0.2, dist) * smoothstep(1.8, 0.3, dist);
+    // Accretion disk - extends from origin outward past top of card
+    float diskInner = 0.15;
+    float diskOuter = 1.8; // Extends well beyond card top
+    float diskFade = smoothstep(diskInner, diskInner + 0.2, dist) * smoothstep(diskOuter, diskOuter - 0.5, dist);
     
-    // Swirling color mix
-    vec3 voidColor = mix(
-        vec3(0.3, 0.0, 0.5),  // Deep purple
-        vec3(1.0, 0.3, 0.6),  // Hot pink
-        disk
+    // Disk brightness varies with spiral arms
+    float diskBrightness = diskFade * (0.4 + spiral * 0.6);
+    
+    // Nebula gas noise layers for texture
+    float gas1 = snoise(uv * 5.0 + vec2(u_time * 0.04, 0.0)) * 0.5 + 0.5;
+    float gas2 = snoise(uv * 10.0 - vec2(0.0, u_time * 0.03)) * 0.5 + 0.5;
+    float gasTexture = mix(gas1, gas2, 0.5);
+    
+    // Accretion disk colors - hot plasma gradient
+    vec3 diskColor = mix(
+        vec3(0.8, 0.2, 0.4),   // Magenta/red outer
+        vec3(1.0, 0.7, 0.9),   // White-pink hot inner
+        smoothstep(1.2, 0.3, dist)
     );
+    // Add blue/purple tints based on spiral position
+    diskColor = mix(diskColor, vec3(0.4, 0.3, 1.0), spiral * 0.35);
+    diskColor = mix(diskColor, vec3(0.6, 0.1, 0.8), gasTexture * 0.25);
     
-    // Add cyan accent
-    voidColor += vec3(0.0, 0.4, 0.5) * pow(disk, 2.0) * 0.5;
+    // Embedded stars (brighten at distance from origin)
+    float starField = pow(voronoi(uv * 30.0), 10.0);
+    starField *= smoothstep(0.4, 0.8, dist); // Stars visible in outer regions
     
-    // Dark core near origin
-    float darkness = smoothstep(0.25, 0.0, dist);
-    voidColor *= (1.0 - darkness * 0.7);
+    // Bright core glow near origin
+    float coreGlow = pow(max(0.0, 1.0 - dist * 1.5), 4.0);
+    vec3 coreColor = vec3(1.0, 0.85, 0.95);
     
-    // Intensity - increased by 5%: 1.3 -> 1.365
-    float intensity = disk * 0.75 + darkness * 0.35;
-    intensity *= smoothstep(2.0, 0.0, dist);
+    // Card darkening - accretion is the PRIMARY light source
+    float darkness = 0.05 + diskBrightness * 0.85; // Very dark base, heavily lit by disk
     
-    return vec4(voidColor, intensity * 1.365);
+    // Combine all elements
+    vec3 color = vec3(0.0);
+    color += diskColor * diskBrightness * gasTexture * 1.4;  // Boosted accretion disk
+    color += coreColor * coreGlow * 0.6;                      // Reduced core (accretion dominates)
+    color += vec3(1.0, 0.95, 1.0) * starField * 0.4;         // Dimmer stars
+    
+    // Apply darkness overlay (card lit primarily by accretion)
+    color *= darkness + 0.2;
+    
+    // Additional dark overlay to reduce overall brightness
+    color *= 0.65;
+    
+    // Increased intensity by 50%: 1.3 -> 1.95
+    float intensity = diskBrightness * 0.85 + coreGlow * 0.25 + starField * 0.15;
+    return vec4(color, intensity * 1.95);
 }
 
 // ============================================
