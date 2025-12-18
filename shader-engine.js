@@ -427,12 +427,37 @@ vec4 getFrameGlow(vec2 uv, int frameType) {
         glowIntensity = sharpGlow * (0.6 + fire * 0.4);
     }
     else if (frameType == 3) {
-        // Gold - Soft pulse added
-        float shimmer = sin(uv.x * 30.0 + u_time * 2.0) * 0.5 + 0.5;
-        float pulse = sin(u_time * 2.0) * 0.15 + 0.85; // Soft 15% pulse
+        // Gold - Polished luxury with sparkle dust and smooth sweeps
         
-        glowColor = mix(vec3(1.0, 0.8, 0.2), vec3(1.0, 0.95, 0.6), shimmer);
-        glowIntensity = borderGlow * 0.5 * pulse;
+        // Elegant diagonal light sweep (slow, smooth)
+        float sweep = sin((uv.x + uv.y) * 6.0 - u_time * 0.6) * 0.5 + 0.5;
+        sweep = pow(sweep, 2.5);
+        
+        // Secondary perpendicular sweep for depth
+        float sweep2 = sin((uv.x - uv.y) * 4.0 + u_time * 0.4) * 0.5 + 0.5;
+        sweep2 = pow(sweep2, 3.0) * 0.4;
+        
+        // Sparkle dust particles - twinkling stars
+        float sparkle1 = pow(snoise(uv * 50.0 + u_time * 0.3) * 0.5 + 0.5, 10.0);
+        float sparkle2 = pow(snoise(uv * 35.0 - u_time * 0.25) * 0.5 + 0.5, 12.0) * 0.7;
+        float sparkles = sparkle1 + sparkle2;
+        
+        // Soft breathing pulse
+        float pulse = sin(u_time * 1.5) * 0.12 + 0.88;
+        
+        // Rich gold color palette
+        vec3 deepGold = vec3(0.85, 0.65, 0.1);
+        vec3 brightGold = vec3(1.0, 0.85, 0.3);
+        vec3 whiteGold = vec3(1.0, 0.95, 0.7);
+        
+        // Color varies with sweeps
+        glowColor = mix(deepGold, brightGold, sweep * 0.7 + sweep2);
+        glowColor = mix(glowColor, whiteGold, (sweep + sweep2) * 0.3);
+        
+        // Sparkle highlights are bright white-gold
+        glowColor += vec3(1.0, 0.95, 0.75) * sparkles * 1.2;
+        
+        glowIntensity = borderGlow * 0.55 * pulse + sweep * borderGlow * 0.2 + sparkles * 0.35;
     }
     else if (frameType == 4) {
         // Rainbow - Missing actual card border
