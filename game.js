@@ -850,13 +850,18 @@ function switchTab(tabId) {
 
 /**
  * Initialize shaders for all visible cards in the collection
- * DISABLED: Too many WebGL contexts cause context loss. 
- * Collection uses CSS-only effects. Shaders are only for Focus mode.
+ * Uses pre-rendered texture cache (single WebGL context) instead of per-card contexts
  */
 function initShadersForVisibleCards() {
-    // Disabled to prevent WebGL context exhaustion
-    // Focus mode already creates a single shader for the focused card
-    return;
+    // Use cached textures from the shared WebGL context
+    if (typeof applyShaderTexture !== 'function') return;
+
+    const cards = document.querySelectorAll('.binder-grid .card');
+    cards.forEach(cardElement => {
+        if (cardElement._cardData) {
+            applyShaderTexture(cardElement, cardElement._cardData);
+        }
+    });
 }
 
 // ============================================
