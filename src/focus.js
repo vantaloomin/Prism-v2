@@ -27,7 +27,7 @@ async function loadLoreData(characterId) {
     // Load cache if not loaded
     if (!loreCache) {
         try {
-            const response = await fetch('./assets/lore/characters.json');
+            const response = await fetch('/assets/lore/characters.json');
             loreCache = await response.json();
         } catch (error) {
             console.warn('Could not load lore data:', error);

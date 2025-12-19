@@ -13,35 +13,35 @@ export const GAMES_CONFIG = {
             id: 'rps',
             name: 'Rock Paper Scissors',
             description: 'Test your luck against the AI!',
-            icon: 'assets/games/icons/rps_icon.webp',
+            icon: '/assets/games/icons/rps_icon.webp',
             fallbackIcon: '✊✋✌️'
         },
         {
             id: 'ttt',
             name: 'Tic Tac Toe',
             description: 'Classic strategy game',
-            icon: 'assets/games/icons/ttt_icon.webp',
+            icon: '/assets/games/icons/ttt_icon.webp',
             fallbackIcon: '⭕❌'
         },
         {
             id: 'blackjack',
             name: 'Blackjack',
             description: 'Try to beat the dealer!',
-            icon: 'assets/games/icons/blackjack_icon.webp',
+            icon: '/assets/games/icons/blackjack_icon.webp',
             fallbackIcon: '🃏'
         }
     ],
     avatars: {
-        neutral: 'assets/games/avatars/avatar_neutral.webp',
-        happy: 'assets/games/avatars/avatar_happy.webp',
-        sad: 'assets/games/avatars/avatar_sad.webp',
-        thinking: 'assets/games/avatars/avatar_thinking.webp',
-        surprised: 'assets/games/avatars/avatar_surprised.webp',
-        throwRock: 'assets/games/avatars/avatar_throw_rock.webp',
-        throwPaper: 'assets/games/avatars/avatar_throw_paper.webp',
-        throwScissors: 'assets/games/avatars/avatar_throw_scissors.webp',
-        pencil: 'assets/games/avatars/avatar_pencil.webp',
-        cards: 'assets/games/avatars/avatar_cards.webp'
+        neutral: '/assets/games/avatars/avatar_neutral.webp',
+        happy: '/assets/games/avatars/avatar_happy.webp',
+        sad: '/assets/games/avatars/avatar_sad.webp',
+        thinking: '/assets/games/avatars/avatar_thinking.webp',
+        surprised: '/assets/games/avatars/avatar_surprised.webp',
+        throwRock: '/assets/games/avatars/avatar_throw_rock.webp',
+        throwPaper: '/assets/games/avatars/avatar_throw_paper.webp',
+        throwScissors: '/assets/games/avatars/avatar_throw_scissors.webp',
+        pencil: '/assets/games/avatars/avatar_pencil.webp',
+        cards: '/assets/games/avatars/avatar_cards.webp'
     }
 };
 
