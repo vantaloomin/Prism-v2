@@ -640,12 +640,18 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.85rem;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-normal);
 }
 
 .reset-button:hover {
     background: rgba(239, 68, 68, 0.1);
     border-color: #ef4444;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25);
+    transform: translateY(-2px);
+}
+
+.reset-button:active {
+    transform: translateY(0);
 }
 
 .gallery-grid {

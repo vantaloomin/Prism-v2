@@ -137,31 +137,31 @@
 }
 
 /* ============================================
-   BOTTOM NAVIGATION
+   TAB NAVIGATION (Below Top Bar)
    Redesigned to match landing page aesthetic
    ============================================ */
 
 .bottom-nav {
     position: fixed;
-    bottom: 0;
+    top: 68px;
     left: 0;
     right: 0;
-    z-index: 900;
+    z-index: 899;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     height: 70px;
-    padding: 0 20px;
+    padding: 8px 20px;
     background: rgba(10, 10, 15, 0.9);
     backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 /* Hide when on landing page */
 .bottom-nav.hidden {
-    transform: translateY(100%);
+    transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
 }
@@ -273,10 +273,9 @@
    ============================================ */
 
 .main-content {
-    padding-top: 80px;
-    /* Space for top bar */
-    padding-bottom: 90px;
-    /* Space for bottom nav */
+    padding-top: 158px;
+    /* Space for top bar (60px) + gap (8px) + tab nav (70px) + gap (20px) */
+    padding-bottom: 30px;
     min-height: 100vh;
 }
 
@@ -333,7 +332,9 @@
     }
 
     .bottom-nav {
+        top: 56px;
         height: 60px;
+        padding: 6px 12px;
         gap: 8px;
     }
 
@@ -347,8 +348,9 @@
     }
 
     .main-content {
-        padding-top: 60px;
-        padding-bottom: 80px;
+        padding-top: 125px;
+        /* Space for top bar (50px) + tab nav (60px) + gap (15px) */
+        padding-bottom: 20px;
     }
 }
 

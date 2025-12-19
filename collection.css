@@ -167,12 +167,23 @@ body.animations-paused .card-layer-tint-overlay {
 /* Collection card wrapper for count badge */
 .collection-card-wrapper {
     position: relative;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover lift effect - matches landing page card aesthetic */
+.collection-card-wrapper:hover {
+    transform: translateY(-8px);
+}
+
+.collection-card-wrapper:hover .card {
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.25);
 }
 
 .collection-card-wrapper .card {
     width: 100%;
     aspect-ratio: 2 / 3;
     position: relative;
+    transition: box-shadow 0.25s ease;
     /* No z-index here - allows ::before/::after with z-index:-1 to appear behind */
 }
 
