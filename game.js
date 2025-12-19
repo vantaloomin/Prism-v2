@@ -637,6 +637,51 @@ function testRngDistribution(iterations = 1000) {
 // INITIALIZATION
 // ============================================
 
+/**
+ * Show the landing page
+ */
+function showLandingPage() {
+    const landingPage = document.getElementById('landing-page');
+    const homeBtn = document.getElementById('btn-home');
+
+    if (landingPage) {
+        landingPage.classList.remove('hidden');
+    }
+    if (homeBtn) {
+        homeBtn.classList.add('hidden');
+    }
+
+    // Update landing page credits display
+    const landingCredits = document.getElementById('landing-credits-amount');
+    if (landingCredits) {
+        landingCredits.textContent = gameState.credits;
+    }
+}
+
+/**
+ * Hide the landing page and show the main app
+ */
+function hideLandingPage() {
+    const landingPage = document.getElementById('landing-page');
+    const homeBtn = document.getElementById('btn-home');
+
+    if (landingPage) {
+        landingPage.classList.add('hidden');
+    }
+    if (homeBtn) {
+        homeBtn.classList.remove('hidden');
+    }
+}
+
+/**
+ * Navigate from landing page to a specific tab
+ * @param {string} tabId - 'shop', 'games', or 'collection'
+ */
+function navigateFromLanding(tabId) {
+    hideLandingPage();
+    switchTab(tabId);
+}
+
 function init() {
     // Load saved data
     loadGame();
@@ -644,6 +689,26 @@ function init() {
     // Update UI
     updateCreditsDisplay();
     renderCollection();
+
+    // Update landing page credits
+    const landingCredits = document.getElementById('landing-credits-amount');
+    if (landingCredits) {
+        landingCredits.textContent = gameState.credits;
+    }
+
+    // Landing page menu card clicks
+    document.querySelectorAll('.menu-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const menuTarget = card.dataset.menu;
+            navigateFromLanding(menuTarget);
+        });
+    });
+
+    // Home button to return to landing
+    const homeBtn = document.getElementById('btn-home');
+    if (homeBtn) {
+        homeBtn.addEventListener('click', showLandingPage);
+    }
 
     // Tab switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -692,10 +757,21 @@ function init() {
         }
     });
 
-    // Escape key to close focus mode
+    // Escape key to close focus mode or return to landing
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeFocusMode();
+            const landingPage = document.getElementById('landing-page');
+            if (landingPage && !landingPage.classList.contains('hidden')) {
+                // Already on landing, do nothing
+                return;
+            }
+
+            const focusOverlay = document.getElementById('card-focus-overlay');
+            if (focusOverlay && !focusOverlay.hidden) {
+                closeFocusMode();
+            } else {
+                showLandingPage();
+            }
         }
     });
 
@@ -715,7 +791,7 @@ function init() {
 
 /**
  * Switch between tabs
- * @param {string} tabId - 'shop' or 'collection'
+ * @param {string} tabId - 'shop', 'games', or 'collection'
  */
 function switchTab(tabId) {
     // Update tab buttons
@@ -728,9 +804,18 @@ function switchTab(tabId) {
         content.classList.toggle('active', content.id === `tab-content-${tabId}`);
     });
 
-    // Refresh collection when switching to it
+    // Tab-specific actions
     if (tabId === 'collection') {
         renderCollection();
+    } else if (tabId === 'games') {
+        // Initialize games module when switching to games tab
+        if (typeof initGames === 'function') {
+            initGames();
+        }
+        // Clean up shaders when leaving collection
+        if (typeof destroyShaderCanvas === 'function') {
+            destroyShaderCanvas();
+        }
     } else {
         // Clean up shaders when leaving collection
         if (typeof destroyShaderCanvas === 'function') {

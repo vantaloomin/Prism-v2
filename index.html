@@ -11,9 +11,56 @@
     <link rel="stylesheet" href="holos.css">
     <link rel="stylesheet" href="collection.css">
     <link rel="stylesheet" href="focus.css">
+    <link rel="stylesheet" href="games.css">
+    <link rel="stylesheet" href="landing.css">
 </head>
 
 <body>
+    <!-- Landing Page / Main Menu -->
+    <div class="landing-page" id="landing-page">
+        <div class="landing-bg"></div>
+
+        <!-- Credits display -->
+        <div class="landing-credits">
+            <span class="credits-icon">💎</span>
+            <span class="credits-amount" id="landing-credits-amount">1000</span>
+        </div>
+
+        <!-- Options button -->
+        <button class="landing-options" id="btn-options">
+            <span>⚙️</span>
+            <span>Options</span>
+        </button>
+
+        <!-- Title -->
+        <div class="landing-title">
+            <h1>✦ PRISM ✦</h1>
+            <p class="landing-subtitle">Gacha Collection</p>
+        </div>
+
+        <!-- Main Menu Cards -->
+        <div class="landing-menu">
+            <div class="menu-card" data-menu="games" id="menu-games">
+                <div class="menu-card-icon">🎮</div>
+                <div class="menu-card-label">Games</div>
+            </div>
+            <div class="menu-card" data-menu="shop" id="menu-shop">
+                <div class="menu-card-icon">🎁</div>
+                <div class="menu-card-label">Open Packs</div>
+            </div>
+            <div class="menu-card" data-menu="collection" id="menu-collection">
+                <div class="menu-card-icon">📚</div>
+                <div class="menu-card-label">Collection</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Button (visible when not on landing) -->
+    <button class="home-btn hidden" id="btn-home">
+        <span>🏠</span>
+        <span>Home</span>
+    </button>
+
     <div class="app-container">
         <!-- Header -->
         <header class="header">
@@ -29,7 +76,11 @@
         <nav class="tab-nav">
             <button class="tab-btn active" id="tab-shop" data-tab="shop">
                 <span class="tab-icon">🎁</span>
-                <span class="tab-label">Pack Shop</span>
+                <span class="tab-label">Open Pack</span>
+            </button>
+            <button class="tab-btn" id="tab-games" data-tab="games">
+                <span class="tab-icon">🎮</span>
+                <span class="tab-label">Games</span>
             </button>
             <button class="tab-btn" id="tab-collection" data-tab="collection">
                 <span class="tab-icon">📚</span>
@@ -118,6 +169,24 @@
             </div>
         </section>
 
+        <!-- Tab Content: Games -->
+        <section class="tab-content" id="tab-content-games">
+            <div class="game-stage">
+                <div class="games-container">
+                    <div class="games-header">
+                        <h2 class="games-title">✧ Mini Games ✧</h2>
+                        <p class="games-subtitle">Challenge the AI and test your luck!</p>
+                    </div>
+                    <div class="game-selection" id="games-selection-container">
+                        <!-- Game cards will be rendered by games.js -->
+                    </div>
+                    <div class="game-play-area" id="games-play-area">
+                        <!-- Active game content will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Card Focus Overlay -->
         <div class="card-focus-overlay" id="card-focus-overlay" hidden>
             <div class="focus-backdrop"></div>
@@ -140,6 +209,7 @@
     <script src="shader-engine.js"></script>
     <script src="animations.js"></script>
     <script src="pack-logic.js"></script>
+    <script src="games.js"></script>
     <script src="game.js"></script>
 </body>
 
