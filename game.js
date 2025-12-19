@@ -62,7 +62,7 @@ function createCardElement(cardData, faceDown = true) {
                 <div class="card-layer-stats">
                     <div class="card-name">
                         <span class="card-rarity">${cardData.rarity.id.toUpperCase()}</span>
-                        ${cardData.name}
+                        <span class="card-name-text">${cardData.name}</span>
                     </div>
                 </div>
             </div>
@@ -633,23 +633,29 @@ function testRngDistribution(iterations = 1000) {
     console.log(`Expected: ~${(total * 0.01 * 0.0045 * 0.0045).toFixed(4)}`);
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
+// Tab title configs for top bar
+const TAB_TITLES = {
+    shop: { icon: '🎁', label: 'Open Pack' },
+    games: { icon: '🎮', label: 'Games' },
+    collection: { icon: '📚', label: 'Collection' }
+};
 
 /**
- * Show the landing page
+ * Show the landing page (hide app UI)
  */
 function showLandingPage() {
     const landingPage = document.getElementById('landing-page');
-    const homeBtn = document.getElementById('btn-home');
+    const topBar = document.getElementById('top-bar');
+    const bottomNav = document.getElementById('bottom-nav');
+    const mainContent = document.getElementById('main-content');
 
-    if (landingPage) {
-        landingPage.classList.remove('hidden');
-    }
-    if (homeBtn) {
-        homeBtn.classList.add('hidden');
-    }
+    // Show landing
+    if (landingPage) landingPage.classList.remove('hidden');
+
+    // Hide app UI
+    if (topBar) topBar.classList.add('hidden');
+    if (bottomNav) bottomNav.classList.add('hidden');
+    if (mainContent) mainContent.classList.add('hidden');
 
     // Update landing page credits display
     const landingCredits = document.getElementById('landing-credits-amount');
@@ -659,18 +665,33 @@ function showLandingPage() {
 }
 
 /**
- * Hide the landing page and show the main app
+ * Hide the landing page and show the main app UI
  */
 function hideLandingPage() {
     const landingPage = document.getElementById('landing-page');
-    const homeBtn = document.getElementById('btn-home');
+    const topBar = document.getElementById('top-bar');
+    const bottomNav = document.getElementById('bottom-nav');
+    const mainContent = document.getElementById('main-content');
 
-    if (landingPage) {
-        landingPage.classList.add('hidden');
-    }
-    if (homeBtn) {
-        homeBtn.classList.remove('hidden');
-    }
+    // Hide landing
+    if (landingPage) landingPage.classList.add('hidden');
+
+    // Show app UI
+    if (topBar) topBar.classList.remove('hidden');
+    if (bottomNav) bottomNav.classList.remove('hidden');
+    if (mainContent) mainContent.classList.remove('hidden');
+}
+
+/**
+ * Update the top bar title based on current tab
+ * @param {string} tabId - 'shop', 'games', or 'collection'
+ */
+function updateTopBarTitle(tabId) {
+    const titleEl = document.getElementById('top-bar-title');
+    if (!titleEl) return;
+
+    const config = TAB_TITLES[tabId] || TAB_TITLES.shop;
+    titleEl.innerHTML = `<span class="icon">${config.icon}</span><span>${config.label}</span>`;
 }
 
 /**
@@ -710,8 +731,8 @@ function init() {
         homeBtn.addEventListener('click', showLandingPage);
     }
 
-    // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    // Bottom navigation tab switching
+    document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.dataset.tab;
             switchTab(tabId);
@@ -794,8 +815,8 @@ function init() {
  * @param {string} tabId - 'shop', 'games', or 'collection'
  */
 function switchTab(tabId) {
-    // Update tab buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    // Update bottom nav buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === tabId);
     });
 
@@ -803,6 +824,9 @@ function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.toggle('active', content.id === `tab-content-${tabId}`);
     });
+
+    // Update top bar title
+    updateTopBarTitle(tabId);
 
     // Tab-specific actions
     if (tabId === 'collection') {
@@ -826,16 +850,13 @@ function switchTab(tabId) {
 
 /**
  * Initialize shaders for all visible cards in the collection
+ * DISABLED: Too many WebGL contexts cause context loss. 
+ * Collection uses CSS-only effects. Shaders are only for Focus mode.
  */
 function initShadersForVisibleCards() {
-    if (typeof initShaderCanvas !== 'function') return;
-
-    const cards = document.querySelectorAll('.binder-grid .card');
-    cards.forEach(cardElement => {
-        if (cardElement._cardData) {
-            initShaderCanvas(cardElement, cardElement._cardData);
-        }
-    });
+    // Disabled to prevent WebGL context exhaustion
+    // Focus mode already creates a single shader for the focused card
+    return;
 }
 
 // ============================================

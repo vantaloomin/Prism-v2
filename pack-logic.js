@@ -239,6 +239,48 @@ function generateHoloDebugCard(holoId) {
 }
 
 /**
+ * Generate a DEBUG card for God Pack
+ * Guaranteed UR/SSR tier with rainbow/black frames and rare holos
+ */
+function generateDebugCard() {
+    // Alternate between the two UR characters
+    const urCharacters = [
+        CHARACTER_POOLS.waifu.find(c => c.id === 'w15'), // Goddess of Love
+        CHARACTER_POOLS.husbando.find(c => c.id === 'h15'), // Sun God Avatar
+        CHARACTER_POOLS.waifu.find(c => c.id === 'w14'), // Dragon Sorceress
+        CHARACTER_POOLS.husbando.find(c => c.id === 'h14'), // Demon Lord
+    ];
+    const character = urCharacters[Math.floor(Math.random() * urCharacters.length)];
+    const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
+
+    // God pack: rare frames only (gold, rainbow, black)
+    const rareFrames = ['gold', 'rainbow', 'black'];
+    const frameId = rareFrames[Math.floor(Math.random() * rareFrames.length)];
+    const frame = FRAME_TABLE.find(f => f.id === frameId);
+
+    // God pack: rare holos only (pearl, fractal, void)
+    const rareHolos = ['pearl', 'fractal', 'void'];
+    const holoId = rareHolos[Math.floor(Math.random() * rareHolos.length)];
+    const holo = HOLO_TABLE.find(h => h.id === holoId);
+
+    const packType = character.id.startsWith('w') ? 'waifu' : 'husbando';
+
+    return {
+        id: generateCardId(),
+        characterId: character.id,
+        name: character.name,
+        packType: packType,
+        rarity: rarity,
+        frame: frame,
+        holo: holo,
+        combinedProb: 0, // Debug
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/${packType}/${character.id}.webp`,
+        obtainedAt: Date.now()
+    };
+}
+
+/**
  * Open a pack and generate cards
  * @param {string} packType - 'waifu', 'husbando', 'debug', 'debug-frame', 'debug-holo'
  * @returns {Array} Array of generated cards

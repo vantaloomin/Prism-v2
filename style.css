@@ -128,24 +128,14 @@ body {
    ============================================ */
 
 .game-stage {
-    background: var(--bg-secondary);
-    border-radius: 20px;
-    padding: 40px;
-    min-height: 450px;
-    margin-bottom: 30px;
-    border: 1px solid rgba(139, 92, 246, 0.15);
+    background: transparent;
+    padding: 20px;
+    min-height: 400px;
     position: relative;
-    overflow: hidden;
-}
-
-.game-stage::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Pack Shop */
@@ -450,25 +440,36 @@ body {
 .card-name {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 8px 12px;
-    font-size: 0.8rem;
+    justify-content: flex-start;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 6px 10px;
+    font-size: 0.75rem;
     font-weight: 600;
     backdrop-filter: blur(4px);
     border-radius: 0;
+    overflow: hidden;
 }
 
-/* Rarity badge - inline with name */
+/* Character name text - truncate with ellipsis */
+.card-name-text {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+/* Rarity badge - inline with name, fixed size */
 .card-rarity {
     flex-shrink: 0;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.55rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 /* Frame styles moved to frames.css */

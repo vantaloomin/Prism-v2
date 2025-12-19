@@ -27,7 +27,7 @@
         </div>
 
         <!-- Options button -->
-        <button class="landing-options" id="btn-options">
+        <button class="landing-options" id="btn-landing-settings">
             <span>⚙️</span>
             <span>Options</span>
         </button>
@@ -55,152 +55,164 @@
         </div>
     </div>
 
-    <!-- Home Button (visible when not on landing) -->
-    <button class="home-btn hidden" id="btn-home">
-        <span>🏠</span>
-        <span>Home</span>
-    </button>
-
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <h1 class="logo">✦ Project Prism ✦</h1>
-            <div class="credits-display">
-                <span class="credits-icon">💎</span>
-                <span id="credits-amount">1000</span>
-                <span class="credits-label">Credits</span>
-            </div>
-        </header>
-
-        <!-- Tab Navigation -->
-        <nav class="tab-nav">
-            <button class="tab-btn active" id="tab-shop" data-tab="shop">
-                <span class="tab-icon">🎁</span>
-                <span class="tab-label">Open Pack</span>
+    <!-- Unified Top Bar -->
+    <header class="top-bar hidden" id="top-bar">
+        <div class="top-bar-left">
+            <button class="top-bar-home" id="btn-home">
+                <span class="icon">🏠</span>
+                <span>Home</span>
             </button>
-            <button class="tab-btn" id="tab-games" data-tab="games">
-                <span class="tab-icon">🎮</span>
-                <span class="tab-label">Games</span>
-            </button>
-            <button class="tab-btn" id="tab-collection" data-tab="collection">
-                <span class="tab-icon">📚</span>
-                <span class="tab-label">Collection</span>
-                <span class="tab-badge" id="collection-badge">0</span>
-            </button>
-        </nav>
-
-        <!-- Tab Content: Shop -->
-        <main class="tab-content active" id="tab-content-shop">
-            <div class="game-stage" id="game-stage">
-                <div class="pack-shop" id="pack-shop">
-                    <h2 class="shop-title">✧ Pack Shop ✧</h2>
-                    <div class="pack-buttons">
-                        <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu">
-                            <div class="pack-icon">🌸</div>
-                            <div class="pack-name">Waifu Pack</div>
-                            <div class="pack-cost">💎 100</div>
-                        </button>
-                        <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando">
-                            <div class="pack-icon">⚔️</div>
-                            <div class="pack-name">Husbando Pack</div>
-                            <div class="pack-cost">💎 100</div>
-                        </button>
-                        <button class="pack-button waifu-pack" id="btn-debug-pack" data-pack-type="debug"
-                            style="border-color: #ffd700; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(50,40,0,0.9));">
-                            <div class="pack-icon">⚡</div>
-                            <div class="pack-name">God Pack</div>
-                            <div class="pack-cost">💎 100</div>
-                        </button>
-                        <button class="pack-button waifu-pack" id="btn-debug-frame-pack" data-pack-type="debug-frame"
-                            style="border-color: #a855f7; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(40,0,50,0.9));">
-                            <div class="pack-icon">🖼️</div>
-                            <div class="pack-name">Frame Test</div>
-                            <div class="pack-cost">💎 50</div>
-                        </button>
-                        <button class="pack-button waifu-pack" id="btn-debug-holo-pack" data-pack-type="debug-holo"
-                            style="border-color: #3b82f6; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(0,40,50,0.9));">
-                            <div class="pack-icon">✨</div>
-                            <div class="pack-name">Holo Test</div>
-                            <div class="pack-cost">💎 150</div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card Display Area -->
-                <div class="card-display-area" id="card-display-area"></div>
-
-                <!-- Pack Animation Container -->
-                <div class="pack-animation-container" id="pack-animation-container" hidden>
-                    <div class="pack-wrapper">
-                        <div class="pack-image" id="pack-image"></div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Tab Content: Collection -->
-        <section class="tab-content" id="tab-content-collection">
-            <div class="collection-header">
-                <h2 class="collection-title">✧ My Collection ✧</h2>
-                <div class="collection-stats">
-                    <span class="stat-item">
-                        <span class="stat-value" id="unique-count">0</span>
-                        <span class="stat-label">Unique</span>
-                    </span>
-                    <span class="stat-divider">|</span>
-                    <span class="stat-item">
-                        <span class="stat-value" id="total-count">0</span>
-                        <span class="stat-label">Total Cards</span>
-                    </span>
-                </div>
-                <div class="collection-controls">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-animations" checked>
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-label">Animations</span>
-                    </label>
-                    <button class="reset-button" id="btn-reset">Reset Save</button>
-                </div>
-            </div>
-
-            <!-- Collection Grid (sorted by rarity) -->
-            <div class="collection-container" id="collection-container">
-                <!-- Cards will be rendered here, grouped and sorted -->
-            </div>
-        </section>
-
-        <!-- Tab Content: Games -->
-        <section class="tab-content" id="tab-content-games">
-            <div class="game-stage">
-                <div class="games-container">
-                    <div class="games-header">
-                        <h2 class="games-title">✧ Mini Games ✧</h2>
-                        <p class="games-subtitle">Challenge the AI and test your luck!</p>
-                    </div>
-                    <div class="game-selection" id="games-selection-container">
-                        <!-- Game cards will be rendered by games.js -->
-                    </div>
-                    <div class="game-play-area" id="games-play-area">
-                        <!-- Active game content will be rendered here -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Card Focus Overlay -->
-        <div class="card-focus-overlay" id="card-focus-overlay" hidden>
-            <div class="focus-backdrop"></div>
-            <div class="focus-container">
-                <div class="focus-card-wrapper" id="focus-card-wrapper">
-                    <!-- Focused card will be cloned here -->
-                </div>
-                <div class="focus-info" id="focus-info">
-                    <!-- Card info will go here -->
-                </div>
-            </div>
-            <button class="focus-close-btn" id="focus-close-btn">✕ Close</button>
-            <div class="focus-hint">Move mouse to interact with holographic effects</div>
         </div>
+        <div class="top-bar-center">
+            <span class="top-bar-title" id="top-bar-title">
+                <span class="icon">🎁</span>
+                <span>Open Pack</span>
+            </span>
+        </div>
+        <div class="top-bar-right">
+            <div class="top-bar-credits">
+                <span class="icon">💎</span>
+                <span class="amount" id="credits-amount">1000</span>
+            </div>
+            <button class="top-bar-settings" id="btn-settings">
+                ⚙️
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content hidden" id="main-content">
+        <div class="content-area">
+
+            <!-- Tab Content: Shop -->
+            <section class="tab-content active" id="tab-content-shop">
+                <div class="game-stage" id="game-stage">
+                    <div class="pack-shop" id="pack-shop">
+                        <div class="pack-buttons">
+                            <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu">
+                                <div class="pack-icon">🌸</div>
+                                <div class="pack-name">Waifu Pack</div>
+                                <div class="pack-cost">💎 100</div>
+                            </button>
+                            <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando">
+                                <div class="pack-icon">⚔️</div>
+                                <div class="pack-name">Husbando Pack</div>
+                                <div class="pack-cost">💎 100</div>
+                            </button>
+                            <button class="pack-button waifu-pack" id="btn-debug-pack" data-pack-type="debug"
+                                style="border-color: #ffd700; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(50,40,0,0.9));">
+                                <div class="pack-icon">⚡</div>
+                                <div class="pack-name">God Pack</div>
+                                <div class="pack-cost">💎 100</div>
+                            </button>
+                            <button class="pack-button waifu-pack" id="btn-debug-frame-pack"
+                                data-pack-type="debug-frame"
+                                style="border-color: #a855f7; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(40,0,50,0.9));">
+                                <div class="pack-icon">🖼️</div>
+                                <div class="pack-name">Frame Test</div>
+                                <div class="pack-cost">💎 50</div>
+                            </button>
+                            <button class="pack-button waifu-pack" id="btn-debug-holo-pack" data-pack-type="debug-holo"
+                                style="border-color: #3b82f6; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(0,40,50,0.9));">
+                                <div class="pack-icon">✨</div>
+                                <div class="pack-name">Holo Test</div>
+                                <div class="pack-cost">💎 150</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card Display Area -->
+                    <div class="card-display-area" id="card-display-area"></div>
+
+                    <!-- Pack Animation Container -->
+                    <div class="pack-animation-container" id="pack-animation-container" hidden>
+                        <div class="pack-wrapper">
+                            <div class="pack-image" id="pack-image"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Content: Collection -->
+            <section class="tab-content" id="tab-content-collection">
+                <div class="collection-header">
+                    <div class="collection-stats">
+                        <span class="stat-item">
+                            <span class="stat-value" id="unique-count">0</span>
+                            <span class="stat-label">Unique</span>
+                        </span>
+                        <span class="stat-divider">|</span>
+                        <span class="stat-item">
+                            <span class="stat-value" id="total-count">0</span>
+                            <span class="stat-label">Total Cards</span>
+                        </span>
+                    </div>
+                    <div class="collection-controls">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-animations" checked>
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">Animations</span>
+                        </label>
+                        <button class="reset-button" id="btn-reset">Reset Save</button>
+                    </div>
+                </div>
+
+                <!-- Collection Grid (sorted by rarity) -->
+                <div class="collection-container" id="collection-container">
+                    <!-- Cards will be rendered here, grouped and sorted -->
+                </div>
+            </section>
+
+            <!-- Tab Content: Games -->
+            <section class="tab-content" id="tab-content-games">
+                <div class="game-stage">
+                    <div class="games-container">
+                        <div class="games-header">
+                            <p class="games-subtitle">Challenge the AI and test your luck!</p>
+                        </div>
+                        <div class="game-selection" id="games-selection-container">
+                            <!-- Game cards will be rendered by games.js -->
+                        </div>
+                        <div class="game-play-area" id="games-play-area">
+                            <!-- Active game content will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav hidden" id="bottom-nav">
+        <button class="nav-btn active" id="nav-shop" data-tab="shop">
+            <span class="nav-icon">🎁</span>
+            <span class="nav-label">Packs</span>
+        </button>
+        <button class="nav-btn" id="nav-games" data-tab="games">
+            <span class="nav-icon">🎮</span>
+            <span class="nav-label">Games</span>
+        </button>
+        <button class="nav-btn" id="nav-collection" data-tab="collection">
+            <span class="nav-icon">📚</span>
+            <span class="nav-label">Collection</span>
+            <span class="nav-badge" id="collection-badge">0</span>
+        </button>
+    </nav>
+
+    <!-- Card Focus Overlay -->
+    <div class="card-focus-overlay" id="card-focus-overlay" hidden>
+        <div class="focus-backdrop"></div>
+        <div class="focus-container">
+            <div class="focus-card-wrapper" id="focus-card-wrapper">
+                <!-- Focused card will be cloned here -->
+            </div>
+            <div class="focus-info" id="focus-info">
+                <!-- Card info will go here -->
+            </div>
+        </div>
+        <button class="focus-close-btn" id="focus-close-btn">✕ Close</button>
+        <div class="focus-hint">Move mouse to interact with holographic effects</div>
     </div>
 
     <!-- GSAP Animation Library -->
