@@ -182,8 +182,8 @@ export function generateCard(packType) {
         frame: frame,
         holo: holo,
         combinedProb: combinedProb,
-        backgroundPath: `/assets/backgrounds/${character.bg}.webp`,
-        characterPath: `/assets/${packType}/${character.id}.webp`,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/${packType}/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
@@ -207,8 +207,8 @@ function generateFrameDebugCard(frameId) {
         frame: frame,
         holo: holo,
         combinedProb: 0, // Debug
-        backgroundPath: `/assets/backgrounds/${character.bg}.webp`,
-        characterPath: `/assets/waifu/${character.id}.webp`,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/waifu/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
@@ -232,8 +232,8 @@ function generateHoloDebugCard(holoId) {
         frame: frame,
         holo: holo,
         combinedProb: 0, // Debug
-        backgroundPath: `/assets/backgrounds/${character.bg}.webp`,
-        characterPath: `/assets/waifu/${character.id}.webp`,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/waifu/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
@@ -274,8 +274,8 @@ function generateDebugCard() {
         frame: frame,
         holo: holo,
         combinedProb: 0, // Debug
-        backgroundPath: `/assets/backgrounds/${character.bg}.webp`,
-        characterPath: `/assets/${packType}/${character.id}.webp`,
+        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
+        characterPath: `assets/${packType}/${character.id}.webp`,
         obtainedAt: Date.now()
     };
 }
