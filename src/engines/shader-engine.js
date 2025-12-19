@@ -280,51 +280,124 @@ vec4 holoPearl(vec2 uv) {
 }
 
 vec4 holoFractal(vec2 uv) {
-    // Geometric crystal facets with cyberpunk color accents
-    float scale = 8.0;
-    vec2 cell = floor(uv * scale);
-    vec2 local = fract(uv * scale);
+    // Sacred Geometry Mandala with Crystalline Refraction
+    // Multi-layer rotating geometric patterns with prismatic light bursts
+    // Anchor point: upper-right corner, light sweeps across card
     
-    // Create sharp geometric lines
-    float edge1 = abs(local.x - local.y);
-    float edge2 = abs(local.x + local.y - 1.0);
-    float edge3 = abs(local.x - 0.5);
-    float edge4 = abs(local.y - 0.5);
+    vec2 center = vec2(1.0, 0.0);  // Upper-right anchor
+    vec2 delta = uv - center;
+    float dist = length(delta);
+    float angle = atan(delta.y, delta.x);
     
-    // Combine edges for faceted look
-    float minEdge = min(min(edge1, edge2), min(edge3, edge4));
-    float facetEdge = smoothstep(0.0, 0.08, minEdge);
+    // Scale factor to make patterns cover full card from corner
+    float scaledDist = dist * 0.7;  // Larger patterns
     
-    // Animated light sweep across facets
-    float sweep = sin(uv.x * 5.0 + uv.y * 3.0 - u_time * 0.8) * 0.5 + 0.5;
-    sweep = pow(sweep, 3.0);
+    // ============================================
+    // LAYER 1: Rotating Sacred Geometry Mandala
+    // Concentric rings of geometric patterns - SCALED UP
+    // ============================================
     
-    // Add noise texture for depth
-    float noise = snoise(uv * 20.0 + u_time * 0.12) * 0.15;
+    // Outer ring - hexagonal pattern (Flower of Life inspired)
+    float outerRot = angle + u_time * 0.15;
+    float hexPattern = abs(sin(outerRot * 3.0)) * 0.5 + 0.5;
+    hexPattern *= smoothstep(1.2, 0.9, scaledDist) * smoothstep(0.5, 0.7, scaledDist);
     
-    // Cyberpunk color scheme: cyan, magenta, electric blue accents
-    float cellHue = fract((cell.x * 0.1 + cell.y * 0.15) + u_time * 0.04 + sweep * 0.2);
-    // Bias towards cyan-magenta range (0.5-0.9 hue)
-    float cyberHue = 0.5 + cellHue * 0.4;
-    vec3 prismColor = hsl2rgb(vec3(cyberHue, 0.9, 0.55 + sweep * 0.2)); // Boosted saturation & lightness
+    // Middle ring - triangular geometry (counter-rotating)
+    float midRot = angle - u_time * 0.1;
+    float triPattern = abs(sin(midRot * 6.0)) * 0.5 + 0.5;
+    triPattern *= smoothstep(0.9, 0.6, scaledDist) * smoothstep(0.25, 0.45, scaledDist);
     
-    // Add stronger neon accents
-    prismColor += vec3(0.0, noise * 0.4, noise * 0.5); // Stronger cyan-ish noise
-    prismColor += vec3(noise * 0.3, 0.0, noise * 0.4) * 0.6; // Stronger magenta accent
+    // Inner ring - star burst pattern
+    float innerRot = angle + u_time * 0.2;
+    float starPattern = pow(abs(sin(innerRot * 8.0)), 3.0);
+    starPattern *= smoothstep(0.5, 0.25, scaledDist) * smoothstep(0.0, 0.15, scaledDist);
     
-    // Bright white edges with pulsing intensity
-    float edgePulse = 0.7 + sin(u_time * 1.2 + (cell.x + cell.y) * 0.5) * 0.3;
-    vec3 edgeGlow = vec3(0.9, 1.0, 1.0) * (1.0 - facetEdge) * edgePulse; // Slightly cyan edges
+    // Combine geometry layers
+    float geometry = hexPattern * 0.5 + triPattern * 0.7 + starPattern;
     
-    // Light sweep highlight
-    vec3 sweepGlow = vec3(1.0, 0.85, 0.95) * sweep * (1.0 - facetEdge) * 0.5;
+    // ============================================
+    // LAYER 2: Radial Line Work (Metatron's Cube style)
+    // Sharp lines emanating from anchor point
+    // ============================================
+    float lineAngle = mod(angle + 3.14159, 3.14159 / 6.0);
+    float radialLines = smoothstep(0.08, 0.0, lineAngle) + smoothstep(0.08, 0.0, 3.14159/6.0 - lineAngle);
+    radialLines *= (1.0 - smoothstep(0.0, 0.3, scaledDist)); // Fade near center
+    radialLines *= smoothstep(1.4, 0.8, scaledDist); // Fade at far edges
     
-    // Combine: prismatic fill + edge highlights + sweep + texture
-    vec3 fractalColor = prismColor * facetEdge + edgeGlow + sweepGlow;
+    // Pulsing line intensity
+    float linePulse = sin(u_time * 1.5 + scaledDist * 8.0) * 0.3 + 0.7;
+    radialLines *= linePulse;
     
-    // Reduced intensity for card art visibility
-    float intensity = (1.0 - facetEdge) * 0.8 + sweep * 0.4 + 0.2;
-    return vec4(fractalColor, intensity * 0.55);
+    // ============================================
+    // LAYER 3: Crystalline Refraction Bursts
+    // Bright prismatic light hitting facet edges
+    // ============================================
+    
+    // Facet grid (diamond pattern)
+    vec2 facetUV = uv * 12.0;
+    vec2 facetCell = floor(facetUV);
+    vec2 facetLocal = fract(facetUV) - 0.5;
+    
+    // Diamond-shaped facets
+    float facetEdge = abs(facetLocal.x) + abs(facetLocal.y);
+    float facetLine = smoothstep(0.48, 0.42, facetEdge);
+    
+    // Animated light sweep hitting facets - sweeps from upper-right
+    float lightSweep = sin(uv.x * 8.0 - uv.y * 6.0 - u_time * 0.6) * 0.5 + 0.5;
+    lightSweep = pow(lightSweep, 4.0);
+    
+    // Prismatic burst at facet intersections
+    float burst = facetLine * lightSweep;
+    
+    // Rainbow refraction colors based on angle
+    float refractionHue = fract(angle / 6.28318 + scaledDist * 0.5 + u_time * 0.05);
+    vec3 refractionColor = hsl2rgb(vec3(refractionHue, 0.9, 0.7));
+    
+    // ============================================
+    // LAYER 4: Core Glow at anchor point
+    // Bright mystical energy radiating from upper-right
+    // ============================================
+    float coreGlow = pow(max(0.0, 1.0 - scaledDist * 1.5), 3.0);
+    float corePulse = sin(u_time * 2.0) * 0.15 + 0.85;
+    coreGlow *= corePulse;
+    
+    // Core color - warm gold/white
+    vec3 coreColor = mix(vec3(1.0, 0.9, 0.7), vec3(1.0, 1.0, 1.0), corePulse);
+    
+    // ============================================
+    // COLOR COMPOSITION
+    // ============================================
+    
+    // Base geometry color - mystical gold/white
+    vec3 geoColor = mix(
+        vec3(1.0, 0.95, 0.8),   // Warm gold
+        vec3(0.9, 0.95, 1.0),   // Cool silver
+        sin(angle * 2.0 + u_time * 0.3) * 0.5 + 0.5
+    );
+    
+    // Radial line color - bright white with slight iridescence
+    float lineHue = fract(scaledDist * 2.0 + u_time * 0.1);
+    vec3 lineColor = mix(vec3(1.0), hsl2rgb(vec3(lineHue, 0.3, 0.9)), 0.2);
+    
+    // Combine all layers
+    vec3 fractal = vec3(0.0);
+    fractal += geoColor * geometry * 0.6;           // Sacred geometry
+    fractal += lineColor * radialLines * 0.5;       // Radial lines
+    fractal += refractionColor * burst * 0.8;       // Crystalline bursts
+    fractal += coreColor * coreGlow * 0.7;          // Core glow from corner
+    
+    // Add subtle sparkle noise
+    float sparkle = pow(snoise(uv * 50.0 + u_time * 0.2) * 0.5 + 0.5, 10.0) * 0.3;
+    fractal += vec3(1.0, 0.98, 0.95) * sparkle;
+    
+    // Distance-based fade to bottom-left (opposite of anchor)
+    float cornerFade = smoothstep(0.0, 0.4, scaledDist) * smoothstep(1.6, 1.0, scaledDist);
+    fractal *= (0.5 + cornerFade * 0.5);
+    
+    // Final intensity
+    float intensity = geometry * 0.4 + radialLines * 0.25 + burst * 0.5 + coreGlow * 0.35 + sparkle + 0.15;
+    
+    return vec4(fractal, intensity * 0.75);
 }
 
 vec4 holoVoid(vec2 uv) {
