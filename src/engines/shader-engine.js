@@ -521,7 +521,7 @@ void main() {
 // SHADER ENGINE CLASS
 // ============================================
 
-class ShaderEngine {
+export class ShaderEngine {
     constructor(canvas) {
         this.canvas = canvas;
         this.gl = canvas.getContext('webgl2', {
@@ -718,7 +718,7 @@ let animationsEnabled = true;
 /**
  * Check if animations are enabled
  */
-function areAnimationsEnabled() {
+export function areAnimationsEnabled() {
     return animationsEnabled;
 }
 
@@ -726,7 +726,7 @@ function areAnimationsEnabled() {
  * Set animations enabled/disabled globally
  * @param {boolean} enabled
  */
-function setAnimationsEnabled(enabled) {
+export function setAnimationsEnabled(enabled) {
     animationsEnabled = enabled;
 
     // Toggle body class for CSS animations
@@ -756,7 +756,7 @@ function setAnimationsEnabled(enabled) {
  * @param {boolean} focusMode - If true, enable mouse tracking (for Focus view only)
  * @returns {ShaderEngine} The created shader engine
  */
-function initShaderCanvas(cardElement, cardData, focusMode = false) {
+export function initShaderCanvas(cardElement, cardData, focusMode = false) {
     // Check if already has a shader
     if (activeShaderEngines.has(cardElement)) {
         return activeShaderEngines.get(cardElement);
@@ -846,7 +846,7 @@ function initShaderCanvas(cardElement, cardData, focusMode = false) {
  * Destroy shader canvas for a specific card element
  * @param {HTMLElement} cardElement
  */
-function destroyShaderCanvasForCard(cardElement) {
+export function destroyShaderCanvasForCard(cardElement) {
     const engine = activeShaderEngines.get(cardElement);
     if (engine) {
         engine.destroy();
@@ -868,7 +868,7 @@ function destroyShaderCanvasForCard(cardElement) {
 /**
  * Destroy all active shader engines
  */
-function destroyShaderCanvas() {
+export function destroyShaderCanvas() {
     activeShaderEngines.forEach((engine, cardElement) => {
         engine.destroy();
         const canvas = cardElement.querySelector('.shader-canvas');
@@ -1095,7 +1095,7 @@ function getShaderTextureCache() {
  * @param {HTMLElement} cardElement - The card DOM element
  * @param {Object} cardData - Card data with frame and holo info
  */
-function applyShaderTexture(cardElement, cardData) {
+export function applyShaderTexture(cardElement, cardData) {
     const cache = getShaderTextureCache();
     const frameId = cardData.frame.id;
     const holoId = cardData.holo.id;
@@ -1164,7 +1164,7 @@ function applyShaderTexture(cardElement, cardData) {
  * Remove cached shader texture from a card element
  * @param {HTMLElement} cardElement
  */
-function removeShaderTexture(cardElement) {
+export function removeShaderTexture(cardElement) {
     if (cardElement._shaderCleanup) {
         cardElement._shaderCleanup();
         delete cardElement._shaderCleanup;

@@ -6,7 +6,7 @@
 // CONSTANTS & CONFIGURATION
 // ============================================
 
-const CONFIG = {
+export const CONFIG = {
     PACK_COST: 100,
     PACK_SIZE: 5,
     FRAME_DEBUG_COST: 50,
@@ -17,7 +17,7 @@ const CONFIG = {
 
 // Probability tables from PRD (values are cumulative thresholds)
 // prob = actual probability for odds calculation
-const RARITY_TABLE = [
+export const RARITY_TABLE = [
     { id: 'c', name: 'Common', threshold: 0.50, prob: 0.50, color: '#9ca3af' },
     { id: 'r', name: 'Rare', threshold: 0.80, prob: 0.30, color: '#3b82f6' },
     { id: 'sr', name: 'Super Rare', threshold: 0.94, prob: 0.14, color: '#a855f7' },
@@ -25,7 +25,7 @@ const RARITY_TABLE = [
     { id: 'ur', name: 'Ultra Rare', threshold: 1.00, prob: 0.01, color: '#ef4444' }
 ];
 
-const FRAME_TABLE = [
+export const FRAME_TABLE = [
     { id: 'white', name: 'White', threshold: 0.500, prob: 0.50 },
     { id: 'blue', name: 'Blue', threshold: 0.800, prob: 0.30 },
     { id: 'red', name: 'Red', threshold: 0.950, prob: 0.15 },
@@ -34,7 +34,7 @@ const FRAME_TABLE = [
     { id: 'black', name: 'Black', threshold: 1.000, prob: 0.0045 }
 ];
 
-const HOLO_TABLE = [
+export const HOLO_TABLE = [
     { id: 'none', name: 'None', threshold: 0.60, prob: 0.60 },
     { id: 'shiny', name: 'Shiny', threshold: 0.80, prob: 0.20 },
     { id: 'rainbow', name: 'Rainbow', threshold: 0.90, prob: 0.10 },
@@ -46,7 +46,7 @@ const HOLO_TABLE = [
 // Character pools - 15 characters per pack
 // Each character has a fixed rarity (not random!)
 // bg = background ID, rarity = fixed rarity tier
-const CHARACTER_POOLS = {
+export const CHARACTER_POOLS = {
     waifu: [
         // Common (6)
         { id: 'w01', name: 'The Village Herbalist', bg: 'bg_garden', rarity: 'c' },
@@ -102,7 +102,7 @@ const CHARACTER_POOLS = {
  * @param {Array} table - Array of {id, name, threshold} objects
  * @returns {Object} The selected entry from the table
  */
-function weightedRoll(table) {
+export function weightedRoll(table) {
     const roll = Math.random();
     for (const entry of table) {
         if (roll < entry.threshold) {
@@ -117,7 +117,7 @@ function weightedRoll(table) {
  * Roll for card rarity
  * @returns {Object} Rarity data
  */
-function rollRarity() {
+export function rollRarity() {
     return weightedRoll(RARITY_TABLE);
 }
 
@@ -125,7 +125,7 @@ function rollRarity() {
  * Roll for frame style
  * @returns {Object} Frame data
  */
-function rollFrame() {
+export function rollFrame() {
     return weightedRoll(FRAME_TABLE);
 }
 
@@ -133,7 +133,7 @@ function rollFrame() {
  * Roll for holographic effect
  * @returns {Object} Holo data
  */
-function rollHolo() {
+export function rollHolo() {
     return weightedRoll(HOLO_TABLE);
 }
 
@@ -151,7 +151,7 @@ function generateCardId() {
  * @param {string} packType - 'waifu' or 'husbando'
  * @returns {Object} Complete card data
  */
-function generateCard(packType) {
+export function generateCard(packType) {
     // Roll for rarity tier first
     const rarityRoll = rollRarity();
     const frame = rollFrame();
@@ -285,7 +285,7 @@ function generateDebugCard() {
  * @param {string} packType - 'waifu', 'husbando', 'debug', 'debug-frame', 'debug-holo'
  * @returns {Array} Array of generated cards
  */
-function openPack(packType) {
+export function openPack(packType) {
     const cards = [];
 
     if (packType === 'debug-frame') {

@@ -7,7 +7,7 @@
 // GAMES CONFIGURATION
 // ============================================
 
-const GAMES_CONFIG = {
+export const GAMES_CONFIG = {
     games: [
         {
             id: 'rps',
@@ -61,7 +61,7 @@ let gamesState = {
 /**
  * Render the games selection screen
  */
-function renderGamesSelection() {
+export function renderGamesSelection() {
     const container = document.getElementById('games-selection-container');
     if (!container) return;
 
@@ -89,7 +89,7 @@ function renderGamesSelection() {
  * Start a specific game
  * @param {string} gameId - The game identifier
  */
-function startGame(gameId) {
+export function startGame(gameId) {
     console.log(`Starting game: ${gameId}`);
     gamesState.currentGame = gameId;
     gamesState.isPlaying = true;
@@ -108,7 +108,7 @@ function startGame(gameId) {
 /**
  * Return to game selection
  */
-function exitGame() {
+export function exitGame() {
     gamesState.currentGame = null;
     gamesState.isPlaying = false;
 
@@ -167,7 +167,7 @@ function renderGamePlayArea(gameId) {
  * Update the AI avatar expression
  * @param {string} expression - The expression key from GAMES_CONFIG.avatars
  */
-function setAvatarExpression(expression) {
+export function setAvatarExpression(expression) {
     const avatar = document.getElementById('game-avatar');
     if (!avatar) return;
 
@@ -257,17 +257,9 @@ function initBlackjackGame() {
 /**
  * Initialize the games module
  */
-function initGames() {
+export function initGames() {
     renderGamesSelection();
     console.log('Games module initialized');
 }
 
-// Auto-initialize when DOM is ready (if not called from game.js)
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        // Only init if games tab exists
-        if (document.getElementById('tab-content-games')) {
-            initGames();
-        }
-    });
-}
+console.log('Games module loaded');

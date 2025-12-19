@@ -3,11 +3,13 @@
    Dramatic pack opening and card effects
    ============================================ */
 
+import { gsap } from 'gsap';
+
 // ============================================
 // ANIMATION CONFIGURATION
 // ============================================
 
-const AnimConfig = {
+export const AnimConfig = {
     // Pack opening phases
     pack: {
         shakeDuration: 0.08,
@@ -39,7 +41,7 @@ const AnimConfig = {
  * @param {HTMLElement} packElement - The pack image element
  * @returns {gsap.core.Timeline} GSAP timeline
  */
-function createPackOpeningAnimation(packElement) {
+export function createPackOpeningAnimation(packElement) {
     const tl = gsap.timeline();
 
     // Phase 1: Initial shake - "something's happening!"
@@ -95,7 +97,7 @@ function createPackOpeningAnimation(packElement) {
  * @param {HTMLElement[]} cardElements - Array of card DOM elements
  * @returns {gsap.core.Timeline} GSAP timeline
  */
-function createCardDealingAnimation(cardElements) {
+export function createCardDealingAnimation(cardElements) {
     const tl = gsap.timeline();
 
     // Set initial state - cards start off screen and small
@@ -125,7 +127,7 @@ function createCardDealingAnimation(cardElements) {
  * @param {Object} cardData - Card data for rarity-based effects
  * @returns {gsap.core.Timeline} GSAP timeline
  */
-function createCardFlipAnimation(cardElement, cardData) {
+export function createCardFlipAnimation(cardElement, cardData) {
     const tl = gsap.timeline();
     const cardInner = cardElement.querySelector('.card-inner');
 
@@ -169,7 +171,7 @@ function createCardFlipAnimation(cardElement, cardData) {
  * @param {HTMLElement} cardElement - The card element
  * @param {Object} cardData - Card data with combinedProb
  */
-function triggerRareCardEffects(cardElement, cardData) {
+export function triggerRareCardEffects(cardElement, cardData) {
     // If combinedProb exists, use it. Otherwise fallback to old rarity (for backward compat)
     const prob = cardData.combinedProb || 1.0;
     const tier = getGlowTier(prob);
@@ -269,7 +271,7 @@ function createGodRollParticles(element) {
  * Shake the entire screen
  * @param {number} intensity - Shake intensity (1-5)
  */
-function screenShake(intensity = 1) {
+export function screenShake(intensity = 1) {
     const container = document.querySelector('.app-container');
     if (!container) return;
 
@@ -288,7 +290,7 @@ function screenShake(intensity = 1) {
 /**
  * Flash the screen white briefly
  */
-function screenFlash() {
+export function screenFlash() {
     const flash = document.createElement('div');
     flash.style.cssText = `
         position: fixed;
@@ -319,7 +321,7 @@ function screenFlash() {
  * @param {HTMLElement} cardElement - Card element with holo layer
  * @param {string} holoType - Type of holo effect
  */
-function animateHoloShimmer(cardElement, holoType) {
+export function animateHoloShimmer(cardElement, holoType) {
     if (holoType === 'none') return;
 
     const holoLayer = cardElement.querySelector('.card-layer-holo');
@@ -360,7 +362,7 @@ function animateHoloLight(cardElement, targetX, targetY) {
  * Animate cards appearing in the collection grid
  * @param {HTMLElement[]} cardElements - Card elements to animate
  */
-function animateCollectionCards(cardElements) {
+export function animateCollectionCards(cardElements) {
     gsap.from(cardElements, {
         scale: 0.8,
         opacity: 0,
@@ -392,7 +394,7 @@ function animatePageTransition(container, direction) {
  * Bounce animation for interactive feedback
  * @param {HTMLElement} element - Element to bounce
  */
-function bounceFeedback(element) {
+export function bounceFeedback(element) {
     gsap.fromTo(element,
         { scale: 1 },
         {
@@ -409,7 +411,7 @@ function bounceFeedback(element) {
  * Pulse animation for attention
  * @param {HTMLElement} element - Element to pulse
  */
-function pulseAttention(element) {
+export function pulseAttention(element) {
     gsap.to(element, {
         scale: 1.05,
         duration: 0.5,
@@ -419,6 +421,4 @@ function pulseAttention(element) {
     });
 }
 
-// Export for use in game.js (if using modules)
-// For now, these are global functions
 console.log('✦ GSAP Animations loaded! ✦');
