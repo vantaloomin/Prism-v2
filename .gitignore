@@ -118,7 +118,6 @@ coverage/
 # PROJECT-SPECIFIC
 # ============================================
 # Product Requirements Document (internal reference)
-PRD.md
 
 # Local save data exports (if any)
 saves/
