@@ -90,6 +90,30 @@ function navigateFromLanding(tabId) {
 }
 
 // ============================================
+// SETTINGS MODAL
+// ============================================
+
+/**
+ * Open the settings modal
+ */
+function openSettingsModal() {
+    const overlay = document.getElementById('settings-overlay');
+    if (overlay) {
+        overlay.classList.add('active');
+    }
+}
+
+/**
+ * Close the settings modal
+ */
+function closeSettingsModal() {
+    const overlay = document.getElementById('settings-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
+// ============================================
 // TAB NAVIGATION
 // ============================================
 
@@ -243,7 +267,7 @@ function init() {
         handlePackPurchase('debug-holo', openFocusMode);
     });
 
-    document.getElementById('btn-reset').addEventListener('click', resetSave);
+
 
     // Add click handler for card display area to go back to shop
     document.getElementById('card-display-area').addEventListener('click', (e) => {
@@ -261,9 +285,16 @@ function init() {
         }
     });
 
-    // Escape key to close focus mode or return to landing
+    // Escape key to close overlays or return to landing
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            // Check settings modal first (highest priority)
+            const settingsOverlay = document.getElementById('settings-overlay');
+            if (settingsOverlay && settingsOverlay.classList.contains('active')) {
+                closeSettingsModal();
+                return;
+            }
+
             const landingPage = document.getElementById('landing-page');
             if (landingPage && !landingPage.classList.contains('hidden')) {
                 // Already on landing, do nothing
@@ -284,6 +315,33 @@ function init() {
     if (animToggle) {
         animToggle.addEventListener('change', (e) => {
             setAnimationsEnabled(e.target.checked);
+        });
+    }
+
+    // Reset save button
+    document.getElementById('btn-reset').addEventListener('click', resetSave);
+
+    // Settings modal controls
+    const settingsOverlay = document.getElementById('settings-overlay');
+    const btnSettings = document.getElementById('btn-settings');
+    const btnLandingSettings = document.getElementById('btn-landing-settings');
+    const btnSettingsClose = document.getElementById('settings-close');
+
+    if (btnSettings) {
+        btnSettings.addEventListener('click', openSettingsModal);
+    }
+    if (btnLandingSettings) {
+        btnLandingSettings.addEventListener('click', openSettingsModal);
+    }
+    if (btnSettingsClose) {
+        btnSettingsClose.addEventListener('click', closeSettingsModal);
+    }
+    // Close on backdrop click
+    if (settingsOverlay) {
+        settingsOverlay.addEventListener('click', (e) => {
+            if (e.target === settingsOverlay) {
+                closeSettingsModal();
+            }
         });
     }
 

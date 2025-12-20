@@ -1,0 +1,215 @@
+/* ============================================
+   PROJECT PRISM - SETTINGS MODAL
+   Glassmorphism-styled settings overlay
+   ============================================ */
+
+/* Modal Overlay - covers entire viewport */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Container - centered in viewport */
+.settings-modal {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    background: linear-gradient(145deg, rgba(26, 26, 37, 0.95), rgba(18, 18, 26, 0.98));
+    border: 2px solid rgba(139, 92, 246, 0.4);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(139, 92, 246, 0.15);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-overlay.active .settings-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Modal Header */
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.settings-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.settings-title .icon {
+    font-size: 1.5rem;
+}
+
+.settings-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.settings-close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Settings Content */
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Settings Item Row */
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    transition: border-color 0.2s ease;
+}
+
+.settings-item:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.settings-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings-item-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.settings-item-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Toggle Switch (reused from collection) */
+.settings-toggle {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    background: var(--bg-tertiary);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.settings-toggle input {
+    display: none;
+}
+
+.settings-toggle .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-tertiary);
+    border-radius: 14px;
+    transition: background 0.3s ease;
+}
+
+.settings-toggle .toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.settings-toggle input:checked + .toggle-track {
+    background: var(--accent-primary);
+}
+
+.settings-toggle input:checked + .toggle-track .toggle-thumb {
+    left: 28px;
+    background: white;
+}
+
+/* Danger Button (Reset Save) */
+.settings-btn-danger {
+    background: transparent;
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    color: #ef4444;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+    transform: translateY(-2px);
+}
+
+.settings-btn-danger:active {
+    transform: translateY(0);
+}
+
+/* Divider */
+.settings-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+    margin: 5px 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .settings-modal {
+        padding: 20px;
+        margin: 15px;
+        width: calc(100% - 30px);
+    }
+
+    .settings-title {
+        font-size: 1.2rem;
+    }
+
+    .settings-item {
+        padding: 12px 15px;
+    }
+}
