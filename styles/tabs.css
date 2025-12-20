@@ -287,6 +287,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Height for VN scene to fill */
+    min-height: calc(100vh - 158px);
 }
 
 /* Main content hidden when on landing */

@@ -11,22 +11,22 @@ export const GAMES_CONFIG = {
     games: [
         {
             id: 'rps',
-            name: 'Rock Paper Scissors',
-            description: 'Test your luck against the AI!',
+            name: 'Wizard Duel',
+            description: 'Fire, Water, Earth - master the elements!',
             icon: 'assets/games/icons/rps_icon.webp',
-            fallbackIcon: '✊✋✌️'
+            fallbackIcon: '🔥💧🌍'
         },
         {
             id: 'ttt',
-            name: 'Tic Tac Toe',
-            description: 'Classic strategy game',
+            name: 'Rune Stones',
+            description: 'Place your runes to form a line of power.',
             icon: 'assets/games/icons/ttt_icon.webp',
-            fallbackIcon: '⭕❌'
+            fallbackIcon: '✦✧'
         },
         {
             id: 'blackjack',
             name: 'Blackjack',
-            description: 'Try to beat the dealer!',
+            description: 'Beat the dealer to 21!',
             icon: 'assets/games/icons/blackjack_icon.webp',
             fallbackIcon: '🃏'
         }
@@ -59,7 +59,7 @@ let gamesState = {
 // ============================================
 
 /**
- * Render the games selection screen
+ * Render the VN-style games selection badges
  */
 export function renderGamesSelection() {
     const container = document.getElementById('games-selection-container');
@@ -68,21 +68,35 @@ export function renderGamesSelection() {
     container.innerHTML = '';
 
     GAMES_CONFIG.games.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        card.dataset.game = game.id;
+        const badge = document.createElement('div');
+        badge.className = 'vn-badge';
+        badge.dataset.game = game.id;
 
-        card.innerHTML = `
-            <div class="game-card-icon">
-                <img src="${game.icon}" alt="${game.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${game.fallbackIcon}';">
+        badge.innerHTML = `
+            <div class="vn-badge-icon">
+                <img src="${game.icon}" alt="${game.name}" 
+                     onerror="this.style.display='none'; this.parentElement.textContent='${game.fallbackIcon}';">
             </div>
-            <div class="game-card-name">${game.name}</div>
-            <div class="game-card-desc">${game.description}</div>
+            <div class="vn-badge-name">${game.name}</div>
         `;
 
-        card.addEventListener('click', () => startGame(game.id));
-        container.appendChild(card);
+        badge.addEventListener('click', () => startGame(game.id));
+        badge.addEventListener('mouseenter', () => setDialogueText(game.description));
+        badge.addEventListener('mouseleave', () => setDialogueText('Select a game to play.'));
+
+        container.appendChild(badge);
     });
+}
+
+/**
+ * Update the VN dialogue box text
+ * @param {string} text - The text to display
+ */
+export function setDialogueText(text) {
+    const dialogueText = document.getElementById('vn-dialogue-text');
+    if (dialogueText) {
+        dialogueText.textContent = text;
+    }
 }
 
 /**
@@ -190,29 +204,29 @@ export function setAvatarExpression(expression) {
 // ============================================
 
 function initRPSGame() {
-    console.log('RPS game initialized (placeholder)');
+    console.log('Wizard Duel game initialized (placeholder)');
     setAvatarExpression('neutral');
 
     const controls = document.getElementById('game-controls');
     if (controls) {
         controls.innerHTML = `
-            <button class="game-btn" disabled>🪨 Rock</button>
-            <button class="game-btn" disabled>📄 Paper</button>
-            <button class="game-btn" disabled>✂️ Scissors</button>
+            <button class="game-btn" disabled>🔥 Fire</button>
+            <button class="game-btn" disabled>💧 Water</button>
+            <button class="game-btn" disabled>🌍 Earth</button>
         `;
     }
 
     const content = document.getElementById('game-content');
     if (content) {
         content.innerHTML = `
-            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Rock Paper Scissors</h2>
-            <p style="color: var(--text-muted);">🚧 Coming soon! 🚧</p>
+            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Wizard Duel</h2>
+            <p style="color: var(--text-muted);">Coming soon!</p>
         `;
     }
 }
 
 function initTTTGame() {
-    console.log('TTT game initialized (placeholder)');
+    console.log('Rune Stones game initialized (placeholder)');
     setAvatarExpression('pencil');
 
     const controls = document.getElementById('game-controls');
@@ -223,8 +237,8 @@ function initTTTGame() {
     const content = document.getElementById('game-content');
     if (content) {
         content.innerHTML = `
-            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Tic Tac Toe</h2>
-            <p style="color: var(--text-muted);">🚧 Coming soon! 🚧</p>
+            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Rune Stones</h2>
+            <p style="color: var(--text-muted);">Coming soon!</p>
         `;
     }
 }
@@ -245,7 +259,7 @@ function initBlackjackGame() {
     if (content) {
         content.innerHTML = `
             <h2 style="color: var(--text-primary); margin-bottom: 20px;">Blackjack</h2>
-            <p style="color: var(--text-muted);">🚧 Coming soon! 🚧</p>
+            <p style="color: var(--text-muted);">Coming soon!</p>
         `;
     }
 }

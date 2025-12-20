@@ -157,20 +157,38 @@
                 </div>
             </section>
 
-            <!-- Tab Content: Games -->
-            <section class="tab-content" id="tab-content-games">
-                <div class="game-stage">
-                    <div class="games-container">
-                        <div class="games-header">
-                            <p class="games-subtitle">Challenge the AI and test your luck!</p>
-                        </div>
-                        <div class="game-selection" id="games-selection-container">
-                            <!-- Game cards will be rendered by games.js -->
-                        </div>
-                        <div class="game-play-area" id="games-play-area">
-                            <!-- Active game content will be rendered here -->
-                        </div>
-                    </div>
+            <!-- Tab Content: Games (VN-Style) -->
+            <section class="tab-content vn-scene" id="tab-content-games">
+                <!-- Full-bleed fantasy background -->
+                <div class="vn-background"></div>
+
+                <!-- VN Avatar (left side) -->
+                <div class="vn-avatar-container">
+                    <img class="vn-avatar" id="vn-avatar" src="assets/games/avatars/avatar_neutral.webp" alt="Game Host"
+                        onerror="this.style.display='none';">
+                </div>
+
+                <!-- Parchment Dialogue Box -->
+                <div class="vn-dialogue-box" id="vn-dialogue-box">
+                    <p class="vn-dialogue-text" id="vn-dialogue-text">
+                        Select a game to play.
+                    </p>
+                </div>
+
+                <!-- Game Selection Badges -->
+                <div class="vn-game-badges" id="games-selection-container">
+                    <!-- Rendered by games.js -->
+                </div>
+
+                <!-- Options Button (top-right) -->
+                <button class="vn-options-btn" id="vn-options-btn">
+                    <span class="icon">⚙️</span>
+                    <span>OPTIONS</span>
+                </button>
+
+                <!-- Game Play Area (hidden until game starts) -->
+                <div class="game-play-area" id="games-play-area">
+                    <!-- Active game content will be rendered here -->
                 </div>
             </section>
 
