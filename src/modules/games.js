@@ -3,6 +3,7 @@
 // Game selection and gameplay logic
 // ============================================
 
+import { initRPSGame } from './game-rps.js';
 // ============================================
 // GAMES CONFIGURATION
 // ============================================
@@ -32,14 +33,15 @@ export const GAMES_CONFIG = {
         }
     ],
     avatars: {
+        welcome: 'assets/games/avatars/avatar_welcome.webp',
         neutral: 'assets/games/avatars/avatar_neutral.webp',
         happy: 'assets/games/avatars/avatar_happy.webp',
-        sad: 'assets/games/avatars/avatar_sad.webp',
+        angry: 'assets/games/avatars/avatar_angry.webp',
         thinking: 'assets/games/avatars/avatar_thinking.webp',
         surprised: 'assets/games/avatars/avatar_surprised.webp',
-        throwRock: 'assets/games/avatars/avatar_throw_rock.webp',
-        throwPaper: 'assets/games/avatars/avatar_throw_paper.webp',
-        throwScissors: 'assets/games/avatars/avatar_throw_scissors.webp',
+        throwFire: 'assets/games/avatars/avatar_throw_fire.webp',
+        throwWater: 'assets/games/avatars/avatar_throw_water.webp',
+        throwEarth: 'assets/games/avatars/avatar_throw_earth.webp',
         pencil: 'assets/games/avatars/avatar_pencil.webp',
         cards: 'assets/games/avatars/avatar_cards.webp'
     }
@@ -108,11 +110,16 @@ export function startGame(gameId) {
     gamesState.currentGame = gameId;
     gamesState.isPlaying = true;
 
-    // Hide selection, show play area
+    // Hide VN selection elements
     const selectionContainer = document.getElementById('games-selection-container');
     const playArea = document.getElementById('games-play-area');
+    const vnAvatarContainer = document.querySelector('.vn-avatar-container');
+    const vnDialogueBox = document.querySelector('.vn-dialogue-box');
 
     if (selectionContainer) selectionContainer.style.display = 'none';
+    if (vnAvatarContainer) vnAvatarContainer.style.display = 'none';
+    if (vnDialogueBox) vnDialogueBox.style.display = 'none';
+
     if (playArea) {
         playArea.classList.add('active');
         renderGamePlayArea(gameId);
@@ -128,12 +135,18 @@ export function exitGame() {
 
     const selectionContainer = document.getElementById('games-selection-container');
     const playArea = document.getElementById('games-play-area');
+    const vnAvatarContainer = document.querySelector('.vn-avatar-container');
+    const vnDialogueBox = document.querySelector('.vn-dialogue-box');
 
     if (playArea) {
         playArea.classList.remove('active');
         playArea.innerHTML = '';
     }
+
+    // Restore VN selection elements
     if (selectionContainer) selectionContainer.style.display = 'flex';
+    if (vnAvatarContainer) vnAvatarContainer.style.display = '';
+    if (vnDialogueBox) vnDialogueBox.style.display = '';
 }
 
 /**
@@ -147,14 +160,14 @@ function renderGamePlayArea(gameId) {
     const game = GAMES_CONFIG.games.find(g => g.id === gameId);
     if (!game) return;
 
-    // Base structure with back button and VN-style avatar
+    // Base structure with back button, centered content, and VN-style avatar
     playArea.innerHTML = `
         <button class="game-back-btn" onclick="exitGame()">← Back to Games</button>
+        <div class="game-content" id="game-content">
+            <h2 style="color: var(--text-primary); margin-bottom: 20px;">${game.name}</h2>
+            <p style="color: var(--text-secondary);">Game coming soon!</p>
+        </div>
         <div class="game-avatar-container">
-            <div class="game-content" id="game-content">
-                <h2 style="color: var(--text-primary); margin-bottom: 20px;">${game.name}</h2>
-                <p style="color: var(--text-secondary);">Game coming soon!</p>
-            </div>
             <img class="game-avatar" id="game-avatar" src="${GAMES_CONFIG.avatars.neutral}" alt="AI Avatar" 
                  onerror="this.style.display='none';">
         </div>
@@ -200,30 +213,8 @@ export function setAvatarExpression(expression) {
 
 // ============================================
 // PLACEHOLDER GAME INITIALIZERS
-// (To be implemented in future)
+// (RPS is now in game-rps.js)
 // ============================================
-
-function initRPSGame() {
-    console.log('Wizard Duel game initialized (placeholder)');
-    setAvatarExpression('neutral');
-
-    const controls = document.getElementById('game-controls');
-    if (controls) {
-        controls.innerHTML = `
-            <button class="game-btn" disabled>🔥 Fire</button>
-            <button class="game-btn" disabled>💧 Water</button>
-            <button class="game-btn" disabled>🌍 Earth</button>
-        `;
-    }
-
-    const content = document.getElementById('game-content');
-    if (content) {
-        content.innerHTML = `
-            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Wizard Duel</h2>
-            <p style="color: var(--text-muted);">Coming soon!</p>
-        `;
-    }
-}
 
 function initTTTGame() {
     console.log('Rune Stones game initialized (placeholder)');

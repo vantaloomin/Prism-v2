@@ -275,20 +275,22 @@
 .main-content {
     padding-top: 158px;
     /* Space for top bar (60px) + gap (8px) + tab nav (70px) + gap (20px) */
-    padding-bottom: 30px;
+    padding-bottom: 0;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* Centered content container */
 .content-area {
     max-width: 1600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     /* Height for VN scene to fill */
-    min-height: calc(100vh - 158px);
+    height: calc(100vh - 158px);
+    overflow: hidden;
 }
 
 /* Main content hidden when on landing */
@@ -300,10 +302,18 @@
 .tab-content {
     display: none;
     width: 100%;
+    height: 100%;
 }
 
 .tab-content.active {
     display: block;
+}
+
+/* Collection tab can scroll, others cannot */
+#tab-content-collection {
+    height: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 158px);
 }
 
 /* ============================================
@@ -352,7 +362,15 @@
     .main-content {
         padding-top: 125px;
         /* Space for top bar (50px) + tab nav (60px) + gap (15px) */
-        padding-bottom: 20px;
+        padding-bottom: 0;
+    }
+
+    .content-area {
+        height: calc(100vh - 125px);
+    }
+
+    #tab-content-collection {
+        max-height: calc(100vh - 125px);
     }
 }
 

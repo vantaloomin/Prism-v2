@@ -12,7 +12,8 @@
     position: relative;
     width: calc(100% + 40px);
     margin: -20px;
-    height: calc(100vh - 158px);
+    margin-top: 0;
+    height: 100%;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -156,12 +157,12 @@
     max-width: 100%;
     object-fit: contain;
     object-position: bottom center;
-    filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.6));
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.7)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
     transition: all 0.4s ease;
 }
 
 .vn-avatar:hover {
-    filter: drop-shadow(0 10px 50px rgba(139, 92, 246, 0.4));
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8)) drop-shadow(0 5px 20px rgba(139, 92, 246, 0.4));
 }
 
 /* Parchment Dialogue Box */
@@ -255,6 +256,9 @@
     cursor: pointer;
     transition: all 0.3s ease;
     overflow: hidden;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .vn-badge::before {
@@ -308,12 +312,17 @@
     background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
     border-radius: 50%;
     border: 2px solid rgba(201, 162, 39, 0.5);
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 .vn-badge-icon img {
     width: 70%;
     height: 70%;
     object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .vn-badge-name {
@@ -465,11 +474,7 @@
     }
 }
 
-@media (max-width: 768px) {
-    .vn-scene {
-        height: calc(100vh - 125px);
-    }
-}
+
 
 @media (max-width: 700px) {
     .vn-avatar-container {
@@ -520,6 +525,180 @@
 
     .vn-options-btn .icon {
         font-size: 0.8rem;
+    }
+}
+
+/* ============================================
+   WIZARD DUEL (RPS) GAME STYLES
+   ============================================ */
+
+.rps-game-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.rps-title {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.rps-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.rps-score {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.rps-dialogue {
+    font-size: 1.2rem;
+    font-family: 'Georgia', serif;
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 15px 0;
+    min-height: 1.5em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+/* Element Selection Buttons */
+.rps-elements {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.rps-element-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 30px;
+    min-width: 120px;
+    background: linear-gradient(145deg,
+            rgba(30, 25, 40, 0.9),
+            rgba(20, 15, 30, 0.95));
+    border: 3px solid rgba(201, 162, 39, 0.6);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.rps-element-btn:hover:not(:disabled) {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #f4d03f;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(201, 162, 39, 0.3);
+}
+
+.rps-element-btn:active:not(:disabled) {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.rps-element-btn:disabled,
+.rps-element-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Fire button */
+.rps-element-btn[data-element="fire"] {
+    border-color: rgba(255, 107, 53, 0.6);
+}
+
+.rps-element-btn[data-element="fire"]:hover:not(:disabled) {
+    border-color: #ff6b35;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 107, 53, 0.4);
+}
+
+/* Water button */
+.rps-element-btn[data-element="water"] {
+    border-color: rgba(66, 165, 245, 0.6);
+}
+
+.rps-element-btn[data-element="water"]:hover:not(:disabled) {
+    border-color: #42a5f5;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(66, 165, 245, 0.4);
+}
+
+/* Earth button */
+.rps-element-btn[data-element="earth"] {
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.rps-element-btn[data-element="earth"]:hover:not(:disabled) {
+    border-color: #4caf50;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(76, 175, 80, 0.4);
+}
+
+.rps-element-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rps-element-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.rps-element-name {
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .rps-elements {
+        gap: 12px;
+    }
+
+    .rps-element-btn {
+        padding: 15px 20px;
+        min-width: 90px;
+    }
+
+    .rps-element-icon {
+        font-size: 2.2rem;
+    }
+
+    .rps-element-name {
+        font-size: 0.8rem;
+    }
+
+    .rps-title {
+        font-size: 1.5rem;
     }
 }
 
@@ -649,63 +828,71 @@
 
 .game-play-area {
     display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     flex-direction: column;
-    gap: 20px;
 }
 
 .game-play-area.active {
     display: flex;
 }
 
-/* VN-Style Avatar Display */
+/* VN-Style Avatar Display - positioned bottom left like welcome screen */
 .game-avatar-container {
-    position: relative;
-    min-height: 400px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40%;
+    max-width: 450px;
+    height: 100%;
     display: flex;
-    justify-content: flex-end;
     align-items: flex-end;
-    padding: 20px;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .game-avatar {
-    max-height: 380px;
+    max-height: 85%;
+    max-width: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
-    transition: all 0.3s ease;
+    object-position: bottom center;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.7)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+    transition: all 0.4s ease;
 }
 
 .game-avatar.thinking {
-    animation: avatar-think 1.5s ease-in-out infinite;
+    /* Thinking state - uses different avatar image, no animation */
+    opacity: 1;
 }
 
-@keyframes avatar-think {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-/* Game Content Area (left side, beside avatar) */
+/* Game Content Area - centered in remaining space (right of avatar) */
 .game-content {
     position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    max-width: 50%;
+    left: calc(40% + (60% / 2));
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    max-width: 500px;
+    z-index: 5;
+    text-align: center;
 }
 
-/* Game Controls */
+/* Game Controls - positioned at bottom center */
 .game-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     flex-wrap: wrap;
     padding: 20px;
+    z-index: 10;
 }
 
 .game-btn {
