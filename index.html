@@ -244,6 +244,22 @@
         </div>
     </div>
 
+    <!-- Confirmation Dialog -->
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-modal">
+            <div class="confirm-icon">⚠️</div>
+            <div class="confirm-title">Delete All Data?</div>
+            <div class="confirm-message">
+                This will <strong>permanently erase</strong> all your cards, credits, and progress.<br><br>
+                This action <strong>cannot be undone</strong>.
+            </div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" id="confirm-cancel">Cancel</button>
+                <button class="confirm-btn confirm-btn-danger" id="confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Vite ES6 Module Entry Point -->
     <script type="module" src="/src/main.js"></script>
 </body>

@@ -288,7 +288,14 @@ function init() {
     // Escape key to close overlays or return to landing
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            // Check settings modal first (highest priority)
+            // Check confirmation dialog first (highest priority)
+            const confirmOverlay = document.getElementById('confirm-overlay');
+            if (confirmOverlay && confirmOverlay.classList.contains('active')) {
+                confirmOverlay.classList.remove('active');
+                return;
+            }
+
+            // Check settings modal
             const settingsOverlay = document.getElementById('settings-overlay');
             if (settingsOverlay && settingsOverlay.classList.contains('active')) {
                 closeSettingsModal();

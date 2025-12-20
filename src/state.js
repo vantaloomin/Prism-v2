@@ -70,12 +70,47 @@ export function loadGame() {
  * Reset all save data
  */
 export function resetSave() {
-    if (confirm('Are you sure you want to delete all your progress? This cannot be undone!')) {
+    const overlay = document.getElementById('confirm-overlay');
+    const cancelBtn = document.getElementById('confirm-cancel');
+    const deleteBtn = document.getElementById('confirm-delete');
+
+    if (!overlay || !cancelBtn || !deleteBtn) {
+        // Fallback to browser confirm if elements don't exist
+        if (confirm('Are you sure you want to delete all your progress? This cannot be undone!')) {
+            localStorage.removeItem(CONFIG.STORAGE_KEY);
+            console.log('Save data reset!');
+            location.reload();
+        }
+        return;
+    }
+
+    // Show custom confirmation dialog
+    overlay.classList.add('active');
+
+    // Handle cancel
+    const handleCancel = () => {
+        overlay.classList.remove('active');
+        cleanup();
+    };
+
+    // Handle confirm delete
+    const handleDelete = () => {
+        overlay.classList.remove('active');
+        cleanup();
         localStorage.removeItem(CONFIG.STORAGE_KEY);
         console.log('Save data reset!');
         // Force full page refresh to reinitialize all state
         location.reload();
-    }
+    };
+
+    // Cleanup event listeners
+    const cleanup = () => {
+        cancelBtn.removeEventListener('click', handleCancel);
+        deleteBtn.removeEventListener('click', handleDelete);
+    };
+
+    cancelBtn.addEventListener('click', handleCancel);
+    deleteBtn.addEventListener('click', handleDelete);
 }
 
 /**
