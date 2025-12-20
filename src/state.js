@@ -74,7 +74,10 @@ export function resetSave() {
     const cancelBtn = document.getElementById('confirm-cancel');
     const deleteBtn = document.getElementById('confirm-delete');
 
+    console.log('resetSave called, elements:', { overlay, cancelBtn, deleteBtn });
+
     if (!overlay || !cancelBtn || !deleteBtn) {
+        console.warn('Confirmation dialog elements not found, using fallback');
         // Fallback to browser confirm if elements don't exist
         if (confirm('Are you sure you want to delete all your progress? This cannot be undone!')) {
             localStorage.removeItem(CONFIG.STORAGE_KEY);
