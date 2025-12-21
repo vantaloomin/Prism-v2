@@ -68,6 +68,26 @@
     margin-bottom: 60px;
 }
 
+.landing-logo {
+    max-width: min(1000px, 90vw);
+    height: auto;
+    animation: title-glow 3s ease-in-out infinite alternate;
+}
+
+.landing-logo-text {
+    display: none;
+    font-family: 'MedievalSharp', cursive;
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-weight: 400;
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 60px rgba(139, 92, 246, 0.5);
+    letter-spacing: 2px;
+    animation: title-glow 3s ease-in-out infinite alternate;
+}
+
 .landing-title h1 {
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 800;
@@ -387,6 +407,14 @@
 
     .landing-title {
         margin-bottom: 40px;
+    }
+
+    .landing-logo {
+        display: none;
+    }
+
+    .landing-logo-text {
+        display: block;
     }
 
     .landing-credits,
