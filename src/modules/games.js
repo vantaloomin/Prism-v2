@@ -15,21 +15,24 @@ export const GAMES_CONFIG = {
             name: 'Wizard Duel',
             description: 'Fire, Water, Earth - master the elements!',
             icon: 'assets/games/icons/rps_icon.webp',
-            fallbackIcon: '🔥💧🌍'
+            fallbackIcon: '🔥💧🌍',
+            disabled: false
         },
         {
             id: 'ttt',
             name: 'Rune Stones',
-            description: 'Place your runes to form a line of power.',
+            description: 'Coming soon!',
             icon: 'assets/games/icons/ttt_icon.webp',
-            fallbackIcon: '✦✧'
+            fallbackIcon: '✦✧',
+            disabled: true
         },
         {
             id: 'blackjack',
             name: 'Blackjack',
-            description: 'Beat the dealer to 21!',
+            description: 'Coming soon!',
             icon: 'assets/games/icons/blackjack_icon.webp',
-            fallbackIcon: '🃏'
+            fallbackIcon: '🃏',
+            disabled: true
         }
     ],
     avatars: {
@@ -71,7 +74,7 @@ export function renderGamesSelection() {
 
     GAMES_CONFIG.games.forEach(game => {
         const badge = document.createElement('div');
-        badge.className = 'vn-badge';
+        badge.className = 'vn-badge' + (game.disabled ? ' disabled' : '');
         badge.dataset.game = game.id;
 
         badge.innerHTML = `
@@ -82,7 +85,9 @@ export function renderGamesSelection() {
             <div class="vn-badge-name">${game.name}</div>
         `;
 
-        badge.addEventListener('click', () => startGame(game.id));
+        if (!game.disabled) {
+            badge.addEventListener('click', () => startGame(game.id));
+        }
         badge.addEventListener('mouseenter', () => setDialogueText(game.description));
         badge.addEventListener('mouseleave', () => setDialogueText('Select a game to play.'));
 
