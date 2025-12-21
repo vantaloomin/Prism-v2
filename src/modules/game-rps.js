@@ -38,9 +38,17 @@ const AVATAR_CHANGE_DELAY = 500; // ms for avatar animation
 
 // Gem rewards
 const GEM_REWARDS = {
-    win: 50,
+    baseWin: 50,
     draw: 25,
     lose: 0
+};
+
+// Win streak multipliers
+const STREAK_MULTIPLIERS = {
+    1: 1.0,   // 50 credits
+    2: 1.5,   // 75 credits
+    3: 2.0,   // 100 credits
+    4: 3.0    // 150 credits (max)
 };
 
 // ============================================
@@ -54,7 +62,8 @@ let gameState = {
     result: null,
     wins: 0,
     losses: 0,
-    draws: 0
+    draws: 0,
+    winStreak: 0
 };
 
 // ============================================
@@ -162,13 +171,21 @@ function showResult() {
     switch (gameState.result) {
         case 'player':
             gameState.wins++;
-            gemsEarned = GEM_REWARDS.win;
+            gameState.winStreak++;
+            const streakLevel = Math.min(gameState.winStreak, 4);
+            const multiplier = STREAK_MULTIPLIERS[streakLevel];
+            gemsEarned = Math.floor(GEM_REWARDS.baseWin * multiplier);
             setAvatar('angry'); // She's angry she lost
-            setDialogue(`${playerEl.name} beats ${aiEl.name}! You win +${gemsEarned} 💎`);
+            if (gameState.winStreak > 1) {
+                setDialogue(`${playerEl.name} beats ${aiEl.name}! ${gameState.winStreak}x streak! +${gemsEarned} 💎`);
+            } else {
+                setDialogue(`${playerEl.name} beats ${aiEl.name}! You win +${gemsEarned} 💎`);
+            }
             break;
 
         case 'ai':
             gameState.losses++;
+            gameState.winStreak = 0; // Reset streak on loss
             gemsEarned = GEM_REWARDS.lose;
             setAvatar('happy');
             setDialogue(`${aiEl.name} beats ${playerEl.name}! I win! Better luck next time~`);
@@ -176,9 +193,10 @@ function showResult() {
 
         case 'draw':
             gameState.draws++;
+            gameState.winStreak = 0; // Draws cancel streak
             gemsEarned = GEM_REWARDS.draw;
             setAvatar('surprised');
-            setDialogue(`We both chose ${playerEl.name}! It's a draw! +${gemsEarned} 💎`);
+            setDialogue(`We both chose ${playerEl.name}! It's a draw! Streak reset. +${gemsEarned} 💎`);
             break;
     }
 
@@ -239,7 +257,8 @@ export function initRPSGame() {
         result: null,
         wins: 0,
         losses: 0,
-        draws: 0
+        draws: 0,
+        winStreak: 0
     };
 
     // Set initial avatar
