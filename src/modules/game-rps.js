@@ -6,6 +6,7 @@
  */
 
 import { GAMES_CONFIG } from './games.js';
+import { gameState as appState, saveGame, updateCreditsDisplay } from '../state.js';
 
 // ============================================
 // GAME CONSTANTS
@@ -34,6 +35,13 @@ const ELEMENTS = {
 
 const RESULT_DELAY = 1500; // ms before showing result
 const AVATAR_CHANGE_DELAY = 500; // ms for avatar animation
+
+// Gem rewards
+const GEM_REWARDS = {
+    win: 50,
+    draw: 25,
+    lose: 0
+};
 
 // ============================================
 // GAME STATE
@@ -149,24 +157,36 @@ function showResult() {
     const playerEl = ELEMENTS[gameState.playerChoice];
     const aiEl = ELEMENTS[gameState.aiChoice];
 
+    let gemsEarned = 0;
+
     switch (gameState.result) {
         case 'player':
             gameState.wins++;
+            gemsEarned = GEM_REWARDS.win;
             setAvatar('angry'); // She's angry she lost
-            setDialogue(`${playerEl.name} beats ${aiEl.name}! You win this round... for now!`);
+            setDialogue(`${playerEl.name} beats ${aiEl.name}! You win +${gemsEarned} 💎`);
             break;
 
         case 'ai':
             gameState.losses++;
+            gemsEarned = GEM_REWARDS.lose;
             setAvatar('happy');
-            setDialogue(`${aiEl.name} beats ${playerEl.name}! I win!`);
+            setDialogue(`${aiEl.name} beats ${playerEl.name}! I win! Better luck next time~`);
             break;
 
         case 'draw':
             gameState.draws++;
+            gemsEarned = GEM_REWARDS.draw;
             setAvatar('surprised');
-            setDialogue(`We both chose ${playerEl.name}! It's a draw!`);
+            setDialogue(`We both chose ${playerEl.name}! It's a draw! +${gemsEarned} 💎`);
             break;
+    }
+
+    // Award gems
+    if (gemsEarned > 0) {
+        appState.credits += gemsEarned;
+        saveGame();
+        updateCreditsDisplay();
     }
 
     // Update score display
@@ -239,6 +259,7 @@ function renderRPSUI() {
     const content = document.getElementById('game-content');
     const controls = document.getElementById('game-controls');
 
+    // Render text panel and controls together inside content area
     if (content) {
         content.innerHTML = `
             <div class="rps-game-container">
@@ -247,11 +268,6 @@ function renderRPSUI() {
                 <p class="rps-dialogue" id="rps-dialogue">Choose your element wisely, challenger!</p>
                 <p class="rps-score" id="rps-score">Wins: 0 | Losses: 0 | Draws: 0</p>
             </div>
-        `;
-    }
-
-    if (controls) {
-        controls.innerHTML = `
             <div class="rps-elements">
                 <button class="rps-element-btn" data-element="fire" onclick="window.rpsSelectElement('fire')">
                     <span class="rps-element-icon"><img src="assets/games/rps/fire.webp" alt="Fire"></span>
@@ -267,6 +283,11 @@ function renderRPSUI() {
                 </button>
             </div>
         `;
+    }
+
+    // Clear the separate controls container (no longer needed for RPS)
+    if (controls) {
+        controls.innerHTML = '';
     }
 }
 
