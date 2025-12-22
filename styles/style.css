@@ -583,13 +583,13 @@ body {
    ============================================ */
 
 .pack-animation-container {
-    position: absolute;
+    position: fixed;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(10, 10, 15, 0.95);
-    z-index: 100;
+    z-index: 1000;
 }
 
 .pack-animation-container[hidden] {
@@ -601,8 +601,9 @@ body {
 }
 
 .pack-image {
-    width: 200px;
-    height: 280px;
+    width: 300px;
+    height: auto;
+    max-height: 80vh;
     background: linear-gradient(145deg, var(--accent-primary), #ec4899);
     border-radius: 16px;
     display: flex;
@@ -612,6 +613,7 @@ body {
     cursor: pointer;
     transition: transform var(--transition-normal);
     box-shadow: 0 0 60px var(--accent-glow);
+    overflow: hidden;
 }
 
 .pack-image:hover {

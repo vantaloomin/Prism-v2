@@ -49,7 +49,22 @@ export async function handlePackPurchase(packType, onFocusClick) {
 
     packShop.hidden = true;
     packContainer.hidden = false;
-    packImage.textContent = packType === 'waifu' ? '🌸' : '⚔️';
+
+    // Set pack image based on pack type
+    if (packType === 'waifu' || packType === 'husbando') {
+        const imgPath = `${import.meta.env.BASE_URL}assets/ui/pack_${packType}.webp`;
+        packImage.innerHTML = `<img src="${imgPath}" alt="${packType} Pack" style="max-width: 300px; height: auto; border-radius: 12px;">`;
+        packImage.style.background = 'transparent';
+    } else {
+        // Debug packs use emoji
+        const emojiMap = {
+            'debug': '⚡',
+            'debug-frame': '🖼️',
+            'debug-holo': '✨'
+        };
+        packImage.textContent = emojiMap[packType] || '🎁';
+        packImage.style.background = 'linear-gradient(145deg, var(--accent-primary), #ec4899)';
+    }
 
     // Reset pack state
     gsap.set(packImage, { scale: 1, rotation: 0, opacity: 1, boxShadow: 'none' });
