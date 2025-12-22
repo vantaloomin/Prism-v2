@@ -37,55 +37,240 @@ export const AnimConfig = {
 // ============================================
 
 /**
- * Create dramatic pack opening animation with anticipation
+ * Create dramatic pack opening animation with rip-open effect
  * @param {HTMLElement} packElement - The pack image element
  * @returns {gsap.core.Timeline} GSAP timeline
  */
 export function createPackOpeningAnimation(packElement) {
     const tl = gsap.timeline();
+    const container = packElement.closest('.pack-animation-container');
 
-    // Phase 1: Initial shake - "something's happening!"
+    // Create energy particles container
+    const particleContainer = document.createElement('div');
+    particleContainer.style.cssText = `
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 10;
+    `;
+    container.appendChild(particleContainer);
+
+    // Phase 1: Initial excited wiggle - pack is eager to be opened!
     tl.to(packElement, {
-        rotation: -AnimConfig.pack.shakeIntensity,
-        duration: AnimConfig.pack.shakeDuration,
-        ease: "power2.out"
+        rotation: -3,
+        duration: 0.06,
+        ease: "power1.inOut"
     });
 
-    // Shake back and forth with increasing intensity
-    for (let i = 0; i < AnimConfig.pack.shakeCount; i++) {
-        const intensity = AnimConfig.pack.shakeIntensity * (1 + i * 0.3);
+    // Quick wiggles
+    for (let i = 0; i < 8; i++) {
         tl.to(packElement, {
-            rotation: i % 2 === 0 ? intensity : -intensity,
-            duration: AnimConfig.pack.shakeDuration * (1 - i * 0.05),
+            rotation: i % 2 === 0 ? 4 : -4,
+            duration: 0.05,
             ease: "power1.inOut"
         });
     }
 
-    // Phase 2: Anticipation pause - build tension
+    // Reset rotation
     tl.to(packElement, {
         rotation: 0,
-        scale: 1.15,
-        duration: AnimConfig.pack.anticipationDuration,
+        duration: 0.1
+    });
+
+    // Phase 2: Energy buildup with glow
+    tl.to(packElement, {
+        scale: 1.08,
+        boxShadow: "0 0 30px 10px rgba(139, 92, 246, 0.6)",
+        duration: 0.3,
         ease: "power2.out"
     });
 
-    // Add glow effect during anticipation
-    tl.to(packElement, {
-        boxShadow: "0 0 60px 20px rgba(139, 92, 246, 0.8)",
-        duration: AnimConfig.pack.anticipationDuration * 0.8,
-        ease: "power2.in"
-    }, "<");
+    // Add subtle pulsing flashes during buildup
+    tl.call(() => {
+        createEnergyFlash(container, 0.15, 0.3);
+    });
 
-    // Phase 3: THE BURST! - explosive reveal
     tl.to(packElement, {
-        scale: 1.5,
-        opacity: 0,
-        rotation: 180,
-        duration: AnimConfig.pack.burstDuration,
+        scale: 1.12,
+        boxShadow: "0 0 50px 20px rgba(236, 72, 153, 0.7)",
+        duration: 0.25,
+        ease: "power2.in"
+    });
+
+    tl.call(() => {
+        createEnergyFlash(container, 0.25, 0.5);
+    });
+
+    // Phase 3: Tension - pack strains
+    tl.to(packElement, {
+        scaleY: 1.15,
+        scaleX: 0.95,
+        boxShadow: "0 0 80px 30px rgba(255, 255, 255, 0.6)",
+        duration: 0.15,
         ease: "power4.in"
     });
 
+    // Phase 4: THE RIP! - Explosive tear
+    tl.call(() => {
+        // Create the torn top element
+        createTornTop(packElement, container);
+
+        // Spawn energy particles
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => createEnergyParticle(particleContainer, packElement), i * 20);
+        }
+
+        // Screen shake
+        screenShake(3);
+
+        // Big flash
+        createEnergyFlash(container, 0.7, 0.2);
+    });
+
+    // Pack reacts to being ripped
+    tl.to(packElement, {
+        scaleY: 1.0,
+        scaleX: 1.0,
+        y: 20,
+        duration: 0.15,
+        ease: "power2.out"
+    });
+
+    // Add glow emanating from inside
+    tl.to(packElement, {
+        boxShadow: "0 0 100px 40px rgba(255, 215, 0, 0.8)",
+        duration: 0.2,
+        ease: "power2.out"
+    }, "<");
+
+    // Phase 5: Cards are revealed! Pack explodes outward
+    tl.call(() => {
+        // More particles
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => createEnergyParticle(particleContainer, packElement), i * 30);
+        }
+        createEnergyFlash(container, 0.9, 0.15);
+    });
+
+    tl.to(packElement, {
+        scale: 1.8,
+        opacity: 0,
+        y: -50,
+        duration: 0.4,
+        ease: "power2.in"
+    });
+
+    // Cleanup
+    tl.call(() => {
+        particleContainer.remove();
+        // Remove any torn pieces
+        container.querySelectorAll('.torn-top').forEach(el => el.remove());
+    });
+
     return tl;
+}
+
+/**
+ * Create a torn top piece that flies off
+ */
+function createTornTop(packElement, container) {
+    const rect = packElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const tornTop = document.createElement('div');
+    tornTop.className = 'torn-top';
+    tornTop.style.cssText = `
+        position: absolute;
+        left: ${rect.left - containerRect.left}px;
+        top: ${rect.top - containerRect.top}px;
+        width: ${rect.width}px;
+        height: ${rect.height * 0.15}px;
+        background: linear-gradient(180deg, rgba(139, 92, 246, 0.8), rgba(236, 72, 153, 0.6));
+        border-radius: 12px 12px 0 0;
+        z-index: 20;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 85% 90%, 70% 100%, 55% 85%, 40% 100%, 25% 90%, 10% 100%, 0% 85%);
+    `;
+    container.appendChild(tornTop);
+
+    // Animate the torn piece flying off
+    gsap.to(tornTop, {
+        y: -200,
+        x: gsap.utils.random(-100, 100),
+        rotation: gsap.utils.random(-45, 45),
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+        onComplete: () => tornTop.remove()
+    });
+}
+
+/**
+ * Create an energy particle that bursts from the pack
+ */
+function createEnergyParticle(container, packElement) {
+    const particle = document.createElement('div');
+    const size = gsap.utils.random(4, 12);
+    const colors = ['#8b5cf6', '#ec4899', '#fbbf24', '#ffffff', '#60a5fa'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    const rect = packElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const startX = rect.left - containerRect.left + rect.width / 2;
+    const startY = rect.top - containerRect.top + rect.height * 0.15; // From the tear line
+
+    particle.style.cssText = `
+        position: absolute;
+        left: ${startX}px;
+        top: ${startY}px;
+        width: ${size}px;
+        height: ${size}px;
+        background: ${color};
+        border-radius: 50%;
+        pointer-events: none;
+        box-shadow: 0 0 ${size * 2}px ${color};
+        z-index: 15;
+    `;
+    container.appendChild(particle);
+
+    // Animate outward in a burst pattern
+    const angle = gsap.utils.random(0, Math.PI * 2);
+    const distance = gsap.utils.random(100, 250);
+    const endX = Math.cos(angle) * distance;
+    const endY = Math.sin(angle) * distance - 50; // Bias upward
+
+    gsap.to(particle, {
+        x: endX,
+        y: endY,
+        opacity: 0,
+        scale: 0.3,
+        duration: gsap.utils.random(0.5, 1.0),
+        ease: "power2.out",
+        onComplete: () => particle.remove()
+    });
+}
+
+/**
+ * Create a flash overlay
+ */
+function createEnergyFlash(container, intensity = 0.5, duration = 0.3) {
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, ${intensity}), transparent 70%);
+        pointer-events: none;
+        z-index: 25;
+    `;
+    container.appendChild(flash);
+
+    gsap.to(flash, {
+        opacity: 0,
+        duration: duration,
+        ease: "power2.out",
+        onComplete: () => flash.remove()
+    });
 }
 
 // ============================================

@@ -354,26 +354,13 @@ body {
 
 /* Card Back */
 .card-back {
-    background: linear-gradient(135deg, #1e1e2e, #2d2d44);
-    border: 3px solid var(--accent-primary);
+    background-image: url('/assets/ui/card_back.webp');
+    background-size: cover;
+    background-position: center;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.card-back::before {
-    content: '✦';
-    font-size: 4rem;
-    color: var(--accent-primary);
-    opacity: 0.5;
-}
-
-.card-back::after {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    border-radius: 8px;
 }
 
 /* Card Front - Layer Stack */
