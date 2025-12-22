@@ -97,11 +97,20 @@ function setAvatar(expression) {
 // DIALOGUE MANAGEMENT
 // ============================================
 
+/**
+ * Format gem amount with currency icon
+ * @param {number} amount - Number of gems
+ * @returns {string} HTML string with icon and amount
+ */
+function formatGems(amount) {
+    return `+${amount} <img src="assets/ui/icon-currency.webp" alt="gems" class="dialogue-gem-icon">`;
+}
+
 function setDialogue(text) {
     const content = document.getElementById('game-content');
     const dialogueEl = content?.querySelector('.ttt-dialogue');
     if (dialogueEl) {
-        dialogueEl.textContent = text;
+        dialogueEl.innerHTML = text;
     }
 }
 
@@ -306,7 +315,7 @@ function handleGameEnd(result) {
             gameState.wins++;
             gemsEarned = Math.floor(GEM_REWARDS.baseWin * tier.rewardMultiplier);
             setAvatar('angry');
-            setDialogue(`Your alignment... impressive. +${gemsEarned} 💎`);
+            setDialogue(`Your alignment... impressive. ${formatGems(gemsEarned)}`);
             break;
 
         case 'ai':
@@ -320,7 +329,7 @@ function handleGameEnd(result) {
             gameState.draws++;
             gemsEarned = Math.floor(GEM_REWARDS.draw * tier.rewardMultiplier);
             setAvatar('surprised');
-            setDialogue(`A cosmic stalemate! +${gemsEarned} 💎`);
+            setDialogue(`A cosmic stalemate! ${formatGems(gemsEarned)}`);
             break;
     }
 

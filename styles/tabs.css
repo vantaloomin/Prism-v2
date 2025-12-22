@@ -65,6 +65,13 @@
     font-size: 1.1rem;
 }
 
+/* Support for image-based icons */
+.top-bar-home img.icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    object-fit: contain;
+}
+
 /* Center section: Screen title */
 .top-bar-center {
     position: absolute;
@@ -84,6 +91,13 @@
 
 .top-bar-title .icon {
     font-size: 1.2rem;
+}
+
+.top-bar-title img.icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    object-fit: contain;
+    vertical-align: middle;
 }
 
 /* Right section: Credits + Settings */
@@ -109,6 +123,12 @@
     font-size: 1rem;
 }
 
+.top-bar-credits img.icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    object-fit: contain;
+}
+
 .top-bar-credits .amount {
     font-size: 1rem;
     font-weight: 700;
@@ -128,6 +148,12 @@
     font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.top-bar-settings img.settings-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    object-fit: contain;
 }
 
 .top-bar-settings:hover {
@@ -188,6 +214,13 @@
 .nav-btn .nav-icon {
     font-size: 1.4rem;
     transition: transform 0.2s ease;
+}
+
+/* Image-based nav icons */
+.nav-btn img.nav-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    object-fit: contain;
 }
 
 .nav-btn .nav-label {

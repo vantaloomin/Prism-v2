@@ -81,10 +81,28 @@ function setAvatar(expression) {
 // DIALOGUE MANAGEMENT
 // ============================================
 
+/**
+ * Format gem amount with currency icon
+ * @param {number} amount - Number of gems
+ * @returns {string} HTML string with icon and amount
+ */
+function formatGems(amount) {
+    return `+${amount} <img src="assets/ui/icon-currency.webp" alt="gems" class="dialogue-gem-icon">`;
+}
+
+/**
+ * Format gem amount with currency icon (no plus sign, for bets)
+ * @param {number} amount - Number of gems
+ * @returns {string} HTML string with icon and amount
+ */
+function formatGemsNoPlus(amount) {
+    return `${amount} <img src="assets/ui/icon-currency.webp" alt="gems" class="dialogue-gem-icon">`;
+}
+
 function setDialogue(text) {
     const dialogueEl = document.getElementById('bj-dialogue');
     if (dialogueEl) {
-        dialogueEl.textContent = text;
+        dialogueEl.innerHTML = text;
     }
 }
 
@@ -348,7 +366,7 @@ function endGame(result) {
             gameState.wins++;
             creditsChange = gameState.currentBet;
             appState.credits += creditsChange;
-            setDialogue(`You win! +${creditsChange} 💎`);
+            setDialogue(`You win! ${formatGems(creditsChange)}`);
             setAvatar('angry');
             break;
 
@@ -357,7 +375,7 @@ function endGame(result) {
             // Blackjack pays 1.5x the bet
             creditsChange = Math.floor(gameState.currentBet * 1.5);
             appState.credits += creditsChange;
-            setDialogue(`Blackjack! +${creditsChange} 💎`);
+            setDialogue(`Blackjack! ${formatGems(creditsChange)}`);
             setAvatar('angry');
             break;
 
@@ -601,7 +619,7 @@ function renderBettingUI() {
                 <div class="bj-bet-options">
                     ${betOptions.length > 0 ? betOptions.map(bet => `
                         <button class="bj-bet-option" onclick="window.bjPlaceBet(${bet})">
-                            ${bet} 💎
+                            ${bet} <img src="assets/ui/icon-currency.webp" alt="gems" class="dialogue-gem-icon">
                         </button>
                     `).join('') : '<p class="bj-no-credits">Not enough credits to play!</p>'}
                 </div>
@@ -624,7 +642,7 @@ function renderGameUI() {
     // Update dialogue area
     const dialogueEl = document.getElementById('bj-dialogue');
     if (dialogueEl) {
-        dialogueEl.textContent = `Bet: ${gameState.currentBet} 💎 - Hit or Stand?`;
+        dialogueEl.innerHTML = `Bet: ${formatGemsNoPlus(gameState.currentBet)} - Hit or Stand?`;
     }
 
     // Hide betting area and show action buttons

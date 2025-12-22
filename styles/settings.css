@@ -66,6 +66,12 @@
     font-size: 1.5rem;
 }
 
+.settings-title img.icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    object-fit: contain;
+}
+
 .settings-close {
     background: transparent;
     border: none;

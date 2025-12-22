@@ -215,14 +215,14 @@ body {
 
 /* Pack cost tooltip on hover */
 .pack-button::after {
-    content: '💎 ' attr(data-cost);
+    content: attr(data-cost);
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.9);
     color: var(--accent-secondary);
-    padding: 8px 16px;
+    padding: 8px 16px 8px 32px;
     border-radius: 20px;
     font-size: 1rem;
     font-weight: 600;
@@ -234,7 +234,23 @@ body {
     border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
-.pack-button:hover::after {
+/* Currency icon for pack cost tooltip */
+.pack-button::before {
+    content: '';
+    position: absolute;
+    bottom: 18px;
+    left: calc(50% - 30px);
+    width: 16px;
+    height: 16px;
+    background: url('/assets/ui/icon-currency.webp') center/contain no-repeat;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.pack-button:hover::after,
+.pack-button:hover::before {
     opacity: 1;
 }
 
@@ -786,4 +802,17 @@ body {
     .app-container {
         max-width: 1800px;
     }
+}
+
+/* ============================================
+   GAME DIALOGUE GEM ICON
+   ============================================ */
+
+/* Inline gem icon for game result messages */
+.dialogue-gem-icon {
+    height: 1em;
+    width: auto;
+    vertical-align: -0.1em;
+    margin-left: 2px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }

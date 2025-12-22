@@ -123,12 +123,21 @@ function setAvatar(expression) {
 // DIALOGUE MANAGEMENT
 // ============================================
 
+/**
+ * Format gem amount with currency icon
+ * @param {number} amount - Number of gems
+ * @returns {string} HTML string with icon and amount
+ */
+function formatGems(amount) {
+    return `+${amount} <img src="assets/ui/icon-currency.webp" alt="gems" class="dialogue-gem-icon">`;
+}
+
 function setDialogue(text) {
     // Update the game content area with dialogue
     const content = document.getElementById('game-content');
     const dialogueEl = content?.querySelector('.rps-dialogue');
     if (dialogueEl) {
-        dialogueEl.textContent = text;
+        dialogueEl.innerHTML = text;
     }
 }
 
@@ -389,9 +398,9 @@ function showResult() {
             gemsEarned = Math.floor(GEM_REWARDS.baseWin * tier.rewardMultiplier * multiplier);
             setAvatar('angry'); // She's angry she lost
             if (gameState.winStreak > 1) {
-                setDialogue(`${playerEl.name} beats ${aiEl.name}! ${gameState.winStreak}x streak! +${gemsEarned} 💎`);
+                setDialogue(`${playerEl.name} beats ${aiEl.name}! ${gameState.winStreak}x streak! ${formatGems(gemsEarned)}`);
             } else {
-                setDialogue(`${playerEl.name} beats ${aiEl.name}! You win +${gemsEarned} 💎`);
+                setDialogue(`${playerEl.name} beats ${aiEl.name}! You win ${formatGems(gemsEarned)}`);
             }
             break;
 
@@ -408,7 +417,7 @@ function showResult() {
             gameState.winStreak = 0; // Draws cancel streak
             gemsEarned = Math.floor(GEM_REWARDS.draw * tier.drawMultiplier);
             setAvatar('surprised');
-            setDialogue(`We both chose ${playerEl.name}! It's a draw! Streak reset. +${gemsEarned} 💎`);
+            setDialogue(`We both chose ${playerEl.name}! It's a draw! Streak reset. ${formatGems(gemsEarned)}`);
             break;
     }
 
