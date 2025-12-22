@@ -891,6 +891,196 @@
     }
 }
 
+/* Difficulty Selection */
+.rps-difficulty-select {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.rps-difficulty-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 30px;
+    min-width: 140px;
+    background: linear-gradient(145deg,
+            rgba(30, 25, 40, 0.9),
+            rgba(20, 15, 30, 0.95));
+    border: 3px solid rgba(201, 162, 39, 0.5);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.rps-difficulty-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #f4d03f;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(201, 162, 39, 0.3);
+}
+
+.rps-diff-icon {
+    font-size: 2rem;
+}
+
+.rps-diff-label {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.rps-diff-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Normal tier - Blue */
+.rps-difficulty-btn[data-difficulty="normal"] {
+    border-color: rgba(66, 165, 245, 0.6);
+}
+
+.rps-difficulty-btn[data-difficulty="normal"]:hover {
+    border-color: #42a5f5;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(66, 165, 245, 0.4);
+}
+
+.rps-difficulty-btn[data-difficulty="normal"] .rps-diff-label {
+    color: #64b5f6;
+}
+
+/* Hard tier - Orange/Red */
+.rps-difficulty-btn[data-difficulty="hard"] {
+    border-color: rgba(255, 152, 0, 0.6);
+}
+
+.rps-difficulty-btn[data-difficulty="hard"]:hover {
+    border-color: #ff9800;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 152, 0, 0.5),
+        0 0 40px rgba(255, 87, 34, 0.2);
+}
+
+.rps-difficulty-btn[data-difficulty="hard"] .rps-diff-label {
+    color: #ffb74d;
+}
+
+/* Hell tier - Deep Red with glow */
+.rps-difficulty-btn[data-difficulty="hell"] {
+    border-color: rgba(244, 67, 54, 0.7);
+    animation: hell-pulse 2s ease-in-out infinite;
+}
+
+.rps-difficulty-btn[data-difficulty="hell"]:hover {
+    border-color: #f44336;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(244, 67, 54, 0.6),
+        0 0 60px rgba(183, 28, 28, 0.3);
+}
+
+.rps-difficulty-btn[data-difficulty="hell"] .rps-diff-label {
+    color: #ef5350;
+    text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+@keyframes hell-pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 15px rgba(244, 67, 54, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 25px rgba(244, 67, 54, 0.4);
+    }
+}
+
+/* Difficulty Badge (shown during gameplay) */
+.rps-difficulty-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    font-family: 'Georgia', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.rps-difficulty-badge[data-difficulty="normal"] {
+    background: rgba(66, 165, 245, 0.2);
+    border: 1px solid rgba(66, 165, 245, 0.5);
+    color: #64b5f6;
+}
+
+.rps-difficulty-badge[data-difficulty="hard"] {
+    background: rgba(255, 152, 0, 0.2);
+    border: 1px solid rgba(255, 152, 0, 0.5);
+    color: #ffb74d;
+}
+
+.rps-difficulty-badge[data-difficulty="hell"] {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid rgba(244, 67, 54, 0.5);
+    color: #ef5350;
+    animation: hell-badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hell-badge-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Responsive difficulty buttons */
+@media (max-width: 600px) {
+    .rps-difficulty-select {
+        gap: 12px;
+    }
+
+    .rps-difficulty-btn {
+        padding: 15px 20px;
+        min-width: 100px;
+    }
+
+    .rps-diff-icon {
+        font-size: 1.5rem;
+    }
+
+    .rps-diff-label {
+        font-size: 1rem;
+    }
+
+    .rps-diff-desc {
+        font-size: 0.7rem;
+    }
+}
+
 /* ============================================
    LEGACY GAMES TAB - SELECTION SCREEN
    (kept for reference/fallback)
