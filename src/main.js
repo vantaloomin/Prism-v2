@@ -152,6 +152,20 @@ function switchTab(tabId) {
 }
 
 // ============================================
+// DEBUG PACK VISIBILITY
+// ============================================
+
+/**
+ * Show or hide debug pack buttons
+ * @param {boolean} show - Whether to show debug packs
+ */
+function toggleDebugPacks(show) {
+    document.querySelectorAll('.debug-pack-btn').forEach(btn => {
+        btn.style.display = show ? '' : 'none';
+    });
+}
+
+// ============================================
 // DEBUG UTILITIES
 // ============================================
 
@@ -322,6 +336,21 @@ function init() {
     if (animToggle) {
         animToggle.addEventListener('change', (e) => {
             setAnimationsEnabled(e.target.checked);
+        });
+    }
+
+    // Debug mode toggle
+    const debugToggle = document.getElementById('toggle-debug-mode');
+    if (debugToggle) {
+        // Restore saved debug mode state
+        const savedDebugMode = localStorage.getItem('debugMode') === 'true';
+        debugToggle.checked = savedDebugMode;
+        toggleDebugPacks(savedDebugMode);
+
+        debugToggle.addEventListener('change', (e) => {
+            const enabled = e.target.checked;
+            localStorage.setItem('debugMode', enabled);
+            toggleDebugPacks(enabled);
         });
     }
 

@@ -201,16 +201,41 @@ body {
     background: linear-gradient(145deg, var(--bg-tertiary), var(--bg-card));
     border: 2px solid rgba(139, 92, 246, 0.3);
     border-radius: 16px;
-    padding: 30px 40px;
+    padding: 15px;
     cursor: pointer;
     transition: all var(--transition-normal);
-    min-width: 200px;
+    position: relative;
 }
 
 .pack-button:hover {
     transform: translateY(-5px);
     border-color: var(--accent-primary);
     box-shadow: 0 10px 40px var(--accent-glow);
+}
+
+/* Pack cost tooltip on hover */
+.pack-button::after {
+    content: '💎 ' attr(data-cost);
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--accent-secondary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.pack-button:hover::after {
+    opacity: 1;
 }
 
 .pack-button:active {
@@ -225,14 +250,15 @@ body {
 
 .pack-icon {
     font-size: 3rem;
-    margin-bottom: 15px;
+    margin-bottom: 0;
 }
 
 .pack-name {
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    margin-top: 10px;
 }
 
 .pack-cost {

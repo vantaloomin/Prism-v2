@@ -94,34 +94,33 @@
                 <div class="game-stage" id="game-stage">
                     <div class="pack-shop" id="pack-shop">
                         <div class="pack-buttons">
-                            <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu">
-                                <div class="pack-icon">🌸</div>
-                                <div class="pack-name">Waifu Pack</div>
-                                <div class="pack-cost">💎 100</div>
+                            <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu"
+                                data-cost="100">
+                                <div class="pack-icon"><img src="/assets/ui/pack_waifu.webp" alt="Waifu Pack"
+                                        style="width: 300px; height: auto; object-fit: contain;"></div>
                             </button>
-                            <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando">
-                                <div class="pack-icon">⚔️</div>
-                                <div class="pack-name">Husbando Pack</div>
-                                <div class="pack-cost">💎 100</div>
+                            <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando"
+                                data-cost="100">
+                                <div class="pack-icon"><img src="/assets/ui/pack_husbando.webp" alt="Husbando Pack"
+                                        style="width: 300px; height: auto; object-fit: contain;"></div>
                             </button>
-                            <button class="pack-button waifu-pack" id="btn-debug-pack" data-pack-type="debug"
-                                style="border-color: #ffd700; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(50,40,0,0.9));">
+                            <button class="pack-button debug-pack-btn" id="btn-debug-pack" data-pack-type="debug"
+                                data-cost="100"
+                                style="display: none; border-color: #ffd700; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(50,40,0,0.9));">
                                 <div class="pack-icon">⚡</div>
                                 <div class="pack-name">God Pack</div>
-                                <div class="pack-cost">💎 100</div>
                             </button>
-                            <button class="pack-button waifu-pack" id="btn-debug-frame-pack"
-                                data-pack-type="debug-frame"
-                                style="border-color: #a855f7; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(40,0,50,0.9));">
+                            <button class="pack-button debug-pack-btn" id="btn-debug-frame-pack"
+                                data-pack-type="debug-frame" data-cost="50"
+                                style="display: none; border-color: #a855f7; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(40,0,50,0.9));">
                                 <div class="pack-icon">🖼️</div>
                                 <div class="pack-name">Frame Test</div>
-                                <div class="pack-cost">💎 50</div>
                             </button>
-                            <button class="pack-button waifu-pack" id="btn-debug-holo-pack" data-pack-type="debug-holo"
-                                style="border-color: #3b82f6; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(0,40,50,0.9));">
+                            <button class="pack-button debug-pack-btn" id="btn-debug-holo-pack"
+                                data-pack-type="debug-holo" data-cost="150"
+                                style="display: none; border-color: #3b82f6; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(0,40,50,0.9));">
                                 <div class="pack-icon">✨</div>
                                 <div class="pack-name">Holo Test</div>
-                                <div class="pack-cost">💎 150</div>
                             </button>
                         </div>
                     </div>
@@ -244,6 +243,19 @@
                     </div>
                     <label class="settings-toggle">
                         <input type="checkbox" id="toggle-animations" checked>
+                        <div class="toggle-track">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="settings-divider"></div>
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <span class="settings-item-label">Debug Mode</span>
+                        <span class="settings-item-desc">Show debug packs (God, Frame, Holo)</span>
+                    </div>
+                    <label class="settings-toggle">
+                        <input type="checkbox" id="toggle-debug-mode">
                         <div class="toggle-track">
                             <div class="toggle-thumb"></div>
                         </div>
