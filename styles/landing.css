@@ -17,6 +17,10 @@
     justify-content: center;
     background: var(--bg-primary);
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 80px 20px 40px;
+    box-sizing: border-box;
 }
 
 .landing-page.hidden {
@@ -65,7 +69,8 @@
 
 .landing-title {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: clamp(20px, 5vh, 60px);
+    flex-shrink: 0;
 }
 
 .landing-logo {
@@ -126,16 +131,17 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 40px;
+    gap: clamp(15px, 3vw, 40px);
     flex-wrap: wrap;
     padding: 0 20px;
     max-width: 1200px;
+    flex-shrink: 0;
 }
 
 .menu-card {
     position: relative;
-    width: 280px;
-    height: 320px;
+    width: clamp(200px, 18vw, 280px);
+    height: clamp(220px, 35vh, 320px);
     background: linear-gradient(145deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
     border-radius: 24px;
     border: 3px solid rgba(139, 92, 246, 0.3);
@@ -146,6 +152,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 /* Decorative frame border */
@@ -190,13 +197,13 @@
 
 /* Menu card icon area */
 .menu-card-icon {
-    width: 140px;
-    height: 140px;
+    width: clamp(80px, 12vh, 140px);
+    height: clamp(80px, 12vh, 140px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 5rem;
-    margin-bottom: 20px;
+    font-size: clamp(3rem, 8vh, 5rem);
+    margin-bottom: clamp(10px, 2vh, 20px);
     position: relative;
     transition: transform 0.3s ease;
 }
@@ -221,11 +228,11 @@
 
 /* Menu card label */
 .menu-card-label {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 2.5vh, 1.5rem);
     font-weight: 700;
     color: var(--text-primary);
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: clamp(1px, 0.5vh, 3px);
     text-align: center;
     transition: color 0.3s ease;
 }
