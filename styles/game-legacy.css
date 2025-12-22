@@ -1,0 +1,322 @@
+/* ============================================
+   AETHEL SAGA - LEGACY GAMES STYLES
+   Fallback/reference game selection and
+   game play area styles
+   ============================================ */
+
+/* ============================================
+   LEGACY GAMES TAB - SELECTION SCREEN
+   (kept for reference/fallback)
+   ============================================ */
+
+.games-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.games-header {
+    text-align: center;
+}
+
+.games-title {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.games-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* Game Selection Grid */
+.game-selection {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.game-card {
+    background: linear-gradient(145deg, var(--bg-tertiary), var(--bg-card));
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    min-width: 220px;
+    max-width: 280px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 15px 40px var(--accent-glow);
+}
+
+.game-card:hover::before {
+    opacity: 1;
+}
+
+.game-card-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    overflow: hidden;
+}
+
+.game-card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.game-card-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.game-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Game-specific accent colors */
+.game-card[data-game="rps"]:hover {
+    border-color: #ec4899;
+    box-shadow: 0 15px 40px rgba(236, 72, 153, 0.3);
+}
+
+.game-card[data-game="ttt"]:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+}
+
+.game-card[data-game="blackjack"]:hover {
+    border-color: #fbbf24;
+    box-shadow: 0 15px 40px rgba(251, 191, 36, 0.3);
+}
+
+/* ============================================
+   GAME PLAY AREA
+   ============================================ */
+
+.game-play-area {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+}
+
+.game-play-area.active {
+    display: flex;
+}
+
+/* VN-Style Avatar Display - positioned bottom left like welcome screen */
+.game-avatar-container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40%;
+    max-width: 450px;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.game-avatar {
+    max-height: 85%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.7)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+    transition: all 0.4s ease;
+}
+
+.game-avatar.thinking {
+    /* Thinking state - uses different avatar image, no animation */
+    opacity: 1;
+}
+
+/* Game UI Wrapper - vertically stacks content and controls */
+.game-content {
+    position: absolute;
+    left: calc(40% + (60% / 2));
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    max-width: 500px;
+    z-index: 5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Game Controls - now flows below content */
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    z-index: 10;
+}
+
+.game-btn {
+    background: linear-gradient(145deg, var(--accent-primary), #7c3aed);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.game-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--accent-glow);
+}
+
+.game-btn:active {
+    transform: translateY(-1px);
+}
+
+.game-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--accent-primary);
+    color: var(--accent-secondary);
+    box-shadow: none;
+}
+
+.game-btn.secondary:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+/* Back Button */
+.game-back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+    z-index: 10;
+}
+
+.game-back-btn:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+/* Game Result Display */
+.game-result {
+    text-align: center;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+.game-result-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.game-result-title.win {
+    color: #22c55e;
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
+.game-result-title.lose {
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+.game-result-title.draw {
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+.game-result-message {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .game-selection {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-card {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .game-avatar-container {
+        min-height: 300px;
+        justify-content: center;
+    }
+
+    .game-content {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .game-avatar {
+        max-height: 280px;
+    }
+}

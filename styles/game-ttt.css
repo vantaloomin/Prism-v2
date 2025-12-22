@@ -1,0 +1,426 @@
+/* ============================================
+   AETHEL SAGA - RUNE STONES (TTT) GAME
+   Tic Tac Toe mini-game styles
+   ============================================ */
+
+.ttt-game-container {
+    text-align: center;
+    padding: 25px 35px;
+    background: linear-gradient(145deg,
+            rgba(15, 10, 25, 0.85),
+            rgba(25, 20, 35, 0.9));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 2px solid rgba(155, 89, 182, 0.4);
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.ttt-title {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ttt-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.ttt-score {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.ttt-dialogue {
+    font-size: 1.2rem;
+    font-family: 'Georgia', serif;
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 15px 0;
+    min-height: 1.5em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+/* Game Board */
+.ttt-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+    width: 320px;
+    height: 320px;
+    margin: 25px auto;
+    padding: 15px;
+    background: linear-gradient(145deg,
+            rgba(40, 30, 50, 0.9),
+            rgba(30, 20, 40, 0.95));
+    border-radius: 16px;
+    border: 3px solid rgba(155, 89, 182, 0.5);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Game Controls Container */
+.ttt-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.ttt-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg,
+            rgba(60, 50, 80, 0.6),
+            rgba(40, 30, 60, 0.8));
+    border-radius: 12px;
+    border: 2px solid rgba(155, 89, 182, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ttt-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(155, 89, 182, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.ttt-cell:not(.occupied):not(.disabled):hover {
+    border-color: rgba(155, 89, 182, 0.7);
+    background: linear-gradient(145deg,
+            rgba(80, 60, 110, 0.7),
+            rgba(60, 40, 90, 0.9));
+    transform: scale(1.02);
+}
+
+.ttt-cell:not(.occupied):not(.disabled):hover::before {
+    opacity: 1;
+}
+
+.ttt-cell.occupied {
+    cursor: default;
+}
+
+.ttt-cell.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Rune Markers */
+.ttt-marker {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: rune-appear 0.4s ease-out;
+}
+
+.ttt-marker img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.ttt-marker.sun-rune img {
+    filter: drop-shadow(0 4px 12px rgba(255, 200, 100, 0.4)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.ttt-marker.moon-rune img {
+    filter: drop-shadow(0 4px 12px rgba(150, 150, 255, 0.4)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes rune-appear {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.1) rotate(10deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Difficulty Selection */
+.ttt-difficulty-select {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.ttt-difficulty-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 30px;
+    min-width: 140px;
+    background: linear-gradient(145deg,
+            rgba(30, 25, 40, 0.9),
+            rgba(20, 15, 30, 0.95));
+    border: 3px solid rgba(155, 89, 182, 0.5);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ttt-difficulty-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #bb8fce;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(155, 89, 182, 0.4);
+}
+
+.ttt-diff-label {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #bb8fce;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.ttt-diff-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Apprentice tier - Purple */
+.ttt-difficulty-btn[data-difficulty="normal"] {
+    border-color: rgba(155, 89, 182, 0.5);
+}
+
+.ttt-difficulty-btn[data-difficulty="normal"]:hover {
+    border-color: #9b59b6;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(155, 89, 182, 0.4);
+}
+
+.ttt-difficulty-btn[data-difficulty="normal"] .ttt-diff-label {
+    color: #bb8fce;
+}
+
+/* Sage tier - Blue/Purple */
+.ttt-difficulty-btn[data-difficulty="hard"] {
+    border-color: rgba(100, 149, 237, 0.6);
+}
+
+.ttt-difficulty-btn[data-difficulty="hard"]:hover {
+    border-color: #6495ed;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(100, 149, 237, 0.5);
+}
+
+.ttt-difficulty-btn[data-difficulty="hard"] .ttt-diff-label {
+    color: #87ceeb;
+}
+
+/* Oracle tier - Gold with glow */
+.ttt-difficulty-btn[data-difficulty="hell"] {
+    border-color: rgba(255, 215, 0, 0.6);
+    animation: oracle-pulse 2s ease-in-out infinite;
+}
+
+.ttt-difficulty-btn[data-difficulty="hell"]:hover {
+    border-color: #ffd700;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 0 50px rgba(255, 180, 0, 0.3);
+}
+
+.ttt-difficulty-btn[data-difficulty="hell"] .ttt-diff-label {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes oracle-pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 15px rgba(255, 215, 0, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 25px rgba(255, 215, 0, 0.4);
+    }
+}
+
+/* Difficulty Badge (shown during gameplay) */
+.ttt-difficulty-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    font-family: 'Georgia', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.ttt-difficulty-badge[data-difficulty="normal"] {
+    background: rgba(155, 89, 182, 0.2);
+    border: 1px solid rgba(155, 89, 182, 0.5);
+    color: #bb8fce;
+}
+
+.ttt-difficulty-badge[data-difficulty="hard"] {
+    background: rgba(100, 149, 237, 0.2);
+    border: 1px solid rgba(100, 149, 237, 0.5);
+    color: #87ceeb;
+}
+
+.ttt-difficulty-badge[data-difficulty="hell"] {
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    animation: oracle-badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes oracle-badge-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Play Again Button */
+.ttt-play-again-btn {
+    padding: 15px 40px;
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: linear-gradient(145deg,
+            rgba(155, 89, 182, 0.3),
+            rgba(100, 60, 140, 0.4));
+    border: 2px solid rgba(155, 89, 182, 0.6);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.ttt-play-again-btn:hover {
+    background: linear-gradient(145deg,
+            rgba(155, 89, 182, 0.5),
+            rgba(100, 60, 140, 0.6));
+    border-color: #bb8fce;
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(155, 89, 182, 0.3);
+}
+
+/* Change Difficulty Button */
+.ttt-change-difficulty-btn {
+    padding: 12px 25px;
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: linear-gradient(145deg,
+            rgba(60, 50, 80, 0.4),
+            rgba(40, 30, 60, 0.5));
+    border: 2px solid rgba(155, 89, 182, 0.4);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.ttt-change-difficulty-btn:hover {
+    background: linear-gradient(145deg,
+            rgba(80, 60, 100, 0.5),
+            rgba(60, 40, 80, 0.6));
+    border-color: rgba(155, 89, 182, 0.7);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(155, 89, 182, 0.2);
+}
+
+/* Responsive TTT */
+@media (max-width: 600px) {
+    .ttt-board {
+        width: 260px;
+        height: 260px;
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .ttt-title {
+        font-size: 1.5rem;
+    }
+
+    .ttt-difficulty-select {
+        gap: 12px;
+    }
+
+    .ttt-difficulty-btn {
+        padding: 15px 20px;
+        min-width: 100px;
+    }
+
+    .ttt-diff-label {
+        font-size: 1rem;
+    }
+
+    .ttt-diff-desc {
+        font-size: 0.7rem;
+    }
+}
