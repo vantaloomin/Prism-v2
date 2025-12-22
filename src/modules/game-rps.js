@@ -506,19 +506,16 @@ function renderDifficultySelect() {
             </div>
             <div class="rps-difficulty-select">
                 <button class="rps-difficulty-btn" data-difficulty="normal" onclick="window.rpsSetDifficulty('normal')">
-                    <span class="rps-diff-icon">⚔️</span>
                     <span class="rps-diff-label">Normal</span>
-                    <span class="rps-diff-desc">Fair fight • 1x rewards</span>
+                    <span class="rps-diff-desc">A fair fight • 1x rewards</span>
                 </button>
                 <button class="rps-difficulty-btn" data-difficulty="hard" onclick="window.rpsSetDifficulty('hard')">
-                    <span class="rps-diff-icon">🔥</span>
                     <span class="rps-diff-label">Hard</span>
-                    <span class="rps-diff-desc">Pattern analysis • 2x rewards</span>
+                    <span class="rps-diff-desc">A challenging opponent • 2x rewards</span>
                 </button>
                 <button class="rps-difficulty-btn" data-difficulty="hell" onclick="window.rpsSetDifficulty('hell')">
-                    <span class="rps-diff-icon">💀</span>
                     <span class="rps-diff-label">Hell</span>
-                    <span class="rps-diff-desc">Near-perfect AI • 4x rewards</span>
+                    <span class="rps-diff-desc">A near-perfect opponent • 4x rewards</span>
                 </button>
             </div>
         `;
