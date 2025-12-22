@@ -662,7 +662,7 @@ function renderGameUI() {
         actionArea.innerHTML = `
             <div class="bj-action-buttons" id="bj-controls">
                 <button class="bj-action-btn hit" id="bj-hit-btn" onclick="window.bjHit()">
-                    <span class="bj-btn-icon">🃏</span>
+                    <span class="bj-btn-icon"><img src="assets/ui/card_back.webp" alt="Hit" class="bj-btn-img"></span>
                     <span class="bj-btn-text">Hit</span>
                 </button>
                 <button class="bj-action-btn stand" id="bj-stand-btn" onclick="window.bjStand()">

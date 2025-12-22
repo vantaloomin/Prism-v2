@@ -529,6 +529,13 @@
     font-size: 1.8rem;
 }
 
+.bj-btn-icon img {
+    height: 1.8rem;
+    width: auto;
+    border-radius: 3px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
 .bj-btn-text {
     font-size: 1rem;
     font-weight: 700;
