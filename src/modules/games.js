@@ -5,6 +5,7 @@
 
 import { initRPSGame } from './game-rps.js';
 import { initTTTGame } from './game-ttt.js';
+import { initBlackjackGame } from './game-blackjack.js';
 // ============================================
 // GAMES CONFIGURATION
 // ============================================
@@ -29,11 +30,11 @@ export const GAMES_CONFIG = {
         },
         {
             id: 'blackjack',
-            name: 'Blackjack',
-            description: 'Coming soon!',
+            name: "Dragon's Hand",
+            description: 'Beat the dealer to 21!',
             icon: 'assets/games/icons/blackjack_icon.webp',
-            fallbackIcon: '🃏',
-            disabled: true
+            fallbackIcon: '🐉',
+            disabled: false
         }
     ],
     avatars: {
@@ -224,26 +225,7 @@ export function setAvatarExpression(expression) {
 
 // TTT game is now in game-ttt.js
 
-function initBlackjackGame() {
-    console.log('Blackjack game initialized (placeholder)');
-    setAvatarExpression('cards');
-
-    const controls = document.getElementById('game-controls');
-    if (controls) {
-        controls.innerHTML = `
-            <button class="game-btn" disabled>Hit</button>
-            <button class="game-btn" disabled>Stand</button>
-        `;
-    }
-
-    const content = document.getElementById('game-content');
-    if (content) {
-        content.innerHTML = `
-            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Blackjack</h2>
-            <p style="color: var(--text-muted);">Coming soon!</p>
-        `;
-    }
-}
+// Blackjack game is now in game-blackjack.js
 
 // ============================================
 // INITIALIZATION

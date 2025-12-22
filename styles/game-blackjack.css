@@ -1,0 +1,719 @@
+/* ============================================
+   AETHEL SAGA - DRAGON'S HAND (Blackjack)
+   Card game styles with VN aesthetics
+   ============================================ */
+
+/* Main Game Container */
+.bj-game-container {
+    text-align: center;
+    padding: 20px 30px;
+    background: linear-gradient(145deg,
+            rgba(15, 10, 25, 0.85),
+            rgba(25, 20, 35, 0.9));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 2px solid rgba(201, 162, 39, 0.4);
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+}
+
+.bj-title {
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.bj-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.bj-dialogue {
+    font-size: 1.2rem;
+    font-family: 'Georgia', serif;
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 12px 0;
+    min-height: 1.5em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.bj-score {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    display: inline-block;
+}
+
+/* Difficulty Badge */
+.bj-difficulty-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    font-family: 'Georgia', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+}
+
+.bj-difficulty-badge[data-difficulty="normal"] {
+    background: rgba(66, 165, 245, 0.2);
+    border: 1px solid rgba(66, 165, 245, 0.5);
+    color: #64b5f6;
+}
+
+.bj-difficulty-badge[data-difficulty="hard"] {
+    background: rgba(255, 152, 0, 0.2);
+    border: 1px solid rgba(255, 152, 0, 0.5);
+    color: #ffb74d;
+}
+
+.bj-difficulty-badge[data-difficulty="hell"] {
+    background: rgba(156, 39, 176, 0.2);
+    border: 1px solid rgba(156, 39, 176, 0.5);
+    color: #ce93d8;
+    animation: dragon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dragon-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   DIFFICULTY SELECTION
+   ============================================ */
+
+.bj-difficulty-select {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.bj-difficulty-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 30px;
+    min-width: 140px;
+    background: linear-gradient(145deg,
+            rgba(30, 25, 40, 0.9),
+            rgba(20, 15, 30, 0.95));
+    border: 3px solid rgba(201, 162, 39, 0.5);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bj-difficulty-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #f4d03f;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(201, 162, 39, 0.3);
+}
+
+.bj-diff-label {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.bj-diff-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Normal tier - Blue */
+.bj-difficulty-btn[data-difficulty="normal"] {
+    border-color: rgba(66, 165, 245, 0.6);
+}
+
+.bj-difficulty-btn[data-difficulty="normal"]:hover {
+    border-color: #42a5f5;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(66, 165, 245, 0.4);
+}
+
+.bj-difficulty-btn[data-difficulty="normal"] .bj-diff-label {
+    color: #64b5f6;
+}
+
+/* Hard tier - Orange */
+.bj-difficulty-btn[data-difficulty="hard"] {
+    border-color: rgba(255, 152, 0, 0.6);
+}
+
+.bj-difficulty-btn[data-difficulty="hard"]:hover {
+    border-color: #ff9800;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 152, 0, 0.5);
+}
+
+.bj-difficulty-btn[data-difficulty="hard"] .bj-diff-label {
+    color: #ffb74d;
+}
+
+/* Hell tier - Purple/Dragon */
+.bj-difficulty-btn[data-difficulty="hell"] {
+    border-color: rgba(156, 39, 176, 0.7);
+    animation: dragon-btn-pulse 2s ease-in-out infinite;
+}
+
+.bj-difficulty-btn[data-difficulty="hell"]:hover {
+    border-color: #9c27b0;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(156, 39, 176, 0.6),
+        0 0 60px rgba(103, 58, 183, 0.3);
+}
+
+.bj-difficulty-btn[data-difficulty="hell"] .bj-diff-label {
+    color: #ce93d8;
+    text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+}
+
+@keyframes dragon-btn-pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 15px rgba(156, 39, 176, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 8px 24px rgba(0, 0, 0, 0.4),
+            0 0 25px rgba(156, 39, 176, 0.4);
+    }
+}
+
+/* ============================================
+   CARD TABLE
+   ============================================ */
+
+.bj-table {
+    position: relative;
+    background: linear-gradient(145deg,
+            rgba(20, 60, 30, 0.6),
+            rgba(15, 45, 25, 0.7));
+    border: 3px solid rgba(201, 162, 39, 0.3);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 15px 0;
+    box-shadow:
+        inset 0 5px 20px rgba(0, 0, 0, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.bj-hand-area {
+    padding: 15px 0;
+}
+
+.bj-hand-label {
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.bj-hand-value {
+    font-weight: 700;
+    color: #f4d03f;
+    margin-left: 10px;
+    font-size: 1.1rem;
+}
+
+.bj-hand {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    min-height: 120px;
+    flex-wrap: wrap;
+}
+
+.bj-divider {
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(201, 162, 39, 0.5) 20%,
+            rgba(201, 162, 39, 0.5) 80%,
+            transparent);
+    margin: 10px 0;
+}
+
+/* Deck Placeholder */
+.bj-deck-area {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.bj-deck {
+    width: 80px;
+    height: 112px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        3px 3px 0 rgba(0, 0, 0, 0.2),
+        6px 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.bj-deck img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bj-deck-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   PLAYING CARDS
+   ============================================ */
+
+.bj-card {
+    width: 80px;
+    height: 112px;
+    background: linear-gradient(145deg, #fafafa, #e8e8e8);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    position: relative;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: cardDeal 0.3s ease-out;
+    transition: transform 0.2s ease;
+}
+
+.bj-card:hover {
+    transform: translateY(-5px);
+}
+
+@keyframes cardDeal {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) rotateY(90deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateY(0);
+    }
+}
+
+/* Card corners */
+.bj-card-corner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.bj-card-corner.top-left {
+    top: 5px;
+    left: 6px;
+}
+
+.bj-card-corner.bottom-right {
+    bottom: 5px;
+    right: 6px;
+    transform: rotate(180deg);
+}
+
+.bj-card-value {
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.bj-card-suit {
+    font-size: 0.8rem;
+}
+
+/* Card center */
+.bj-card-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.bj-card-suit-large {
+    font-size: 2.5rem;
+}
+
+/* Card colors */
+.bj-card.red .bj-card-value,
+.bj-card.red .bj-card-suit,
+.bj-card.red .bj-card-suit-large {
+    color: #d32f2f;
+}
+
+.bj-card.black .bj-card-value,
+.bj-card.black .bj-card-suit,
+.bj-card.black .bj-card-suit-large {
+    color: #212121;
+}
+
+/* Face-down card */
+.bj-card.face-down {
+    background: transparent;
+    border-color: rgba(201, 162, 39, 0.5);
+    overflow: hidden;
+}
+
+.bj-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 6px;
+    background-image: url('/assets/games/blackjack/card_back.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* ============================================
+   BETTING UI
+   ============================================ */
+
+.bj-betting-area {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(145deg,
+            rgba(20, 15, 30, 0.8),
+            rgba(15, 10, 25, 0.9));
+    border: 2px solid rgba(201, 162, 39, 0.3);
+    border-radius: 16px;
+}
+
+.bj-bet-options {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.bj-bet-option {
+    padding: 12px 24px;
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: linear-gradient(145deg,
+            rgba(40, 35, 55, 0.9),
+            rgba(30, 25, 45, 0.95));
+    border: 2px solid rgba(201, 162, 39, 0.5);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bj-bet-option:hover {
+    transform: translateY(-3px) scale(1.05);
+    border-color: #f4d03f;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(201, 162, 39, 0.3);
+}
+
+.bj-bet-option:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.bj-bet-range {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* ============================================
+   ACTION AREA & BUTTONS
+   ============================================ */
+
+.bj-action-area {
+    margin-top: 20px;
+}
+
+.bj-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.bj-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 35px;
+    min-width: 120px;
+    font-family: 'Georgia', serif;
+    background: linear-gradient(145deg,
+            rgba(30, 25, 40, 0.9),
+            rgba(20, 15, 30, 0.95));
+    border: 3px solid rgba(201, 162, 39, 0.6);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bj-action-btn:hover:not(:disabled) {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #f4d03f;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(201, 162, 39, 0.3);
+}
+
+.bj-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.bj-btn-icon {
+    font-size: 1.8rem;
+}
+
+.bj-btn-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Hit button - Green accent */
+.bj-action-btn.hit {
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.bj-action-btn.hit:hover:not(:disabled) {
+    border-color: #4caf50;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(76, 175, 80, 0.4);
+}
+
+.bj-action-btn.hit .bj-btn-text {
+    color: #81c784;
+}
+
+/* Stand button - Orange accent */
+.bj-action-btn.stand {
+    border-color: rgba(255, 152, 0, 0.6);
+}
+
+.bj-action-btn.stand:hover:not(:disabled) {
+    border-color: #ff9800;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 152, 0, 0.4);
+}
+
+.bj-action-btn.stand .bj-btn-text {
+    color: #ffb74d;
+}
+
+/* Play Again / Reset Stats buttons */
+.bj-action-btn.play-again {
+    border-color: rgba(66, 165, 245, 0.6);
+    color: #64b5f6;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.bj-action-btn.play-again:hover {
+    border-color: #42a5f5;
+    color: #90caf9;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(66, 165, 245, 0.4);
+}
+
+.bj-action-btn.change-stakes {
+    border-color: rgba(201, 162, 39, 0.5);
+    color: #f4d03f;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.bj-action-btn.change-stakes:hover {
+    border-color: #f4d03f;
+    color: #fff9c4;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(201, 162, 39, 0.4);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 600px) {
+    .bj-game-container {
+        padding: 15px 20px;
+    }
+
+    .bj-title {
+        font-size: 1.5rem;
+    }
+
+    .bj-dialogue {
+        font-size: 1rem;
+    }
+
+    .bj-difficulty-select {
+        gap: 12px;
+    }
+
+    .bj-difficulty-btn {
+        padding: 15px 20px;
+        min-width: 100%;
+    }
+
+    .bj-table {
+        padding: 15px;
+    }
+
+    .bj-card {
+        width: 60px;
+        height: 84px;
+    }
+
+    .bj-card-value {
+        font-size: 0.8rem;
+    }
+
+    .bj-card-suit {
+        font-size: 0.6rem;
+    }
+
+    .bj-card-suit-large {
+        font-size: 1.8rem;
+    }
+
+    .bj-card-back::after {
+        font-size: 1.4rem;
+    }
+
+    .bj-hand {
+        gap: 6px;
+        min-height: 90px;
+    }
+
+    .bj-bet-options {
+        gap: 8px;
+    }
+
+    .bj-bet-option {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+
+    .bj-action-buttons {
+        gap: 12px;
+    }
+
+    .bj-action-btn {
+        padding: 14px 25px;
+        min-width: 100px;
+    }
+
+    .bj-btn-icon {
+        font-size: 1.4rem;
+    }
+
+    .bj-btn-text {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .bj-card {
+        width: 50px;
+        height: 70px;
+    }
+
+    .bj-card-corner {
+        font-size: 0.7rem;
+    }
+
+    .bj-card-value {
+        font-size: 0.7rem;
+    }
+
+    .bj-card-suit {
+        font-size: 0.5rem;
+    }
+
+    .bj-card-suit-large {
+        font-size: 1.4rem;
+    }
+
+    .bj-card-corner.top-left {
+        top: 3px;
+        left: 4px;
+    }
+
+    .bj-card-corner.bottom-right {
+        bottom: 3px;
+        right: 4px;
+    }
+}
