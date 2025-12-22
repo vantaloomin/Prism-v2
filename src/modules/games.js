@@ -151,7 +151,7 @@ export function exitGame() {
     }
 
     // Restore VN selection elements
-    if (selectionContainer) selectionContainer.style.display = 'flex';
+    if (selectionContainer) selectionContainer.style.display = '';
     if (vnAvatarContainer) vnAvatarContainer.style.display = '';
     if (vnDialogueBox) vnDialogueBox.style.display = '';
 }
