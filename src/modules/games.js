@@ -4,6 +4,7 @@
 // ============================================
 
 import { initRPSGame } from './game-rps.js';
+import { initTTTGame } from './game-ttt.js';
 // ============================================
 // GAMES CONFIGURATION
 // ============================================
@@ -21,10 +22,10 @@ export const GAMES_CONFIG = {
         {
             id: 'ttt',
             name: 'Rune Stones',
-            description: 'Coming soon!',
+            description: 'Align ancient runes on the stone tablet!',
             icon: 'assets/games/icons/ttt_icon.webp',
             fallbackIcon: '✦✧',
-            disabled: true
+            disabled: false
         },
         {
             id: 'blackjack',
@@ -221,23 +222,7 @@ export function setAvatarExpression(expression) {
 // (RPS is now in game-rps.js)
 // ============================================
 
-function initTTTGame() {
-    console.log('Rune Stones game initialized (placeholder)');
-    setAvatarExpression('pencil');
-
-    const controls = document.getElementById('game-controls');
-    if (controls) {
-        controls.innerHTML = `<button class="game-btn" disabled>Start New Game</button>`;
-    }
-
-    const content = document.getElementById('game-content');
-    if (content) {
-        content.innerHTML = `
-            <h2 style="color: var(--text-primary); margin-bottom: 20px;">Rune Stones</h2>
-            <p style="color: var(--text-muted);">Coming soon!</p>
-        `;
-    }
-}
+// TTT game is now in game-ttt.js
 
 function initBlackjackGame() {
     console.log('Blackjack game initialized (placeholder)');
