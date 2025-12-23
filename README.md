@@ -48,6 +48,11 @@ Earn credits by battling an AI wizard in elemental combat. Fire beats Earth. Ear
 | Animations | GSAP 3.12 |
 | Visuals | WebGL 2.0 with Custom GLSL Shaders |
 
+### Browser Requirements
+- **Minimum Viewport:** 1024 × 768 pixels
+- A CSS-only viewport blocker ensures mobile users see a friendly message directing them to use a larger screen
+- WebGL 2.0 support required for holographic effects
+
 ### Run Locally
 
 ```bash
