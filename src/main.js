@@ -1,12 +1,13 @@
 /**
- * PROJECT PRISM - Main Entry Point
+ * AETHAL SAGA - Main Entry Point
  * Application initialization and navigation
  */
 
 // Core imports
-import { CONFIG, rollRarity, rollFrame, rollHolo } from './engines/pack-logic.js';
+import { CONFIG, rollRarity, rollFrame, rollHolo, initializeCharacterPools } from './engines/pack-logic.js';
+import { loadAllPacks } from './engines/pack-loader.js';
 import { gameState, loadGame, saveGame, resetSave, updateCreditsDisplay } from './state.js';
-import { handlePackPurchase, showPackShop } from './shop.js';
+import { initPackShop, showPackShop, toggleDebugPacks } from './shop.js';
 import { renderCollection, initScrollToTop } from './collection.js';
 import { openFocusMode, closeFocusMode } from './focus.js';
 import { initGames, exitGame } from './modules/games.js';
@@ -151,20 +152,7 @@ function switchTab(tabId) {
         initGames();
     }
 }
-
-// ============================================
-// DEBUG PACK VISIBILITY
-// ============================================
-
-/**
- * Show or hide debug pack buttons
- * @param {boolean} show - Whether to show debug packs
- */
-function toggleDebugPacks(show) {
-    document.querySelectorAll('.debug-pack-btn').forEach(btn => {
-        btn.style.display = show ? '' : 'none';
-    });
-}
+// toggleDebugPacks is now imported from shop.js
 
 // ============================================
 // DEBUG UTILITIES
@@ -225,13 +213,27 @@ function testRngDistribution(iterations = 1000) {
 // INITIALIZATION
 // ============================================
 
-function init() {
+async function init() {
+    // Load dynamic pack data first
+    try {
+        await loadAllPacks();
+        initializeCharacterPools();
+    } catch (error) {
+        console.error('Failed to load packs:', error);
+        // Show error to user
+        document.body.innerHTML = '<div style="color: white; padding: 20px;">Failed to load game data. Please refresh the page.</div>';
+        return;
+    }
+
     // Load saved data
     loadGame();
 
     // Initialize audio system
     initAudio();
     initAudioSettingsUI();
+
+    // Initialize pack shop with dynamic buttons
+    initPackShop(openFocusMode);
 
     // Update UI
     updateCreditsDisplay();
@@ -266,26 +268,7 @@ function init() {
         });
     });
 
-    // Bind pack buttons
-    document.getElementById('btn-waifu-pack').addEventListener('click', () => {
-        handlePackPurchase('waifu', openFocusMode);
-    });
-
-    document.getElementById('btn-husbando-pack').addEventListener('click', () => {
-        handlePackPurchase('husbando', openFocusMode);
-    });
-
-    document.getElementById('btn-debug-pack').addEventListener('click', () => {
-        handlePackPurchase('debug', openFocusMode);
-    });
-
-    document.getElementById('btn-debug-frame-pack').addEventListener('click', () => {
-        handlePackPurchase('debug-frame', openFocusMode);
-    });
-
-    document.getElementById('btn-debug-holo-pack').addEventListener('click', () => {
-        handlePackPurchase('debug-holo', openFocusMode);
-    });
+    // Pack buttons are now initialized dynamically in initPackShop()
 
 
 

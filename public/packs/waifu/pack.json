@@ -1,0 +1,100 @@
+{
+    "id": "waifu",
+    "name": "Waifu Pack",
+    "description": "Female character collection featuring heroines, warriors, and mystical beings",
+    "cost": 100,
+    "enabled": true,
+    "order": 1,
+    "characters": [
+        {
+            "id": "w01",
+            "name": "The Village Herbalist",
+            "background": "bg_garden",
+            "rarity": "c"
+        },
+        {
+            "id": "w02",
+            "name": "The Novice Cleric",
+            "background": "bg_temple",
+            "rarity": "c"
+        },
+        {
+            "id": "w03",
+            "name": "The Steel Vanguard",
+            "background": "bg_castle",
+            "rarity": "c"
+        },
+        {
+            "id": "w04",
+            "name": "The Elven Scribe",
+            "background": "bg_forest",
+            "rarity": "c"
+        },
+        {
+            "id": "w05",
+            "name": "The Dwarven Smith",
+            "background": "bg_forge",
+            "rarity": "c"
+        },
+        {
+            "id": "w06",
+            "name": "The Nekomimi Baker",
+            "background": "bg_village",
+            "rarity": "c"
+        },
+        {
+            "id": "w07",
+            "name": "The Royal Duelist",
+            "background": "bg_castle",
+            "rarity": "r"
+        },
+        {
+            "id": "w08",
+            "name": "The Forest Ranger",
+            "background": "bg_forest",
+            "rarity": "r"
+        },
+        {
+            "id": "w09",
+            "name": "The Kitsune Diviner",
+            "background": "bg_shrine",
+            "rarity": "r"
+        },
+        {
+            "id": "w10",
+            "name": "The Tavern Brawler",
+            "background": "bg_tavern",
+            "rarity": "r"
+        },
+        {
+            "id": "w11",
+            "name": "The Shadow Assassin",
+            "background": "bg_night",
+            "rarity": "sr"
+        },
+        {
+            "id": "w12",
+            "name": "The Dancer of the Dunes",
+            "background": "bg_desert",
+            "rarity": "sr"
+        },
+        {
+            "id": "w13",
+            "name": "The Barbarian Queen",
+            "background": "bg_mountain",
+            "rarity": "sr"
+        },
+        {
+            "id": "w14",
+            "name": "The Dragon Sorceress",
+            "background": "bg_volcano",
+            "rarity": "ssr"
+        },
+        {
+            "id": "w15",
+            "name": "The Goddess of Love",
+            "background": "bg_celestial",
+            "rarity": "ur"
+        }
+    ]
+}

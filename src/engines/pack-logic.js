@@ -1,6 +1,17 @@
 /* ============================================
-   PROJECT PRISM - PACK GENERATION LOGIC
-   ============================================ */
+   AETHAL SAGA - PACK GENERATION LOGIC
+   ============================================ 
+   
+   This module handles card generation using dynamic pack data.
+   Character pools are loaded from pack manifests at runtime.
+*/
+
+import {
+    buildCharacterPools,
+    getCharacterPath,
+    getBackgroundPath,
+    getAllPackIds
+} from './pack-loader.js';
 
 // ============================================
 // CONSTANTS & CONFIGURATION
@@ -43,55 +54,22 @@ export const HOLO_TABLE = [
     { id: 'void', name: 'Void', threshold: 1.000, prob: 0.0045 }
 ];
 
-// Character pools - 15 characters per pack
-// Each character has a fixed rarity (not random!)
-// bg = background ID, rarity = fixed rarity tier
-export const CHARACTER_POOLS = {
-    waifu: [
-        // Common (6)
-        { id: 'w01', name: 'The Village Herbalist', bg: 'bg_garden', rarity: 'c' },
-        { id: 'w02', name: 'The Novice Cleric', bg: 'bg_temple', rarity: 'c' },
-        { id: 'w03', name: 'The Steel Vanguard', bg: 'bg_castle', rarity: 'c' },
-        { id: 'w04', name: 'The Elven Scribe', bg: 'bg_forest', rarity: 'c' },
-        { id: 'w05', name: 'The Dwarven Smith', bg: 'bg_forge', rarity: 'c' },
-        { id: 'w06', name: 'The Nekomimi Baker', bg: 'bg_village', rarity: 'c' },
-        // Rare (4)
-        { id: 'w07', name: 'The Royal Duelist', bg: 'bg_castle', rarity: 'r' },
-        { id: 'w08', name: 'The Forest Ranger', bg: 'bg_forest', rarity: 'r' },
-        { id: 'w09', name: 'The Kitsune Diviner', bg: 'bg_shrine', rarity: 'r' },
-        { id: 'w10', name: 'The Tavern Brawler', bg: 'bg_tavern', rarity: 'r' },
-        // Super Rare (3)
-        { id: 'w11', name: 'The Shadow Assassin', bg: 'bg_night', rarity: 'sr' },
-        { id: 'w12', name: 'The Dancer of the Dunes', bg: 'bg_desert', rarity: 'sr' },
-        { id: 'w13', name: 'The Barbarian Queen', bg: 'bg_mountain', rarity: 'sr' },
-        // SSR (1)
-        { id: 'w14', name: 'The Dragon Sorceress', bg: 'bg_volcano', rarity: 'ssr' },
-        // UR (1)
-        { id: 'w15', name: 'The Goddess of Love', bg: 'bg_celestial', rarity: 'ur' }
-    ],
-    husbando: [
-        // Common (6)
-        { id: 'h01', name: 'The City Watchman', bg: 'bg_city', rarity: 'c' },
-        { id: 'h02', name: 'The Traveling Merchant', bg: 'bg_road', rarity: 'c' },
-        { id: 'h03', name: 'The Court Mage', bg: 'bg_castle', rarity: 'c' },
-        { id: 'h04', name: 'The Halfling Bard', bg: 'bg_tavern', rarity: 'c' },
-        { id: 'h05', name: 'The Stable Master', bg: 'bg_village', rarity: 'c' },
-        { id: 'h06', name: 'The Alchemist', bg: 'bg_laboratory', rarity: 'c' },
-        // Rare (4)
-        { id: 'h07', name: 'The Elven Ranger', bg: 'bg_forest', rarity: 'r' },
-        { id: 'h08', name: 'The Pirate First Mate', bg: 'bg_ocean', rarity: 'r' },
-        { id: 'h09', name: 'The Martial Monk', bg: 'bg_dojo', rarity: 'r' },
-        { id: 'h10', name: 'The Wolf-Kin Warrior', bg: 'bg_snow', rarity: 'r' },
-        // Super Rare (3)
-        { id: 'h11', name: 'The Gladiator Champion', bg: 'bg_arena', rarity: 'sr' },
-        { id: 'h12', name: 'The Orc Warlord', bg: 'bg_battlefield', rarity: 'sr' },
-        { id: 'h13', name: 'The Dark Elf Warlock', bg: 'bg_ruins', rarity: 'sr' },
-        // SSR (1)
-        { id: 'h14', name: 'The Demon Lord', bg: 'bg_inferno', rarity: 'ssr' },
-        // UR (1)
-        { id: 'h15', name: 'The Sun God Avatar', bg: 'bg_celestial', rarity: 'ur' }
-    ]
-};
+// ============================================
+// DYNAMIC CHARACTER POOLS
+// ============================================
+
+// Character pools built dynamically from loaded packs
+// Call initializeCharacterPools() after packs are loaded
+export let CHARACTER_POOLS = {};
+
+/**
+ * Initialize character pools from loaded pack data
+ * Must be called after loadAllPacks() completes
+ */
+export function initializeCharacterPools() {
+    CHARACTER_POOLS = buildCharacterPools();
+    console.log('✦ Character pools initialized:', Object.keys(CHARACTER_POOLS));
+}
 
 // ============================================
 // RNG ENGINE (3-Axis Roller)
@@ -148,7 +126,7 @@ function generateCardId() {
 /**
  * Generate a single card with proper rarity-based character selection
  * First rolls rarity, then picks a character of that rarity tier
- * @param {string} packType - 'waifu' or 'husbando'
+ * @param {string} packType - Pack ID (e.g., 'waifu', 'husbando')
  * @returns {Object} Complete card data
  */
 export function generateCard(packType) {
@@ -159,6 +137,10 @@ export function generateCard(packType) {
 
     // Get all characters of this rarity from the pool
     const pool = CHARACTER_POOLS[packType];
+    if (!pool) {
+        throw new Error(`Unknown pack type: ${packType}`);
+    }
+
     const eligibleCharacters = pool.filter(c => c.rarity === rarityRoll.id);
 
     // Pick a random character from eligible pool
@@ -182,18 +164,28 @@ export function generateCard(packType) {
         frame: frame,
         holo: holo,
         combinedProb: combinedProb,
-        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
-        characterPath: `assets/${packType}/${character.id}.webp`,
+        // Use pack-relative paths from pack-loader
+        backgroundPath: getBackgroundPath(packType, character.bg),
+        characterPath: getCharacterPath(packType, character.id),
         obtainedAt: Date.now()
     };
 }
 
 /**
  * Generate a DEBUG card for Frame Testing
- * All Kitsune Diviner ('w09'), specified frame, no holo
+ * Uses first available pack's first rare character
  */
 function generateFrameDebugCard(frameId) {
-    const character = CHARACTER_POOLS.waifu.find(c => c.id === 'w09');
+    const packIds = getAllPackIds();
+    const packType = packIds[0] || 'waifu';
+    const pool = CHARACTER_POOLS[packType] || [];
+
+    // Find a rare character for testing
+    const character = pool.find(c => c.rarity === 'r') || pool[0];
+    if (!character) {
+        throw new Error('No characters available for debug card');
+    }
+
     const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
     const frame = FRAME_TABLE.find(f => f.id === frameId);
     const holo = HOLO_TABLE.find(h => h.id === 'none');
@@ -206,19 +198,28 @@ function generateFrameDebugCard(frameId) {
         rarity: rarity,
         frame: frame,
         holo: holo,
-        combinedProb: 0, // Debug
-        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
-        characterPath: `assets/waifu/${character.id}.webp`,
+        combinedProb: 0,
+        backgroundPath: getBackgroundPath(packType, character.bg),
+        characterPath: getCharacterPath(packType, character.id),
         obtainedAt: Date.now()
     };
 }
 
 /**
  * Generate a DEBUG card for Holo Testing
- * All Kitsune Diviner ('w09'), white frame, specified holo
+ * Uses first available pack's first rare character
  */
 function generateHoloDebugCard(holoId) {
-    const character = CHARACTER_POOLS.waifu.find(c => c.id === 'w09');
+    const packIds = getAllPackIds();
+    const packType = packIds[0] || 'waifu';
+    const pool = CHARACTER_POOLS[packType] || [];
+
+    // Find a rare character for testing
+    const character = pool.find(c => c.rarity === 'r') || pool[0];
+    if (!character) {
+        throw new Error('No characters available for debug card');
+    }
+
     const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
     const frame = FRAME_TABLE.find(f => f.id === 'white');
     const holo = HOLO_TABLE.find(h => h.id === holoId);
@@ -231,9 +232,9 @@ function generateHoloDebugCard(holoId) {
         rarity: rarity,
         frame: frame,
         holo: holo,
-        combinedProb: 0, // Debug
-        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
-        characterPath: `assets/waifu/${character.id}.webp`,
+        combinedProb: 0,
+        backgroundPath: getBackgroundPath(packType, character.bg),
+        characterPath: getCharacterPath(packType, character.id),
         obtainedAt: Date.now()
     };
 }
@@ -243,15 +244,22 @@ function generateHoloDebugCard(holoId) {
  * Guaranteed UR/SSR tier with rainbow/black frames and rare holos
  */
 function generateDebugCard() {
-    // Alternate between the two UR characters
-    const urCharacters = [
-        CHARACTER_POOLS.waifu.find(c => c.id === 'w15'), // Goddess of Love
-        CHARACTER_POOLS.husbando.find(c => c.id === 'h15'), // Sun God Avatar
-        CHARACTER_POOLS.waifu.find(c => c.id === 'w14'), // Dragon Sorceress
-        CHARACTER_POOLS.husbando.find(c => c.id === 'h14'), // Demon Lord
-    ];
-    const character = urCharacters[Math.floor(Math.random() * urCharacters.length)];
-    const rarity = RARITY_TABLE.find(r => r.id === character.rarity);
+    // Collect all UR/SSR characters from all packs
+    const urCharacters = [];
+    for (const [packType, pool] of Object.entries(CHARACTER_POOLS)) {
+        for (const char of pool) {
+            if (char.rarity === 'ur' || char.rarity === 'ssr') {
+                urCharacters.push({ ...char, packType });
+            }
+        }
+    }
+
+    if (urCharacters.length === 0) {
+        throw new Error('No UR/SSR characters available for debug card');
+    }
+
+    const charData = urCharacters[Math.floor(Math.random() * urCharacters.length)];
+    const rarity = RARITY_TABLE.find(r => r.id === charData.rarity);
 
     // God pack: rare frames only (gold, rainbow, black)
     const rareFrames = ['gold', 'rainbow', 'black'];
@@ -263,26 +271,24 @@ function generateDebugCard() {
     const holoId = rareHolos[Math.floor(Math.random() * rareHolos.length)];
     const holo = HOLO_TABLE.find(h => h.id === holoId);
 
-    const packType = character.id.startsWith('w') ? 'waifu' : 'husbando';
-
     return {
         id: generateCardId(),
-        characterId: character.id,
-        name: character.name,
-        packType: packType,
+        characterId: charData.id,
+        name: charData.name,
+        packType: charData.packType,
         rarity: rarity,
         frame: frame,
         holo: holo,
-        combinedProb: 0, // Debug
-        backgroundPath: `assets/backgrounds/${character.bg}.webp`,
-        characterPath: `assets/${packType}/${character.id}.webp`,
+        combinedProb: 0,
+        backgroundPath: getBackgroundPath(charData.packType, charData.bg),
+        characterPath: getCharacterPath(charData.packType, charData.id),
         obtainedAt: Date.now()
     };
 }
 
 /**
  * Open a pack and generate cards
- * @param {string} packType - 'waifu', 'husbando', 'debug', 'debug-frame', 'debug-holo'
+ * @param {string} packType - Pack ID or debug type ('debug', 'debug-frame', 'debug-holo')
  * @returns {Array} Array of generated cards
  */
 export function openPack(packType) {

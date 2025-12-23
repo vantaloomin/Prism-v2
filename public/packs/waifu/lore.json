@@ -1,0 +1,107 @@
+{
+    "w01": {
+        "title": "The Village Herbalist",
+        "quote": "\"Even the wolves hesitate to tread on her garden, knowing the peace she brings to the woods is worth more than a meal.\"",
+        "origin": "Born in the quiet hamlet of Willowmere, she discovered her gift for herbal magic at a young age.",
+        "story": "What began as gathering herbs for her grandmother's remedies grew into a deep connection with the natural world. Now she tends to the village, healing ailments both physical and spiritual with her carefully prepared tinctures.",
+        "abilities": "Nature Attunement, Healing Touch, Potion Brewing"
+    },
+    "w02": {
+        "title": "The Novice Cleric",
+        "quote": "\"She prays so loudly the stained glass rattles, yet she has never seen the world outside the rectory walls.\"",
+        "origin": "Raised in the Temple of the Dawn, she took her vows at the earliest age permitted.",
+        "story": "Though still learning the ways of divine magic, her unwavering devotion has already caught the attention of the High Priestess. She believes that even the smallest prayer can move mountains.",
+        "abilities": "Divine Light, Minor Healing, Blessing of Protection"
+    },
+    "w03": {
+        "title": "The Steel Vanguard",
+        "quote": "\"They say her heart is made of the same iron as her breastplate; neither has ever been pierced by an enemy blade.\"",
+        "origin": "Forged in the crucible of the Northern Border Wars.",
+        "story": "She rose through the ranks not through noble birth, but through sheer determination and an unbreakable will. Her armor bears the dents of a hundred battles, each one a life saved.",
+        "abilities": "Defensive Stance, Shield Bash, Rally Cry"
+    },
+    "w04": {
+        "title": "The Elven Scribe",
+        "quote": "\"She knows the history of every dynasty for the last three thousand years, yet she still cannot find her quill when it is tucked behind her ear.\"",
+        "origin": "From the ancient libraries of Silverleaf Grove.",
+        "story": "She has spent three centuries cataloging the histories of mortal kingdoms, watching empires rise and fall from behind her quill. Her chronicles are considered the definitive record of the realm.",
+        "abilities": "Ancient Knowledge, Scroll Mastery, Memory Perfect"
+    },
+    "w05": {
+        "title": "The Dwarven Smith",
+        "quote": "\"The sparks from her anvil are the only stars to be seen in the deep mines, and she burns brighter than any of them.\"",
+        "origin": "Heir to the legendary Ironforge clan.",
+        "story": "She broke tradition by leaving the mountain halls to study surface metalworking techniques. Now she combines dwarven craftsmanship with exotic materials to create weapons of unparalleled quality.",
+        "abilities": "Master Crafting, Flame Mastery, Rune Enchantment"
+    },
+    "w06": {
+        "title": "The Nekomimi Baker",
+        "quote": "\"Her kneading technique is legendary, though customers do occasionally find a whisker in the sourdough.\"",
+        "origin": "Wandered into the village from the Eastern Provinces.",
+        "story": "With ears that twitch at every sound and an uncanny ability to predict what customers want, she has made the village bakery famous across three kingdoms. Her secret ingredient? A dash of feline intuition.",
+        "abilities": "Culinary Magic, Comfort Aura, Swift Reflexes"
+    },
+    "w07": {
+        "title": "The Royal Duelist",
+        "quote": "\"She fights not to kill, but to humiliate. A pristine uniform at the end of a match is her greatest trophy.\"",
+        "origin": "Champion of the Queen's Court.",
+        "story": "Undefeated in sixty-seven official duels, she serves as the Crown's judicial champion. Her blade has decided matters of law, honor, and succession—always with lethal grace.",
+        "abilities": "Perfect Stance, Riposte, Blade Dance"
+    },
+    "w08": {
+        "title": "The Forest Ranger",
+        "quote": "\"To track her is to chase the wind; by the time you spot the fletching of her arrow, she is already three trees away.\"",
+        "origin": "Guardian of the Emerald Expanse.",
+        "story": "She patrols the ancient woods where the boundary between the mortal realm and fae territories grows thin. Her arrows never miss, guided by the whispers of the trees themselves.",
+        "abilities": "Eagle Eye, Nature's Ally, Shadow Step"
+    },
+    "w09": {
+        "title": "The Kitsune Diviner",
+        "quote": "\"Never ask a fox for the truth unless you are prepared to trade your secrets for a riddle that haunts you.\"",
+        "origin": "Last daughter of the Nine-Tailed Shrine.",
+        "story": "Her three tails mark her as a fox spirit of considerable age and power. She offers prophecies to those brave enough to seek her out, though her answers often come wrapped in riddles.",
+        "abilities": "Future Sight, Illusion Weaving, Spirit Fox Form"
+    },
+    "w10": {
+        "title": "The Tavern Brawler",
+        "quote": "\"The local carpenter owes his entire fortune to the number of tables she breaks on a typical Friday night.\"",
+        "origin": "Rose to fame in the fighting pits of Port Crimson.",
+        "story": "What started as fighting for coin became a legend. She never uses weapons—claims they're unsporting. Her bare-knuckle style has humbled knights and monsters alike.",
+        "abilities": "Iron Fists, Thick Skin, Battle Fury"
+    },
+    "w11": {
+        "title": "The Shadow Assassin",
+        "quote": "\"She is a whisper in the dark, a cold touch on the neck, and then... absolute silence.\"",
+        "origin": "Trained in the Obsidian Citadel.",
+        "story": "She is whispered about in courts and back alleys alike—a phantom who has never failed a contract. None have seen her face and lived to describe it.",
+        "abilities": "Shadow Meld, Death Strike, Poison Mastery"
+    },
+    "w12": {
+        "title": "The Dancer of the Dunes",
+        "quote": "\"Kings have traded entire cities just to secure front-row seats to the Dance of the Seven Veils.\"",
+        "origin": "Chosen vessel of the Sand Goddess.",
+        "story": "Her dance summons sandstorms and parts dunes. What appears as performance is actually powerful elemental magic, passed down through an unbroken line of sacred dancers.",
+        "abilities": "Sand Dance, Desert Wind, Mirage Step"
+    },
+    "w13": {
+        "title": "The Barbarian Queen",
+        "quote": "\"She wears the bitter northern frost as comfortably as a southern lady wears silk, and she cuts twice as deep.\"",
+        "origin": "United the warring Mountain Clans through blood and fire.",
+        "story": "She carved her throne from the bones of those who underestimated her. Now she leads the largest horde the north has ever seen, her war cry echoing across frozen peaks.",
+        "abilities": "Berserker Rage, War Cry, Indomitable Will"
+    },
+    "w14": {
+        "title": "The Dragon Sorceress",
+        "quote": "\"Her scales are harder than diamond, and her vanity is twice as unbreakable as her scales.\"",
+        "origin": "Born from the pact between a mortal witch and an elder wyrm.",
+        "story": "Half-human, half-dragon, she commands power that terrifies even archmages. The scales that mark her skin shimmer with contained flames, and her eyes hold the wisdom of ages.",
+        "abilities": "Dragon Fire, Draconic Form, Ancient Magic"
+    },
+    "w15": {
+        "title": "The Goddess of Love",
+        "quote": "\"To look upon her is to forget one's own name; mortals simply break under the weight of such perfection.\"",
+        "origin": "Descended from the Celestial Realm.",
+        "story": "She walks among mortals to remind them of love's true nature—not possession, but liberation. Her mere presence can mend broken hearts or kindle flames that burn for eternity.",
+        "abilities": "Divine Love, Heart's Truth, Eternal Bond"
+    }
+}

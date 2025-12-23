@@ -1,0 +1,107 @@
+{
+    "h01": {
+        "title": "The City Watchman",
+        "quote": "\"He stands as still as a statue, and honestly, the pigeons can't tell the difference either.\"",
+        "origin": "Veteran of the Capital Guard.",
+        "story": "Twenty years walking the midnight streets have taught him every shadow, every shortcut, every criminal's trick. He's the one they send when things get complicated.",
+        "abilities": "Street Wisdom, Night Vision, Calm Authority"
+    },
+    "h02": {
+        "title": "The Traveling Merchant",
+        "quote": "\"If you have a coin, he has a ware. If you have two coins, he has a 'rare ancient artifact' made just yesterday.\"",
+        "origin": "Former member of the Silk Road Consortium.",
+        "story": "His cart has been through thirty kingdoms, and he's survived bandits, wars, and worse. There's nothing he can't acquire—for the right price.",
+        "abilities": "Silver Tongue, Trade Secrets, Hidden Inventory"
+    },
+    "h03": {
+        "title": "The Court Mage",
+        "quote": "\"He spends more time conversing with ancient spirits in the ether than he does acknowledging the King he supposedly serves.\"",
+        "origin": "Graduated top of his class at the Arcane Academy.",
+        "story": "He advises the throne on matters magical and mundane, but his true research remains hidden in tower chambers that none may enter. Some say he seeks immortality itself.",
+        "abilities": "Arcane Mastery, Court Intrigue, Spell Weaving"
+    },
+    "h04": {
+        "title": "The Halfling Bard",
+        "quote": "\"He has been kicked out of every tavern in the kingdom, usually by jealous husbands who didn't appreciate his ballads.\"",
+        "origin": "Born in the wandering Sweetwater Caravan.",
+        "story": "His songs have started revolutions and ended wars. He travels with adventurers, chronicling their deeds—and occasionally saving them with a well-timed ballad.",
+        "abilities": "Inspiring Song, Tale Spinning, Lucky Charm"
+    },
+    "h05": {
+        "title": "The Stable Master",
+        "quote": "\"The horses listen to him better than the knights who ride them do; he speaks a language of patience they understand.\"",
+        "origin": "Raised among the wild herds of the Eastern Plains.",
+        "story": "He speaks to horses in a language older than words. Under his care, the kingdom's cavalry has become legendary, and even the wildest stallions become gentle.",
+        "abilities": "Animal Bond, Horse Whisper, Wild Empathy"
+    },
+    "h06": {
+        "title": "The Alchemist",
+        "quote": "\"His neighbors worry less about the explosions and more about the maniacal laughter that usually follows them.\"",
+        "origin": "Self-taught genius from the Undercity.",
+        "story": "His explosions have destroyed three laboratories, but his discoveries have saved thousands. He walks the line between brilliant and mad with gleeful abandon.",
+        "abilities": "Potion Craft, Explosive Mixtures, Transmutation"
+    },
+    "h07": {
+        "title": "The Elven Ranger",
+        "quote": "\"He speaks the language of the leaves, a dialect far older and wiser than Common tongue.\"",
+        "origin": "Sentinel of the Twilight Forest.",
+        "story": "He has guarded the same stretch of ancient woodland since before the human kingdoms existed. His arrows find evil hearts across impossible distances.",
+        "abilities": "Eternal Vigilance, Perfect Shot, Forest Soul"
+    },
+    "h08": {
+        "title": "The Pirate First Mate",
+        "quote": "\"The sea is the only mistress he has ever remained faithful to, though certainly not for lack of trying.\"",
+        "origin": "Former naval officer turned privateer.",
+        "story": "He left the navy when they hanged an innocent crew. Now he sails under the black flag, but his code of honor remains unbroken. He only takes from those who deserve to lose.",
+        "abilities": "Sea Legs, Cutlass Mastery, Loyal Crew"
+    },
+    "h09": {
+        "title": "The Martial Monk",
+        "quote": "\"His body is a temple, and he defends the gates with a disciplined fury that belies his silent vows.\"",
+        "origin": "Trained at the Monastery of the Frozen Peak.",
+        "story": "He spent thirty years in meditation before throwing his first punch. Now his strikes carry the weight of absolute certainty, and his defense is like trying to hit flowing water.",
+        "abilities": "Inner Peace, Flowing Strike, Iron Body"
+    },
+    "h10": {
+        "title": "The Wolf-Kin Warrior",
+        "quote": "\"Loyalty is written in his blood, but so is the hunger to chase down anything that runs from him.\"",
+        "origin": "Born under the Blood Moon, blessed by the Wolf Spirit.",
+        "story": "He walks between worlds—human enough to wear armor, wolf enough to hunt by moonlight. His pack considers him their greatest hunter, and his enemies consider him their worst nightmare.",
+        "abilities": "Pack Tactics, Lunar Strength, Predator Senses"
+    },
+    "h11": {
+        "title": "The Gladiator Champion",
+        "quote": "\"The crowd does not cheer for blood; they cheer for the flex of his bicep as he delivers the final blow.\"",
+        "origin": "Rose from slave to legend in the Grand Colosseum.",
+        "story": "He won his freedom in the arena, but chose to stay. Now he fights for those who cannot—a symbol that even chains can be broken with enough determination.",
+        "abilities": "Crowd Favorite, Combat Veteran, Unbreakable Spirit"
+    },
+    "h12": {
+        "title": "The Orc Warlord",
+        "quote": "\"Civilization is a cage. He is the hammer that breaks the bars.\"",
+        "origin": "First Orc to unite the Scattered Tribes.",
+        "story": "He has fought against every stereotype of his people, proving that orcs can build as well as break. His confederation has brought peace to lands that knew only war.",
+        "abilities": "War Leader, Tribal Unity, Devastating Charge"
+    },
+    "h13": {
+        "title": "The Dark Elf Warlock",
+        "quote": "\"He promised power for a price, but looking into his eyes, many forgot to ask what the cost would be until it was too late.\"",
+        "origin": "Exiled from the Underdark for seeking forbidden knowledge.",
+        "story": "He bargained with entities that would drive lesser minds to madness. The power he gained cost him everything—his home, his kin, his left eye. He considers it a fair trade.",
+        "abilities": "Shadow Pact, Eldritch Blast, Dark Vision"
+    },
+    "h14": {
+        "title": "The Demon Lord",
+        "quote": "\"He does not need to conquer kingdoms with armies; he simply walks in, and the desperate fall to their knees.\"",
+        "origin": "Ancient ruler of the Seventh Hell.",
+        "story": "He walks the mortal plane not to conquer, but to observe. What he finds has begun to change him in ways that concern his demonic kin. Some say he's developing... mercy.",
+        "abilities": "Hellfire Command, Demonic Presence, Soul Sight"
+    },
+    "h15": {
+        "title": "The Sun God Avatar",
+        "quote": "\"He is not merely bright; he is the sun itself, and we are but moths drawn helplessly to the incineration.\"",
+        "origin": "Physical manifestation of the Solar Divine.",
+        "story": "When the darkness grew too deep, the Sun God himself descended. He has taken mortal form to walk among his worshippers, his radiance humbled but never diminished.",
+        "abilities": "Solar Radiance, Divine Judgment, Eternal Light"
+    }
+}

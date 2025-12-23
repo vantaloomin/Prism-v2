@@ -1,41 +1,32 @@
 /**
- * PROJECT PRISM - Focus Module
+ * AETHAL SAGA - Focus Module
  * Card focus/inspection overlay
  */
 
 import { createCardElement, calculateOddsString } from './card.js';
 import { initShaderCanvas, destroyShaderCanvasForCard } from './engines/shader-engine.js';
 import { initShadersForVisibleCards } from './collection.js';
+import { getCharacterLore } from './engines/pack-loader.js';
 
 // ============================================
 // FOCUS MODE STATE
 // ============================================
 
 let focusedCardData = null;
-let loreCache = null;
 
 // ============================================
 // LORE DATA
 // ============================================
 
 /**
- * Load lore data from JSON file
+ * Load lore data for a character from their pack's lore.json
+ * @param {string} packType - Pack ID (e.g., 'waifu', 'husbando')
  * @param {string} characterId - Character ID (e.g., 'w01', 'h15')
- * @returns {Object|null} Lore data for the character
+ * @returns {Promise<Object|null>} Lore data for the character
  */
-async function loadLoreData(characterId) {
-    // Load cache if not loaded
-    if (!loreCache) {
-        try {
-            const response = await fetch('assets/lore/characters.json');
-            loreCache = await response.json();
-        } catch (error) {
-            console.warn('Could not load lore data:', error);
-            loreCache = {};
-        }
-    }
-
-    return loreCache[characterId] || null;
+async function loadLoreData(packType, characterId) {
+    // Use pack-loader to get lore from the pack's lore.json
+    return await getCharacterLore(packType, characterId);
 }
 
 // ============================================
@@ -66,8 +57,8 @@ export async function openFocusMode(cardData) {
         initShaderCanvas(focusedCard, cardData, true); // focusMode = true for mouse tracking
     }, 100);
 
-    // Load lore data
-    const lore = await loadLoreData(cardData.characterId);
+    // Load lore data from the pack's lore.json
+    const lore = await loadLoreData(cardData.packType, cardData.characterId);
 
     // Populate info panel with tabs
     infoPanel.innerHTML = `

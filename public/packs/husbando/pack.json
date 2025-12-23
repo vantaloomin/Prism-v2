@@ -1,0 +1,100 @@
+{
+    "id": "husbando",
+    "name": "Husbando Pack",
+    "description": "Male character collection featuring heroes, warriors, and legendary figures",
+    "cost": 100,
+    "enabled": true,
+    "order": 2,
+    "characters": [
+        {
+            "id": "h01",
+            "name": "The City Watchman",
+            "background": "bg_city",
+            "rarity": "c"
+        },
+        {
+            "id": "h02",
+            "name": "The Traveling Merchant",
+            "background": "bg_road",
+            "rarity": "c"
+        },
+        {
+            "id": "h03",
+            "name": "The Court Mage",
+            "background": "bg_castle",
+            "rarity": "c"
+        },
+        {
+            "id": "h04",
+            "name": "The Halfling Bard",
+            "background": "bg_tavern",
+            "rarity": "c"
+        },
+        {
+            "id": "h05",
+            "name": "The Stable Master",
+            "background": "bg_village",
+            "rarity": "c"
+        },
+        {
+            "id": "h06",
+            "name": "The Alchemist",
+            "background": "bg_laboratory",
+            "rarity": "c"
+        },
+        {
+            "id": "h07",
+            "name": "The Elven Ranger",
+            "background": "bg_forest",
+            "rarity": "r"
+        },
+        {
+            "id": "h08",
+            "name": "The Pirate First Mate",
+            "background": "bg_ocean",
+            "rarity": "r"
+        },
+        {
+            "id": "h09",
+            "name": "The Martial Monk",
+            "background": "bg_dojo",
+            "rarity": "r"
+        },
+        {
+            "id": "h10",
+            "name": "The Wolf-Kin Warrior",
+            "background": "bg_snow",
+            "rarity": "r"
+        },
+        {
+            "id": "h11",
+            "name": "The Gladiator Champion",
+            "background": "bg_arena",
+            "rarity": "sr"
+        },
+        {
+            "id": "h12",
+            "name": "The Orc Warlord",
+            "background": "bg_battlefield",
+            "rarity": "sr"
+        },
+        {
+            "id": "h13",
+            "name": "The Dark Elf Warlock",
+            "background": "bg_ruins",
+            "rarity": "sr"
+        },
+        {
+            "id": "h14",
+            "name": "The Demon Lord",
+            "background": "bg_inferno",
+            "rarity": "ssr"
+        },
+        {
+            "id": "h15",
+            "name": "The Sun God Avatar",
+            "background": "bg_celestial",
+            "rarity": "ur"
+        }
+    ]
+}

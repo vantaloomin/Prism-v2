@@ -120,35 +120,10 @@
             <section class="tab-content active" id="tab-content-shop">
                 <div class="game-stage" id="game-stage">
                     <div class="pack-shop" id="pack-shop">
-                        <div class="pack-buttons">
-                            <button class="pack-button waifu-pack" id="btn-waifu-pack" data-pack-type="waifu"
-                                data-cost="100">
-                                <div class="pack-icon"><img src="/assets/ui/pack_waifu.webp" alt="Waifu Pack"
-                                        style="width: 300px; height: auto; object-fit: contain;"></div>
-                            </button>
-                            <button class="pack-button husbando-pack" id="btn-husbando-pack" data-pack-type="husbando"
-                                data-cost="100">
-                                <div class="pack-icon"><img src="/assets/ui/pack_husbando.webp" alt="Husbando Pack"
-                                        style="width: 300px; height: auto; object-fit: contain;"></div>
-                            </button>
-                            <button class="pack-button debug-pack-btn" id="btn-debug-pack" data-pack-type="debug"
-                                data-cost="100"
-                                style="display: none; border-color: #ffd700; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(50,40,0,0.9));">
-                                <div class="pack-icon">⚡</div>
-                                <div class="pack-name">God Pack</div>
-                            </button>
-                            <button class="pack-button debug-pack-btn" id="btn-debug-frame-pack"
-                                data-pack-type="debug-frame" data-cost="50"
-                                style="display: none; border-color: #a855f7; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(40,0,50,0.9));">
-                                <div class="pack-icon">🖼️</div>
-                                <div class="pack-name">Frame Test</div>
-                            </button>
-                            <button class="pack-button debug-pack-btn" id="btn-debug-holo-pack"
-                                data-pack-type="debug-holo" data-cost="150"
-                                style="display: none; border-color: #3b82f6; background: linear-gradient(145deg, rgba(20,20,20,0.9), rgba(0,40,50,0.9));">
-                                <div class="pack-icon">✨</div>
-                                <div class="pack-name">Holo Test</div>
-                            </button>
+                        <!-- Pack buttons are generated dynamically by shop.js -->
+                        <div class="pack-buttons" id="pack-buttons-container">
+                            <!-- Loading indicator shown until packs load -->
+                            <div class="pack-loading">Loading packs...</div>
                         </div>
                     </div>
 

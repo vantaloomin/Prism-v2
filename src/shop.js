@@ -1,10 +1,11 @@
 /**
- * PROJECT PRISM - Shop Module
- * Pack opening and shop functionality
+ * AETHAL SAGA - Shop Module
+ * Pack opening and shop functionality with dynamic pack loading
  */
 
 import { gsap } from 'gsap';
 import { CONFIG, openPack } from './engines/pack-logic.js';
+import { getAllEnabledPacks, getPackIconPath, getPackById } from './engines/pack-loader.js';
 import { gameState, saveGame, updateCreditsDisplay } from './state.js';
 import { createCardElement } from './card.js';
 import {
@@ -19,19 +20,159 @@ import { initShaderCanvas, destroyShaderCanvas } from './engines/shader-engine.j
 import { renderCollection } from './collection.js';
 
 // ============================================
+// MODULE STATE
+// ============================================
+
+let currentFocusCallback = null;
+
+// ============================================
+// PACK SHOP INITIALIZATION
+// ============================================
+
+/**
+ * Initialize the pack shop with dynamically generated buttons
+ * @param {Function} onFocusClick - Callback for focus mode
+ */
+export function initPackShop(onFocusClick) {
+    currentFocusCallback = onFocusClick;
+
+    const container = document.getElementById('pack-buttons-container');
+    if (!container) {
+        console.error('Pack buttons container not found');
+        return;
+    }
+
+    // Clear existing buttons
+    container.innerHTML = '';
+
+    // Get enabled packs and generate buttons
+    const packs = getAllEnabledPacks();
+
+    packs.forEach(pack => {
+        const button = createPackButton(pack);
+        container.appendChild(button);
+    });
+
+    // Add debug pack buttons (always at the end)
+    addDebugPackButtons(container);
+
+    console.log(`✦ Pack Shop initialized with ${packs.length} packs ✦`);
+}
+
+/**
+ * Create a pack button element
+ * @param {Object} pack - Pack data from manifest
+ * @returns {HTMLElement} Button element
+ */
+function createPackButton(pack) {
+    const button = document.createElement('button');
+    button.className = `pack-button ${pack.id}-pack`;
+    button.id = `btn-${pack.id}-pack`;
+    button.dataset.packType = pack.id;
+    button.dataset.cost = pack.cost || CONFIG.PACK_COST;
+
+    const iconPath = getPackIconPath(pack.id);
+    const cost = pack.cost || CONFIG.PACK_COST;
+
+    button.innerHTML = `
+        <div class="pack-icon"><img src="${iconPath}" alt="${pack.name}" style="width: 300px; height: auto; object-fit: contain;" onerror="this.style.display='none'; this.parentElement.textContent='📦';"></div>
+    `;
+
+    button.addEventListener('click', () => {
+        handlePackPurchase(pack.id, currentFocusCallback, cost);
+    });
+
+    // Update disabled state based on credits
+    updatePackButtonState(button, cost);
+
+    return button;
+}
+
+/**
+ * Add debug pack buttons to the container
+ * @param {HTMLElement} container - Container element
+ */
+function addDebugPackButtons(container) {
+    const debugPacks = [
+        { id: 'debug', name: 'God Pack', emoji: '⚡', cost: CONFIG.PACK_COST, borderColor: '#ffd700', bg: 'rgba(50,40,0,0.9)' },
+        { id: 'debug-frame', name: 'Frame Test', emoji: '🖼️', cost: CONFIG.FRAME_DEBUG_COST, borderColor: '#a855f7', bg: 'rgba(40,0,50,0.9)' },
+        { id: 'debug-holo', name: 'Holo Test', emoji: '✨', cost: CONFIG.HOLO_DEBUG_COST, borderColor: '#3b82f6', bg: 'rgba(0,40,50,0.9)' }
+    ];
+
+    debugPacks.forEach(debug => {
+        const button = document.createElement('button');
+        button.className = 'pack-button debug-pack-btn';
+        button.id = `btn-${debug.id}-pack`;
+        button.dataset.packType = debug.id;
+        button.dataset.cost = debug.cost;
+        button.style.borderColor = debug.borderColor;
+        button.style.background = `linear-gradient(145deg, rgba(20,20,20,0.9), ${debug.bg})`;
+
+        button.innerHTML = `
+            <div class="pack-icon">${debug.emoji}</div>
+            <div class="pack-name">${debug.name}</div>
+        `;
+
+        button.addEventListener('click', () => {
+            handlePackPurchase(debug.id, currentFocusCallback, debug.cost);
+        });
+
+        // Hide by default unless debug mode is enabled
+        const debugMode = localStorage.getItem('debugMode') === 'true';
+        button.style.display = debugMode ? '' : 'none';
+
+        container.appendChild(button);
+    });
+}
+
+/**
+ * Update pack button disabled state based on credits
+ * @param {HTMLElement} button - Button element
+ * @param {number} cost - Pack cost
+ */
+function updatePackButtonState(button, cost) {
+    button.disabled = gameState.credits < cost;
+}
+
+/**
+ * Update all pack button states (call after credits change)
+ */
+export function updateAllPackButtonStates() {
+    const packs = getAllEnabledPacks();
+
+    packs.forEach(pack => {
+        const button = document.getElementById(`btn-${pack.id}-pack`);
+        if (button) {
+            updatePackButtonState(button, pack.cost || CONFIG.PACK_COST);
+        }
+    });
+
+    // Update debug buttons
+    const debugCosts = {
+        'debug': CONFIG.PACK_COST,
+        'debug-frame': CONFIG.FRAME_DEBUG_COST,
+        'debug-holo': CONFIG.HOLO_DEBUG_COST
+    };
+
+    for (const [id, cost] of Object.entries(debugCosts)) {
+        const button = document.getElementById(`btn-${id}-pack`);
+        if (button) {
+            updatePackButtonState(button, cost);
+        }
+    }
+}
+
+// ============================================
 // PACK OPENING SEQUENCE
 // ============================================
 
 /**
  * Handle pack purchase and opening
- * @param {string} packType - 'waifu' or 'husbando'
+ * @param {string} packType - Pack ID or debug type
  * @param {Function} onFocusClick - Callback for focus mode
+ * @param {number} cost - Cost of the pack
  */
-export async function handlePackPurchase(packType, onFocusClick) {
-    let cost = CONFIG.PACK_COST;
-    if (packType === 'debug-frame') cost = CONFIG.FRAME_DEBUG_COST;
-    if (packType === 'debug-holo') cost = CONFIG.HOLO_DEBUG_COST;
-
+export async function handlePackPurchase(packType, onFocusClick, cost = CONFIG.PACK_COST) {
     if (gameState.credits < cost) {
         console.log('Not enough credits!');
         bounceFeedback(document.getElementById('credits-amount'));
@@ -41,6 +182,7 @@ export async function handlePackPurchase(packType, onFocusClick) {
     // Deduct credits
     gameState.credits -= cost;
     updateCreditsDisplay();
+    updateAllPackButtonStates();
 
     // Hide shop, show pack animation
     const packShop = document.getElementById('pack-shop');
@@ -51,8 +193,11 @@ export async function handlePackPurchase(packType, onFocusClick) {
     packContainer.hidden = false;
 
     // Set pack image based on pack type
-    if (packType === 'waifu' || packType === 'husbando') {
-        const imgPath = `${import.meta.env.BASE_URL}assets/ui/pack_${packType}.webp`;
+    const isDebugPack = packType.startsWith('debug');
+
+    if (!isDebugPack) {
+        // Regular pack - use pack icon
+        const imgPath = getPackIconPath(packType);
         packImage.innerHTML = `<img src="${imgPath}" alt="${packType} Pack" style="max-width: 300px; height: auto; border-radius: 12px;">`;
         packImage.style.background = 'transparent';
     } else {
@@ -62,6 +207,7 @@ export async function handlePackPurchase(packType, onFocusClick) {
             'debug-frame': '🖼️',
             'debug-holo': '✨'
         };
+        packImage.innerHTML = '';
         packImage.textContent = emojiMap[packType] || '🎁';
         packImage.style.background = 'linear-gradient(145deg, var(--accent-primary), #ec4899)';
     }
@@ -189,4 +335,14 @@ export function showPackShop() {
 
     displayArea.innerHTML = '';
     packShop.hidden = false;
+}
+
+/**
+ * Toggle debug pack visibility
+ * @param {boolean} show - Whether to show debug packs
+ */
+export function toggleDebugPacks(show) {
+    document.querySelectorAll('.debug-pack-btn').forEach(btn => {
+        btn.style.display = show ? '' : 'none';
+    });
 }
