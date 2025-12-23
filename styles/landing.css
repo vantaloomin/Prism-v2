@@ -29,7 +29,7 @@
 
 /* Background with animated gradient */
 .landing-bg {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background:
         radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),

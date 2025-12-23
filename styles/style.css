@@ -55,11 +55,16 @@
     padding: 0;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    min-height: 100vh;
+    min-height: 100%;
+    height: 100%;
     overflow-x: hidden;
 }
 
