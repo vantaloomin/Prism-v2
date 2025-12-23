@@ -816,3 +816,178 @@ body {
     margin-left: 2px;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
+
+/* ============================================
+   MOBILE VIEWPORT BLOCKER
+   ============================================ */
+
+/* Default: hidden on desktop */
+.mobile-blocker {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1025 50%, #0a0a0f 100%);
+    overflow: hidden;
+}
+
+/* Animated background pattern */
+.mobile-blocker::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+    animation: blocker-pulse 8s ease-in-out infinite;
+}
+
+@keyframes blocker-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Floating particles effect */
+.mobile-blocker::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 30% 70%, rgba(139, 92, 246, 0.4) 50%, transparent 50%),
+        radial-gradient(1px 1px at 50% 40%, rgba(255, 255, 255, 0.2) 50%, transparent 50%),
+        radial-gradient(2px 2px at 70% 25%, rgba(236, 72, 153, 0.3) 50%, transparent 50%),
+        radial-gradient(1px 1px at 90% 60%, rgba(255, 255, 255, 0.25) 50%, transparent 50%),
+        radial-gradient(2px 2px at 20% 90%, rgba(59, 130, 246, 0.35) 50%, transparent 50%),
+        radial-gradient(1px 1px at 80% 85%, rgba(255, 255, 255, 0.2) 50%, transparent 50%);
+    animation: blocker-stars 20s linear infinite;
+}
+
+@keyframes blocker-stars {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+
+.mobile-blocker-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.mobile-blocker-icon {
+    margin-bottom: 24px;
+    animation: blocker-float 3s ease-in-out infinite;
+}
+
+@keyframes blocker-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.mobile-blocker-logo {
+    width: 120px;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.5));
+}
+
+.mobile-blocker-brand {
+    font-family: 'MedievalSharp', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-secondary) 0%, #ec4899 50%, var(--accent-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.mobile-blocker-title {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.mobile-blocker-message {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 320px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.mobile-blocker-hint {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    max-width: 280px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.mobile-blocker-specs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+.mobile-blocker-specs span {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Show on small viewports (below 1024px width OR 768px height) */
+@media (max-width: 1023px),
+(max-height: 767px) {
+    .mobile-blocker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hide all other content */
+    .landing-page,
+    .top-bar,
+    .main-content,
+    .bottom-nav,
+    .card-focus-overlay,
+    .settings-overlay,
+    .confirm-overlay {
+        display: none !important;
+    }
+}
