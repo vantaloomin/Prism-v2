@@ -7,6 +7,7 @@
 
 import { GAMES_CONFIG } from './games.js';
 import { gameState as appState, saveGame, updateCreditsDisplay } from '../state.js';
+import { playSFX } from '../audio-manager.js';
 
 // ============================================
 // GAME CONSTANTS
@@ -365,8 +366,9 @@ function selectElement(element) {
         // AI makes choice
         gameState.aiChoice = getAIChoice();
 
-        // Show AI's element avatar
+        // Show AI's element avatar and play sound
         setAvatar(ELEMENTS[gameState.aiChoice].avatar);
+        playSFX(`element_${gameState.aiChoice}`);
         setDialogue(`I choose ${ELEMENTS[gameState.aiChoice].name}!`);
 
         // Determine result after a short delay

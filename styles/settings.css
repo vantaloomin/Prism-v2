@@ -89,7 +89,85 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Settings Content */
+/* ============================================
+   TAB NAVIGATION
+   ============================================ */
+
+.settings-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.settings-tab {
+    flex: 1;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.settings-tab:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.settings-tab.active {
+    color: white;
+    background: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================
+   TAB CONTENT (Scrollable)
+   ============================================ */
+
+.settings-tab-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-right: -8px;
+}
+
+/* Custom scrollbar for settings */
+.settings-tab-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.settings-tab-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.settings-tab-content::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 3px;
+}
+
+.settings-tab-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+
+/* Tab Panels */
+.settings-panel {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.settings-panel.active {
+    display: flex;
+}
+
+/* Settings Content (legacy - keep for compatibility) */
 .settings-content {
     display: flex;
     flex-direction: column;
@@ -201,6 +279,98 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
     margin: 5px 0;
+}
+
+/* Section Header (for Audio section) */
+.settings-section-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+}
+
+/* Volume Slider Row */
+.settings-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 20px 12px 20px;
+    margin-top: -10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 12px 12px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    border-top: none;
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.settings-volume-row.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.settings-volume-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    min-width: 50px;
+}
+
+.settings-volume-value {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    min-width: 40px;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* Range Slider Styling */
+.settings-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.settings-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.settings-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.6);
+}
+
+.settings-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+}
+
+/* Audio item styling - rounded bottom when slider is hidden */
+.settings-audio-item {
+    border-radius: 12px;
+    margin-bottom: 0;
 }
 
 /* Responsive */

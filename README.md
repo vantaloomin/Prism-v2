@@ -56,8 +56,8 @@ Earn credits by battling an AI wizard in elemental combat. Fire beats Earth. Ear
 ### Run Locally
 
 ```bash
-git clone https://github.com/your-username/prism-v2.git
-cd prism-v2
+git clone https://github.com/vantaloomin/Prism-v2.git
+cd Prism-v2
 npm install
 npm run dev
 ```

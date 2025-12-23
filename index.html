@@ -264,40 +264,116 @@
                 </div>
                 <button class="settings-close" id="settings-close">✕</button>
             </div>
-            <div class="settings-content">
-                <div class="settings-item">
-                    <div class="settings-item-info">
-                        <span class="settings-item-label">Animations</span>
-                        <span class="settings-item-desc">Enable holographic and visual effects</span>
-                    </div>
-                    <label class="settings-toggle">
-                        <input type="checkbox" id="toggle-animations" checked>
-                        <div class="toggle-track">
-                            <div class="toggle-thumb"></div>
+
+            <!-- Tab Navigation -->
+            <div class="settings-tabs">
+                <button class="settings-tab active" data-settings-tab="general">General</button>
+                <button class="settings-tab" data-settings-tab="audio">Audio</button>
+                <button class="settings-tab" data-settings-tab="data">Data</button>
+            </div>
+
+            <!-- Tab Content (scrollable) -->
+            <div class="settings-tab-content">
+
+                <!-- General Tab -->
+                <div class="settings-panel active" data-settings-panel="general">
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Animations</span>
+                            <span class="settings-item-desc">Enable holographic and visual effects</span>
                         </div>
-                    </label>
-                </div>
-                <div class="settings-divider"></div>
-                <div class="settings-item">
-                    <div class="settings-item-info">
-                        <span class="settings-item-label">Debug Mode</span>
-                        <span class="settings-item-desc">Show debug packs (God, Frame, Holo)</span>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="toggle-animations" checked>
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
                     </div>
-                    <label class="settings-toggle">
-                        <input type="checkbox" id="toggle-debug-mode">
-                        <div class="toggle-track">
-                            <div class="toggle-thumb"></div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Debug Mode</span>
+                            <span class="settings-item-desc">Show debug packs (God, Frame, Holo)</span>
                         </div>
-                    </label>
-                </div>
-                <div class="settings-divider"></div>
-                <div class="settings-item">
-                    <div class="settings-item-info">
-                        <span class="settings-item-label">Reset Save Data</span>
-                        <span class="settings-item-desc">Clear all cards and reset credits</span>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="toggle-debug-mode">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
                     </div>
-                    <button class="settings-btn-danger" id="btn-reset">Reset</button>
                 </div>
+
+                <!-- Audio Tab -->
+                <div class="settings-panel" data-settings-panel="audio">
+                    <!-- SFX Toggle + Slider -->
+                    <div class="settings-item settings-audio-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Sound Effects</span>
+                            <span class="settings-item-desc">Game sounds and UI feedback</span>
+                        </div>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="toggle-sfx">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="settings-volume-row" id="sfx-volume-row">
+                        <span class="settings-volume-label">Volume</span>
+                        <input type="range" class="settings-slider" id="slider-sfx" min="0" max="100" value="80">
+                        <span class="settings-volume-value" id="sfx-volume-value">80%</span>
+                    </div>
+
+                    <!-- Voice Toggle + Slider -->
+                    <div class="settings-item settings-audio-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Voice</span>
+                            <span class="settings-item-desc">Character voiceover lines</span>
+                        </div>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="toggle-voice">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="settings-volume-row" id="voice-volume-row">
+                        <span class="settings-volume-label">Volume</span>
+                        <input type="range" class="settings-slider" id="slider-voice" min="0" max="100" value="80">
+                        <span class="settings-volume-value" id="voice-volume-value">80%</span>
+                    </div>
+
+                    <!-- Music Toggle + Slider -->
+                    <div class="settings-item settings-audio-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Music</span>
+                            <span class="settings-item-desc">Background music and ambiance</span>
+                        </div>
+                        <label class="settings-toggle">
+                            <input type="checkbox" id="toggle-music">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="settings-volume-row" id="music-volume-row">
+                        <span class="settings-volume-label">Volume</span>
+                        <input type="range" class="settings-slider" id="slider-music" min="0" max="100" value="80">
+                        <span class="settings-volume-value" id="music-volume-value">80%</span>
+                    </div>
+                </div>
+
+                <!-- Data Tab -->
+                <div class="settings-panel" data-settings-panel="data">
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Reset Save Data</span>
+                            <span class="settings-item-desc">Clear all cards and reset credits</span>
+                        </div>
+                        <button class="settings-btn-danger" id="btn-reset">Reset</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
