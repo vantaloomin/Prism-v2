@@ -384,6 +384,28 @@
    RESPONSIVE
    ============================================ */
 
+/* Height-constrained viewports (zoomed desktops, shorter monitors) */
+@media (max-height: 900px) {
+    .landing-logo {
+        max-width: min(800px, 80vw);
+        max-height: 25vh;
+    }
+
+    .menu-card {
+        height: clamp(180px, 28vh, 280px);
+    }
+
+    .menu-card-icon {
+        width: clamp(60px, 9vh, 100px);
+        height: clamp(60px, 9vh, 100px);
+        font-size: clamp(2.5rem, 6vh, 4rem);
+    }
+
+    .landing-title {
+        margin-bottom: clamp(15px, 3vh, 40px);
+    }
+}
+
 @media (max-width: 1024px) {
     .landing-menu {
         gap: 25px;

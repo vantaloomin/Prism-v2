@@ -171,3 +171,33 @@ export function initShadersForVisibleCards() {
         }
     });
 }
+
+/**
+ * Initialize the scroll-to-top button functionality
+ * Shows button when scrolled past threshold, hides when at top
+ */
+export function initScrollToTop() {
+    const collectionTab = document.getElementById('tab-content-collection');
+    const scrollBtn = document.getElementById('scroll-to-top-btn');
+    
+    if (!collectionTab || !scrollBtn) return;
+
+    const SCROLL_THRESHOLD = 200;
+
+    // Listen for scroll on the collection tab (it has overflow-y: auto)
+    collectionTab.addEventListener('scroll', () => {
+        if (collectionTab.scrollTop > SCROLL_THRESHOLD) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
+        }
+    });
+
+    // Handle click - smooth scroll to top
+    scrollBtn.addEventListener('click', () => {
+        collectionTab.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}

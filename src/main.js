@@ -7,7 +7,7 @@
 import { CONFIG, rollRarity, rollFrame, rollHolo } from './engines/pack-logic.js';
 import { gameState, loadGame, saveGame, resetSave, updateCreditsDisplay } from './state.js';
 import { handlePackPurchase, showPackShop } from './shop.js';
-import { renderCollection } from './collection.js';
+import { renderCollection, initScrollToTop } from './collection.js';
 import { openFocusMode, closeFocusMode } from './focus.js';
 import { initGames, exitGame } from './modules/games.js';
 import { setAnimationsEnabled, destroyShaderCanvas } from './engines/shader-engine.js';
@@ -231,6 +231,7 @@ function init() {
     // Update UI
     updateCreditsDisplay();
     renderCollection(null, openFocusMode);
+    initScrollToTop();
 
     // Update landing page credits
     const landingCredits = document.getElementById('landing-credits-amount');

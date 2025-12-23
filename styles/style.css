@@ -976,9 +976,9 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Show on small viewports (below 1024px width OR 768px height) */
+/* Show on small viewports (below 1024px width OR 600px height) */
 @media (max-width: 1023px),
-(max-height: 767px) {
+(max-height: 599px) {
     .mobile-blocker {
         display: flex;
         align-items: center;

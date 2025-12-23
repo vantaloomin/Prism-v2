@@ -141,7 +141,7 @@ body.animations-paused .card-layer-tint-overlay {
 }
 
 /* At narrower viewports, switch to 4 columns before shrinking cards */
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
     .binder-grid {
         grid-template-columns: repeat(4, minmax(200px, 1fr));
     }
@@ -334,4 +334,44 @@ body.animations-paused .card-layer-tint-overlay {
 
 .pagination-dot:hover:not(.active) {
     background: var(--text-muted);
+}
+
+/* ============================================
+   SCROLL TO TOP BUTTON
+   ============================================ */
+
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 800;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--accent-primary), #7c3aed);
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.scroll-to-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px var(--accent-glow);
+    background: linear-gradient(145deg, var(--accent-secondary), var(--accent-primary));
+}
+
+.scroll-to-top-btn:active {
+    transform: translateY(-1px);
 }
