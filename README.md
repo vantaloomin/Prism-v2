@@ -73,6 +73,14 @@ npm run preview
 
 ---
 
+## Modding
+
+Want to add your own card packs? Aethel Saga features a **dynamic pack system** that makes modding easy — no code changes required!
+
+📖 **[Read the Modding Guide](MODDING.md)** to learn how to create custom packs with your own characters, backgrounds, and lore.
+
+---
+
 ## License
 
 MIT License — See [LICENSE](LICENSE) for details.
