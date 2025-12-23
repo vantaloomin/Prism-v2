@@ -613,6 +613,199 @@
    RESPONSIVE DESIGN
    ============================================ */
 
+/* Height-based responsive scaling for smaller viewports */
+@media (max-height: 850px) {
+    .bj-game-container {
+        padding: 12px 20px;
+        margin-bottom: 12px;
+    }
+
+    .bj-title {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+    }
+
+    .bj-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .bj-dialogue {
+        font-size: 1rem;
+        margin: 8px 0;
+    }
+
+    .bj-score {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+
+    .bj-table {
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    .bj-hand {
+        min-height: 100px;
+        gap: 8px;
+    }
+
+    .bj-hand-area {
+        padding: 10px 0;
+    }
+
+    .bj-card {
+        width: 65px;
+        height: 91px;
+    }
+
+    .bj-card-value {
+        font-size: 0.85rem;
+    }
+
+    .bj-card-suit {
+        font-size: 0.7rem;
+    }
+
+    .bj-card-suit-large {
+        font-size: 2rem;
+    }
+
+    .bj-betting-area {
+        margin-top: 12px;
+        padding: 12px;
+    }
+
+    .bj-bet-option {
+        padding: 10px 18px;
+        font-size: 0.95rem;
+    }
+
+    .bj-action-btn {
+        padding: 12px 24px;
+        min-width: 100px;
+    }
+
+    .bj-btn-icon {
+        font-size: 1.4rem;
+    }
+
+    .bj-btn-text {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-height: 750px) {
+    .bj-game-container {
+        padding: 8px 15px;
+        margin-bottom: 8px;
+    }
+
+    .bj-title {
+        font-size: 1.3rem;
+    }
+
+    .bj-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+
+    .bj-dialogue {
+        font-size: 0.9rem;
+        margin: 6px 0;
+    }
+
+    .bj-score {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+    }
+
+    .bj-table {
+        padding: 10px;
+        margin: 8px 0;
+    }
+
+    .bj-hand {
+        min-height: 80px;
+        gap: 6px;
+    }
+
+    .bj-hand-area {
+        padding: 6px 0;
+    }
+
+    .bj-hand-label {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .bj-divider {
+        margin: 6px 0;
+    }
+
+    .bj-card {
+        width: 55px;
+        height: 77px;
+    }
+
+    .bj-card-corner {
+        font-size: 0.75rem;
+    }
+
+    .bj-card-value {
+        font-size: 0.75rem;
+    }
+
+    .bj-card-suit {
+        font-size: 0.55rem;
+    }
+
+    .bj-card-suit-large {
+        font-size: 1.6rem;
+    }
+
+    .bj-card-corner.top-left {
+        top: 3px;
+        left: 4px;
+    }
+
+    .bj-card-corner.bottom-right {
+        bottom: 3px;
+        right: 4px;
+    }
+
+    .bj-betting-area {
+        margin-top: 8px;
+        padding: 10px;
+    }
+
+    .bj-bet-options {
+        gap: 8px;
+    }
+
+    .bj-bet-option {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    .bj-action-buttons {
+        gap: 12px;
+    }
+
+    .bj-action-btn {
+        padding: 10px 20px;
+        min-width: 90px;
+    }
+
+    .bj-btn-icon {
+        font-size: 1.2rem;
+    }
+
+    .bj-btn-text {
+        font-size: 0.8rem;
+    }
+}
+
 @media (max-width: 600px) {
     .bj-game-container {
         padding: 15px 20px;

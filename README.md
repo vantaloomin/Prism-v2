@@ -4,7 +4,7 @@
 
 Aethel Saga delivers the dopamine rush of opening rare card packs with stunning GPU-accelerated holographic effects, dramatic reveal animations, and a deep collection system. No downloads. No installs. Just open and play.
 
-> 🎮 **100% Free. Forever.** While Aethel Saga captures the excitement of gacha mechanics, there are **no microtransactions, no ads, and no way to spend real money**. All credits are earned through gameplay. This is purely for the joy of collecting — no strings attached.
+> **100% Free. Forever.** While Aethel Saga captures the excitement of gacha mechanics, there are **no microtransactions, no ads, and no way to spend real money**. All credits are earned through gameplay. This is purely for the joy of collecting — no strings attached.
 
 ---
 
