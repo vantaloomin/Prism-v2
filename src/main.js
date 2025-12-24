@@ -13,6 +13,7 @@ import { openFocusMode, closeFocusMode } from './focus.js';
 import { initGames, exitGame } from './modules/games.js';
 import { setAnimationsEnabled, destroyShaderCanvas } from './engines/shader-engine.js';
 import { initAudio, getAudioSettings, setSFXEnabled, setSFXVolume, setVoiceEnabled, setVoiceVolume, setMusicEnabled, setMusicVolume } from './audio-manager.js';
+import { initSaveTransfer } from './save-transfer.js';
 
 // ============================================
 // TAB CONFIGURATION
@@ -231,6 +232,9 @@ async function init() {
     // Initialize audio system
     initAudio();
     initAudioSettingsUI();
+
+    // Initialize save transfer (export/import)
+    initSaveTransfer();
 
     // Initialize pack shop with dynamic buttons
     initPackShop(openFocusMode);

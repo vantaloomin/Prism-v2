@@ -343,6 +343,44 @@
 
                 <!-- Data Tab -->
                 <div class="settings-panel" data-settings-panel="data">
+                    <!-- Export Section -->
+                    <div class="settings-section-header">Export Save</div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Download File</span>
+                            <span class="settings-item-desc">Save as .json file</span>
+                        </div>
+                        <button class="settings-btn-primary" id="btn-export-file">Download</button>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Copy Save Code</span>
+                            <span class="settings-item-desc">Shareable text code</span>
+                        </div>
+                        <button class="settings-btn-primary" id="btn-export-code">Copy</button>
+                    </div>
+
+                    <!-- Import Section -->
+                    <div class="settings-section-header">Import Save</div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Upload File</span>
+                            <span class="settings-item-desc">Load from .json file</span>
+                        </div>
+                        <button class="settings-btn-primary" id="btn-import-file">Upload</button>
+                        <input type="file" id="import-file-input" accept=".json" hidden>
+                    </div>
+                    <div class="settings-import-code">
+                        <textarea id="import-code-input" placeholder="Paste save code here..."></textarea>
+                        <button class="settings-btn-primary" id="btn-import-code">Import Code</button>
+                    </div>
+
+                    <!-- Status Message -->
+                    <div class="settings-status" id="save-transfer-status"></div>
+
+                    <!-- Danger Zone -->
+                    <div class="settings-divider"></div>
+                    <div class="settings-section-header settings-section-danger">Danger Zone</div>
                     <div class="settings-item">
                         <div class="settings-item-info">
                             <span class="settings-item-label">Reset Save Data</span>
