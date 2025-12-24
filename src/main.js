@@ -8,7 +8,7 @@ import { CONFIG, rollRarity, rollFrame, rollHolo, initializeCharacterPools } fro
 import { loadAllPacks } from './engines/pack-loader.js';
 import { gameState, loadGame, saveGame, resetSave, updateCreditsDisplay } from './state.js';
 import { initPackShop, showPackShop, toggleDebugPacks } from './shop.js';
-import { renderCollection, initScrollToTop } from './collection.js';
+import { renderCollection, initScrollToTop, initScrapModal } from './collection.js';
 import { openFocusMode, closeFocusMode } from './focus.js';
 import { initGames, exitGame } from './modules/games.js';
 import { setAnimationsEnabled, destroyShaderCanvas } from './engines/shader-engine.js';
@@ -243,6 +243,7 @@ async function init() {
     updateCreditsDisplay();
     renderCollection(null, openFocusMode);
     initScrollToTop();
+    initScrapModal();
 
     // Update landing page credits
     const landingCredits = document.getElementById('landing-credits-amount');
@@ -299,6 +300,20 @@ async function init() {
             const confirmOverlay = document.getElementById('confirm-overlay');
             if (confirmOverlay && confirmOverlay.classList.contains('active')) {
                 confirmOverlay.classList.remove('active');
+                return;
+            }
+
+            // Check scrap modal
+            const scrapOverlay = document.getElementById('scrap-overlay');
+            if (scrapOverlay && scrapOverlay.classList.contains('active')) {
+                scrapOverlay.classList.remove('active');
+                return;
+            }
+
+            // Check convert all modal
+            const convertAllOverlay = document.getElementById('convert-all-overlay');
+            if (convertAllOverlay && convertAllOverlay.classList.contains('active')) {
+                convertAllOverlay.classList.remove('active');
                 return;
             }
 

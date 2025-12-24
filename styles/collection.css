@@ -54,6 +54,45 @@
     opacity: 0.5;
 }
 
+/* Convert All Duplicates Button */
+.convert-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: linear-gradient(145deg, #059669, #10b981);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.convert-all-btn:hover:not(:disabled) {
+    background: linear-gradient(145deg, #047857, #059669);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.5);
+    transform: translateY(-1px);
+}
+
+.convert-all-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.convert-all-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--bg-tertiary);
+    box-shadow: none;
+}
+
+.convert-all-icon {
+    width: 16px;
+    height: 16px;
+}
+
 /* Collection Controls */
 .collection-controls {
     display: flex;
@@ -374,4 +413,177 @@ body.animations-paused .card-layer-tint-overlay {
 
 .scroll-to-top-btn:active {
     transform: translateY(-1px);
+}
+
+/* ============================================
+   SCRAP BUTTON (on duplicate card stacks)
+   ============================================ */
+
+.scrap-btn {
+    position: absolute;
+    bottom: 50px;
+    right: -5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: linear-gradient(145deg, #059669, #10b981);
+    border: none;
+    border-radius: 8px 0 0 8px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 70;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(5, 150, 105, 0.4);
+}
+
+.scrap-btn img {
+    width: 14px;
+    height: 14px;
+}
+
+/* Show scrap button on hover */
+.collection-card-wrapper:hover .scrap-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scrap-btn:hover {
+    background: linear-gradient(145deg, #047857, #059669);
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.6);
+    transform: translateX(0) scale(1.05);
+}
+
+.scrap-btn:active {
+    transform: translateX(0) scale(0.98);
+}
+
+/* ============================================
+   SCRAP CONFIRMATION MODAL
+   ============================================ */
+
+.scrap-modal {
+    max-width: 380px;
+}
+
+.scrap-preview {
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+}
+
+.scrap-card-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.scrap-card-details {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.scrap-value-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: linear-gradient(145deg, rgba(5, 150, 105, 0.15), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.scrap-value-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.scrap-value-amount {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.scrap-gem-icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* Quantity Controls */
+.scrap-quantity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.scrap-quantity label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.scrap-quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.scrap-qty-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 2px solid var(--bg-tertiary);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scrap-qty-btn:hover:not(:disabled) {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.scrap-qty-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.scrap-qty-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 40px;
+    text-align: center;
+}
+
+.scrap-qty-max {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Scrap Confirm Button (Green variant) */
+.confirm-btn-scrap {
+    background: linear-gradient(145deg, #059669, #10b981);
+    color: white;
+}
+
+.confirm-btn-scrap:hover {
+    background: linear-gradient(145deg, #047857, #059669);
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
 }

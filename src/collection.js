@@ -12,6 +12,19 @@ import {
     getCardGroupKey
 } from './card.js';
 import { applyShaderTexture } from './engines/shader-engine.js';
+import {
+    calculateScrapValue,
+    scrapFromGroup,
+    getMaxScrappable
+} from './engines/scrap-logic.js';
+
+// ============================================
+// SCRAP MODAL STATE
+// ============================================
+
+let currentScrapGroup = null;
+let currentScrapQuantity = 1;
+let currentOnFocusClick = null;
 
 // ============================================
 // COLLECTION RENDERING
@@ -23,6 +36,9 @@ import { applyShaderTexture } from './engines/shader-engine.js';
  * @param {Function} onFocusClick - Callback for focus mode
  */
 export function renderCollection(page = null, onFocusClick = null) {
+    // Store onFocusClick reference for re-render after scrapping
+    currentOnFocusClick = onFocusClick;
+
     const container = document.getElementById('collection-container');
     const uniqueCount = document.getElementById('unique-count');
     const totalCount = document.getElementById('total-count');
@@ -55,7 +71,8 @@ export function renderCollection(page = null, onFocusClick = null) {
         if (!cardGroups[key]) {
             cardGroups[key] = {
                 card: card,
-                count: 0
+                count: 0,
+                groupKey: key
             };
         }
         cardGroups[key].count++;
@@ -120,6 +137,17 @@ export function renderCollection(page = null, onFocusClick = null) {
             countBadge.className = 'card-count-badge';
             countBadge.textContent = `×${group.count}`;
             wrapper.appendChild(countBadge);
+
+            // Add scrap button for duplicates
+            const scrapValue = calculateScrapValue(group.card);
+            const scrapBtn = document.createElement('button');
+            scrapBtn.className = 'scrap-btn';
+            scrapBtn.innerHTML = `<img src="assets/ui/icon-currency.webp" alt="gems"> ${scrapValue}`;
+            scrapBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openScrapModal(group);
+            });
+            wrapper.appendChild(scrapBtn);
         }
 
         grid.appendChild(wrapper);
@@ -154,7 +182,305 @@ export function renderCollection(page = null, onFocusClick = null) {
     requestAnimationFrame(() => {
         initShadersForVisibleCards();
     });
+
+    // Update Convert All button state
+    updateConvertAllButton();
 }
+
+// ============================================
+// SCRAP MODAL HANDLING
+// ============================================
+
+/**
+ * Open the scrap confirmation modal for a card group
+ * @param {Object} group - The card group { card, count, groupKey }
+ */
+function openScrapModal(group) {
+    currentScrapGroup = group;
+    currentScrapQuantity = 1;
+
+    const overlay = document.getElementById('scrap-overlay');
+    const cardName = document.getElementById('scrap-card-name');
+    const cardDetails = document.getElementById('scrap-card-details');
+    const gemsValue = document.getElementById('scrap-gems-value');
+    const qtyValue = document.getElementById('scrap-qty-value');
+    const qtyMax = document.getElementById('scrap-qty-max');
+    const qtySection = document.getElementById('scrap-quantity-section');
+    const minusBtn = document.getElementById('scrap-qty-minus');
+    const plusBtn = document.getElementById('scrap-qty-plus');
+
+    if (!overlay) return;
+
+    // Populate card info
+    const card = group.card;
+    cardName.textContent = card.name;
+    cardDetails.textContent = `${card.rarity.name} • ${card.frame.name} Frame • ${card.holo.name === 'None' ? 'No Holo' : card.holo.name + ' Holo'}`;
+
+    // Calculate max scrappable (keep at least one)
+    const maxScrappable = group.count - 1;
+
+    // Show/hide quantity section based on max
+    if (maxScrappable <= 1) {
+        qtySection.style.display = 'none';
+    } else {
+        qtySection.style.display = 'flex';
+        qtyMax.textContent = `(max: ${maxScrappable})`;
+    }
+
+    // Update display
+    updateScrapDisplay();
+
+    // Show modal
+    overlay.classList.add('active');
+
+    // Wire up quantity controls
+    minusBtn.onclick = () => {
+        if (currentScrapQuantity > 1) {
+            currentScrapQuantity--;
+            updateScrapDisplay();
+        }
+    };
+
+    plusBtn.onclick = () => {
+        if (currentScrapQuantity < maxScrappable) {
+            currentScrapQuantity++;
+            updateScrapDisplay();
+        }
+    };
+
+    // Wire up action buttons (using clone-replace pattern to avoid listener accumulation)
+    const cancelBtn = document.getElementById('scrap-cancel');
+    const confirmBtn = document.getElementById('scrap-confirm');
+
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    newCancelBtn.addEventListener('click', closeScrapModal);
+
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    newConfirmBtn.addEventListener('click', confirmScrap);
+}
+
+/**
+ * Update the scrap modal display (gems value, quantity, button states)
+ */
+function updateScrapDisplay() {
+    if (!currentScrapGroup) return;
+
+    const gemsValue = document.getElementById('scrap-gems-value');
+    const qtyValue = document.getElementById('scrap-qty-value');
+    const minusBtn = document.getElementById('scrap-qty-minus');
+    const plusBtn = document.getElementById('scrap-qty-plus');
+
+    const singleValue = calculateScrapValue(currentScrapGroup.card);
+    const totalValue = singleValue * currentScrapQuantity;
+    const maxScrappable = currentScrapGroup.count - 1;
+
+    gemsValue.textContent = totalValue;
+    qtyValue.textContent = currentScrapQuantity;
+
+    // Update button states
+    minusBtn.disabled = currentScrapQuantity <= 1;
+    plusBtn.disabled = currentScrapQuantity >= maxScrappable;
+}
+
+/**
+ * Close the scrap modal
+ */
+function closeScrapModal() {
+    const overlay = document.getElementById('scrap-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+    currentScrapGroup = null;
+    currentScrapQuantity = 1;
+}
+
+/**
+ * Confirm the scrap action
+ */
+function confirmScrap() {
+    if (!currentScrapGroup) return;
+
+    const result = scrapFromGroup(currentScrapGroup.groupKey, currentScrapQuantity);
+
+    console.log(`♻️ Scrapped ${result.count} cards for ${result.totalValue} gems`);
+
+    // Close modal
+    closeScrapModal();
+
+    // Re-render collection
+    renderCollection(null, currentOnFocusClick);
+}
+
+/**
+ * Initialize scrap modal event listeners (call once on init)
+ */
+export function initScrapModal() {
+    const overlay = document.getElementById('scrap-overlay');
+    if (!overlay) return;
+
+    // Close on backdrop click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeScrapModal();
+        }
+    });
+
+    // Initialize Convert All modal
+    initConvertAllModal();
+}
+
+// ============================================
+// CONVERT ALL DUPLICATES
+// ============================================
+
+/**
+ * Calculate total duplicates and their combined scrap value
+ * @returns {Object} { totalDuplicates, totalValue, groups }
+ */
+function calculateAllDuplicates() {
+    // Group cards by unique combo
+    const cardGroups = {};
+    gameState.inventory.forEach(card => {
+        const key = getCardGroupKey(card);
+        if (!cardGroups[key]) {
+            cardGroups[key] = {
+                card: card,
+                count: 0,
+                groupKey: key
+            };
+        }
+        cardGroups[key].count++;
+    });
+
+    let totalDuplicates = 0;
+    let totalValue = 0;
+    const groups = [];
+
+    Object.values(cardGroups).forEach(group => {
+        if (group.count > 1) {
+            const dupeCount = group.count - 1; // Keep one of each
+            const cardValue = calculateScrapValue(group.card);
+            totalDuplicates += dupeCount;
+            totalValue += cardValue * dupeCount;
+            groups.push({
+                ...group,
+                dupeCount,
+                value: cardValue * dupeCount
+            });
+        }
+    });
+
+    return { totalDuplicates, totalValue, groups };
+}
+
+/**
+ * Update the Convert All button state (disabled if no duplicates)
+ */
+export function updateConvertAllButton() {
+    const btn = document.getElementById('convert-all-btn');
+    if (!btn) return;
+
+    const { totalDuplicates } = calculateAllDuplicates();
+    btn.disabled = totalDuplicates === 0;
+}
+
+/**
+ * Open the Convert All confirmation modal
+ */
+function openConvertAllModal() {
+    const { totalDuplicates, totalValue } = calculateAllDuplicates();
+
+    if (totalDuplicates === 0) {
+        console.log('No duplicates to convert');
+        return;
+    }
+
+    const overlay = document.getElementById('convert-all-overlay');
+    const countEl = document.getElementById('convert-all-count');
+    const gemsEl = document.getElementById('convert-all-gems');
+
+    if (!overlay) return;
+
+    countEl.textContent = totalDuplicates;
+    gemsEl.textContent = totalValue;
+
+    overlay.classList.add('active');
+}
+
+/**
+ * Close the Convert All modal
+ */
+function closeConvertAllModal() {
+    const overlay = document.getElementById('convert-all-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
+/**
+ * Confirm and execute Convert All
+ */
+function confirmConvertAll() {
+    const { groups } = calculateAllDuplicates();
+
+    let totalScrapped = 0;
+    let totalGems = 0;
+
+    // Scrap duplicates from each group
+    groups.forEach(group => {
+        const result = scrapFromGroup(group.groupKey, group.dupeCount);
+        totalScrapped += result.count;
+        totalGems += result.totalValue;
+    });
+
+    console.log(`♻️ Converted all: ${totalScrapped} duplicates for ${totalGems} gems`);
+
+    // Close modal
+    closeConvertAllModal();
+
+    // Re-render collection
+    renderCollection(null, currentOnFocusClick);
+}
+
+/**
+ * Initialize Convert All modal event listeners
+ */
+function initConvertAllModal() {
+    const overlay = document.getElementById('convert-all-overlay');
+    const convertAllBtn = document.getElementById('convert-all-btn');
+    const cancelBtn = document.getElementById('convert-all-cancel');
+    const confirmBtn = document.getElementById('convert-all-confirm');
+
+    if (!overlay) return;
+
+    // Convert All button in header
+    if (convertAllBtn) {
+        convertAllBtn.addEventListener('click', openConvertAllModal);
+    }
+
+    // Close on backdrop click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeConvertAllModal();
+        }
+    });
+
+    // Cancel button
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeConvertAllModal);
+    }
+
+    // Confirm button
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', confirmConvertAll);
+    }
+}
+
+// ============================================
+// SHADER INITIALIZATION
+// ============================================
 
 /**
  * Initialize shaders for all visible cards in the collection
@@ -172,6 +498,10 @@ export function initShadersForVisibleCards() {
     });
 }
 
+// ============================================
+// SCROLL TO TOP BUTTON
+// ============================================
+
 /**
  * Initialize the scroll-to-top button functionality
  * Shows button when scrolled past threshold, hides when at top
@@ -179,7 +509,7 @@ export function initShadersForVisibleCards() {
 export function initScrollToTop() {
     const collectionTab = document.getElementById('tab-content-collection');
     const scrollBtn = document.getElementById('scroll-to-top-btn');
-    
+
     if (!collectionTab || !scrollBtn) return;
 
     const SCROLL_THRESHOLD = 200;
@@ -201,3 +531,4 @@ export function initScrollToTop() {
         });
     });
 }
+

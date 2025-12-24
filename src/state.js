@@ -14,7 +14,8 @@ export const gameState = {
     inventory: [],
     stats: {
         packsOpened: 0,
-        totalCards: 0
+        totalCards: 0,
+        totalScrapped: 0
     }
 };
 
@@ -56,7 +57,11 @@ export function loadGame() {
             const saveData = JSON.parse(saved);
             gameState.credits = saveData.credits ?? CONFIG.STARTING_CREDITS;
             gameState.inventory = saveData.inventory ?? [];
-            gameState.stats = saveData.stats ?? { packsOpened: 0, totalCards: 0 };
+            gameState.stats = saveData.stats ?? { packsOpened: 0, totalCards: 0, totalScrapped: 0 };
+            // Ensure totalScrapped exists for older saves
+            if (gameState.stats.totalScrapped === undefined) {
+                gameState.stats.totalScrapped = 0;
+            }
             console.log('Game loaded!', gameState.stats);
             return true;
         }

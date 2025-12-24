@@ -152,6 +152,11 @@
                             <span class="stat-value" id="total-count">0</span>
                             <span class="stat-label">Total Cards</span>
                         </span>
+                        <span class="stat-divider">|</span>
+                        <button class="convert-all-btn" id="convert-all-btn" title="Scrap all duplicate cards">
+                            <img src="/assets/ui/icon-currency.webp" alt="gems" class="convert-all-icon">
+                            <span>Scrap All</span>
+                        </button>
                     </div>
 
                 </div>
@@ -406,6 +411,62 @@
             <div class="confirm-buttons">
                 <button class="confirm-btn confirm-btn-cancel" id="confirm-cancel">Cancel</button>
                 <button class="confirm-btn confirm-btn-danger" id="confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrap Confirmation Modal -->
+    <div class="confirm-overlay" id="scrap-overlay">
+        <div class="confirm-modal scrap-modal">
+            <div class="confirm-icon">♻️</div>
+            <div class="confirm-title" id="scrap-title">Scrap Card?</div>
+            <!-- Preview & Value Display -->
+            <div class="scrap-preview">
+                <div class="scrap-card-name" id="scrap-card-name">Card Name</div>
+                <div class="scrap-card-details" id="scrap-card-details">Rarity • Frame • Holo</div>
+            </div>
+            <div class="scrap-value-display">
+                <span class="scrap-value-label">You will receive:</span>
+                <span class="scrap-value-amount" id="scrap-value-amount">
+                    <span id="scrap-gems-value">0</span>
+                    <img src="/assets/ui/icon-currency.webp" alt="gems" class="scrap-gem-icon">
+                </span>
+            </div>
+            <!-- Bulk Controls -->
+            <div class="scrap-quantity" id="scrap-quantity-section">
+                <label>Quantity to scrap:</label>
+                <div class="scrap-quantity-controls">
+                    <button class="scrap-qty-btn" id="scrap-qty-minus">−</button>
+                    <span class="scrap-qty-value" id="scrap-qty-value">1</span>
+                    <button class="scrap-qty-btn" id="scrap-qty-plus">+</button>
+                </div>
+                <span class="scrap-qty-max" id="scrap-qty-max">(max: 0)</span>
+            </div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" id="scrap-cancel">Cancel</button>
+                <button class="confirm-btn confirm-btn-scrap" id="scrap-confirm">Scrap</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Convert All Confirmation Modal -->
+    <div class="confirm-overlay" id="convert-all-overlay">
+        <div class="confirm-modal scrap-modal">
+            <div class="confirm-icon">♻️</div>
+            <div class="confirm-title">Scrap All Duplicates?</div>
+            <div class="confirm-message">
+                This will scrap <strong id="convert-all-count">0</strong> duplicate cards across your collection.
+            </div>
+            <div class="scrap-value-display">
+                <span class="scrap-value-label">You will receive:</span>
+                <span class="scrap-value-amount" id="convert-all-value">
+                    <span id="convert-all-gems">0</span>
+                    <img src="/assets/ui/icon-currency.webp" alt="gems" class="scrap-gem-icon">
+                </span>
+            </div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" id="convert-all-cancel">Cancel</button>
+                <button class="confirm-btn confirm-btn-scrap" id="convert-all-confirm">Scrap All</button>
             </div>
         </div>
     </div>
