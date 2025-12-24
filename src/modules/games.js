@@ -6,6 +6,8 @@
 import { initRPSGame } from './game-rps.js';
 import { initTTTGame } from './game-ttt.js';
 import { initBlackjackGame } from './game-blackjack.js';
+import { playVO } from '../audio-manager.js';
+
 // ============================================
 // GAMES CONFIGURATION
 // ============================================
@@ -74,6 +76,13 @@ export function renderGamesSelection() {
 
     container.innerHTML = '';
 
+    // Map game IDs to voice line IDs
+    const hoverVoiceMap = {
+        'rps': 'hover_wizard_duel',
+        'ttt': 'hover_rune_stones',
+        'blackjack': 'hover_dragons_hand'
+    };
+
     GAMES_CONFIG.games.forEach(game => {
         const badge = document.createElement('div');
         badge.className = 'vn-badge' + (game.disabled ? ' disabled' : '');
@@ -90,8 +99,13 @@ export function renderGamesSelection() {
         if (!game.disabled) {
             badge.addEventListener('click', () => startGame(game.id));
         }
-        badge.addEventListener('mouseenter', () => setDialogueText(game.description));
-        badge.addEventListener('mouseleave', () => setDialogueText('Select a game to play.'));
+        badge.addEventListener('mouseenter', () => {
+            setDialogueText(game.description);
+            playVO(hoverVoiceMap[game.id]);
+        });
+        badge.addEventListener('mouseleave', () => {
+            setDialogueText('Select a game to play.');
+        });
 
         container.appendChild(badge);
     });

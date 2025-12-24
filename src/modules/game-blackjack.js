@@ -7,6 +7,7 @@
 
 import { GAMES_CONFIG } from './games.js';
 import { gameState as appState, saveGame, updateCreditsDisplay } from '../state.js';
+import { playSFX, playVO } from '../audio-manager.js';
 
 // ============================================
 // GAME CONSTANTS
@@ -217,6 +218,7 @@ async function dealCards() {
     gameState.phase = 'dealing';
     setAvatar('thinking');
     setDialogue('Dealing cards...');
+    playVO('bj_dealing');
     disableControls(true);
 
     // Deal 2 cards to player and dealer alternately
@@ -238,6 +240,7 @@ async function dealCards() {
     if (isBlackjack(gameState.playerHand)) {
         gameState.blackjacks++;
         setDialogue('Blackjack! 🐉');
+        playVO('bj_blackjack');
         setAvatar('surprised');
         await delay(RESULT_DELAY);
 
@@ -259,6 +262,7 @@ async function dealCards() {
     gameState.phase = 'playing';
     setAvatar('cards');
     setDialogue('Hit or Stand?');
+    playVO('bj_hit_or_stand');
     disableControls(false);
     updateHandDisplays();
 }
@@ -277,11 +281,14 @@ function playerHit() {
 
     if (isBusted(gameState.playerHand)) {
         setDialogue('Bust! You went over 21.');
+        playVO('bj_player_bust');
         setAvatar('happy');
+        playSFX('bj_lose');
         endGame('dealer');
     } else if (calculateHandValue(gameState.playerHand) === 21) {
         // Auto-stand on 21
         setDialogue('21! Standing automatically.');
+        playVO('bj_player_21');
         playerStand();
     } else {
         disableControls(false);
@@ -297,6 +304,7 @@ async function playerStand() {
     gameState.phase = 'dealer-turn';
     disableControls(true);
     setDialogue("Dealer's turn...");
+    playVO('bj_dealer_turn');
     setAvatar('thinking');
 
     // Reveal dealer's face-down card
@@ -325,6 +333,8 @@ async function dealerPlay() {
 
     while (calculateHandValue(gameState.dealerHand) < 17) {
         setDialogue('Dealer hits...');
+        playVO('bj_dealer_hits');
+        playSFX('bj_card_deal');
         await delay(DEALER_PLAY_DELAY);
 
         gameState.dealerHand.push(drawCard());
@@ -337,6 +347,7 @@ async function dealerPlay() {
     // Determine winner
     if (isBusted(gameState.dealerHand)) {
         setDialogue('Dealer busts! You win!');
+        playVO('bj_dealer_bust');
         endGame('player');
     } else {
         const playerValue = calculateHandValue(gameState.playerHand);
@@ -367,6 +378,8 @@ function endGame(result) {
             creditsChange = gameState.currentBet;
             appState.credits += creditsChange;
             setDialogue(`You win! ${formatGems(creditsChange)}`);
+            playVO('bj_player_wins');
+            playSFX('bj_win');
             setAvatar('angry');
             break;
 
@@ -376,6 +389,8 @@ function endGame(result) {
             creditsChange = Math.floor(gameState.currentBet * 1.5);
             appState.credits += creditsChange;
             setDialogue(`Blackjack! ${formatGems(creditsChange)}`);
+            playVO('bj_blackjack');
+            playSFX('bj_win');
             setAvatar('angry');
             break;
 
@@ -383,6 +398,8 @@ function endGame(result) {
             gameState.losses++;
             // Bet was already deducted
             setDialogue('Dealer wins. Better luck next time!');
+            playVO('bj_dealer_wins');
+            playSFX('bj_lose');
             setAvatar('happy');
             break;
 
@@ -391,6 +408,7 @@ function endGame(result) {
             // Return the bet
             appState.credits += gameState.currentBet;
             setDialogue("Push! It's a tie. Bet returned.");
+            playVO('bj_push');
             setAvatar('surprised');
             break;
     }
@@ -426,11 +444,13 @@ function placeBet(amount) {
     // Validate bet is a valid option
     if (!BET_OPTIONS.includes(amount)) {
         setDialogue('Invalid bet amount!');
+        playVO('bj_invalid_bet');
         return;
     }
 
     if (amount > appState.credits) {
         setDialogue("You don't have enough credits!");
+        playVO('bj_not_enough');
         return;
     }
 

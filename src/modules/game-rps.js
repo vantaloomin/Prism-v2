@@ -7,7 +7,7 @@
 
 import { GAMES_CONFIG } from './games.js';
 import { gameState as appState, saveGame, updateCreditsDisplay } from '../state.js';
-import { playSFX } from '../audio-manager.js';
+import { playSFX, playVO } from '../audio-manager.js';
 
 // ============================================
 // GAME CONSTANTS
@@ -359,6 +359,7 @@ function selectElement(element) {
 
     // Show player's choice
     setDialogue(`You chose ${ELEMENTS[element].name}! Let me think...`);
+    playVO(`rps_player_${element}`);
     setAvatar('thinking');
 
     // AI "thinking" delay
@@ -369,6 +370,7 @@ function selectElement(element) {
         // Show AI's element avatar and play sound
         setAvatar(ELEMENTS[gameState.aiChoice].avatar);
         playSFX(`element_${gameState.aiChoice}`);
+        playVO(`rps_ai_${gameState.aiChoice}`);
         setDialogue(`I choose ${ELEMENTS[gameState.aiChoice].name}!`);
 
         // Determine result after a short delay
@@ -401,8 +403,10 @@ function showResult() {
             setAvatar('angry'); // She's angry she lost
             if (gameState.winStreak > 1) {
                 setDialogue(`${playerEl.name} beats ${aiEl.name}! ${gameState.winStreak}x streak! ${formatGems(gemsEarned)}`);
+                playVO('rps_player_streak');
             } else {
                 setDialogue(`${playerEl.name} beats ${aiEl.name}! You win ${formatGems(gemsEarned)}`);
+                playVO('rps_player_wins');
             }
             break;
 
@@ -412,6 +416,7 @@ function showResult() {
             gemsEarned = GEM_REWARDS.lose;
             setAvatar('happy');
             setDialogue(`${aiEl.name} beats ${playerEl.name}! I win! Better luck next time~`);
+            playVO('rps_ai_wins');
             break;
 
         case 'draw':
@@ -420,6 +425,7 @@ function showResult() {
             gemsEarned = Math.floor(GEM_REWARDS.draw * tier.drawMultiplier);
             setAvatar('surprised');
             setDialogue(`We both chose ${playerEl.name}! It's a draw! Streak reset. ${formatGems(gemsEarned)}`);
+            playVO('rps_draw');
             break;
     }
 
@@ -548,6 +554,7 @@ function setDifficulty(tier) {
 
     // Set dialogue for chosen difficulty
     setDialogue(`${DIFFICULTY_TIERS[tier].label} mode! Choose your element wisely, challenger!`);
+    playVO(`rps_difficulty_${tier}`);
 
     // Render game UI
     renderRPSUI();

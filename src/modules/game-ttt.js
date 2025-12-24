@@ -7,6 +7,7 @@
 
 import { GAMES_CONFIG } from './games.js';
 import { gameState as appState, saveGame, updateCreditsDisplay } from '../state.js';
+import { playSFX, playVO } from '../audio-manager.js';
 
 // ============================================
 // GAME CONSTANTS
@@ -267,6 +268,7 @@ function handleCellClick(index) {
     // AI's turn
     gameState.currentTurn = 'ai';
     setDialogue('The stars reveal...');
+    playVO('ttt_ai_thinking');
     setAvatar('thinking');
     disableCells(true);
 
@@ -277,6 +279,8 @@ function handleCellClick(index) {
             gameState.board[aiMove] = AI_MARKER;
             setAvatar('pencil');
             setDialogue('The moon rises here.');
+            playVO('ttt_ai_placed');
+            playSFX('ttt_place');
             renderBoard();
 
             // Check for AI win/draw after delay
@@ -294,6 +298,7 @@ function handleCellClick(index) {
                 // Back to player's turn
                 gameState.currentTurn = 'player';
                 setDialogue('I await your move...');
+                playVO('ttt_await_move');
                 setAvatar('thinking');
                 disableCells(false);
             }, RESULT_DELAY);
@@ -316,6 +321,8 @@ function handleGameEnd(result) {
             gemsEarned = Math.floor(GEM_REWARDS.baseWin * tier.rewardMultiplier);
             setAvatar('angry');
             setDialogue(`Your alignment... impressive. ${formatGems(gemsEarned)}`);
+            playVO('ttt_player_wins');
+            playSFX('ttt_win');
             break;
 
         case 'ai':
@@ -323,6 +330,7 @@ function handleGameEnd(result) {
             gemsEarned = GEM_REWARDS.lose;
             setAvatar('happy');
             setDialogue('The stars foretold this victory!');
+            playVO('ttt_ai_wins');
             break;
 
         case 'draw':
@@ -330,6 +338,8 @@ function handleGameEnd(result) {
             gemsEarned = Math.floor(GEM_REWARDS.draw * tier.rewardMultiplier);
             setAvatar('surprised');
             setDialogue(`A cosmic stalemate! ${formatGems(gemsEarned)}`);
+            playVO('ttt_draw');
+            playSFX('ttt_draw');
             break;
     }
 
@@ -358,6 +368,7 @@ function resetGame() {
 
     setAvatar('thinking');
     setDialogue('Place your rune wisely, seeker...');
+    playVO('ttt_place_rune');
     renderBoard();
     disableCells(false);
     hidePlayAgainButton();
