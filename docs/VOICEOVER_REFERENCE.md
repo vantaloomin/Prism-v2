@@ -1,6 +1,6 @@
-# Aethel Saga - Voiceover Reference
+# Aethel Saga - Audio Reference
 
-All voiceover lines organized by location. Files are in `public/assets/audio/voice/`.
+All audio assets organized by location. Files are in `public/assets/audio/`.
 
 ## File Structure
 
@@ -9,6 +9,59 @@ Voice lines are duplicated for both avatar genders:
 - **Male**: `public/assets/audio/voice/male/[path]`
 
 ---
+
+# Sound Effects (SFX)
+
+## RPS Elements
+| File | Ideal Sound Description |
+|------|------------------------|
+| `games/rps/sfx/element_fire.mp3` | Whooshing flame burst, crackling fire sound ~0.5s |
+| `games/rps/sfx/element_water.mp3` | Splashing water, wave crash or drip sound ~0.5s |
+| `games/rps/sfx/element_earth.mp3` | Rumbling earth, stone grinding or impact ~0.5s |
+
+## Pack Opening
+| File | Ideal Sound Description |
+|------|------------------------|
+| `sfx/pack_burst.mp3` | Magical burst/explosion when pack opens, sparkle overlay ~0.8s |
+| `sfx/card_flip.mp3` | Crisp card flip/whoosh sound ~0.3s |
+| `sfx/card_reveal_common.mp3` | Subtle chime, soft reveal ~0.4s |
+| `sfx/card_reveal_rare.mp3` | Brighter chime, slight shimmer ~0.5s |
+| `sfx/card_reveal_legendary.mp3` | Epic stinger with reverb, triumphant reveal ~1.5s |
+
+## UI Interactions
+| File | Ideal Sound Description |
+|------|------------------------|
+| `sfx/button_click.mp3` | Soft click/tap, satisfying feedback ~0.1s |
+| `sfx/button_hover.mp3` | Very subtle hover effect, light whoosh ~0.1s |
+| `ui/modal_open.mp3` | Soft slide-in or pop sound ~0.3s |
+| `ui/modal_close.mp3` | Soft slide-out or dismiss sound ~0.2s |
+| `ui/tab_switch.mp3` | Quick tab change click ~0.15s |
+
+## Blackjack (Dragon's Hand)
+| File | Ideal Sound Description |
+|------|------------------------|
+| `games/blackjack/sfx/card_deal.mp3` | Card sliding on felt, dealt snap ~0.3s |
+| `games/blackjack/sfx/chip_stack.mp3` | Casino chips clinking together ~0.4s |
+| `games/blackjack/sfx/win.mp3` | Victory fanfare, coins/gems sound ~0.8s |
+| `games/blackjack/sfx/lose.mp3` | Sad trombone or deflating sound ~0.6s |
+
+## Rune Stones (TTT)
+| File | Ideal Sound Description |
+|------|------------------------|
+| `games/ttt/sfx/place_piece.mp3` | Stone placing on tablet, mystical thud ~0.4s |
+| `games/ttt/sfx/win.mp3` | Triumphant mystical chime, rune glow sound ~0.8s |
+| `games/ttt/sfx/draw.mp3` | Neutral mystical hum, stalemate tone ~0.6s |
+
+## Background Music (BGM)
+| File | Ideal Sound Description |
+|------|------------------------|
+| `bgm/main_theme.mp3` | Epic orchestral fantasy theme, loop-friendly ~2-3min |
+| `bgm/arcade_loop.mp3` | Upbeat chiptune/synth arcade vibes, loops ~1-2min |
+| `bgm/collection_ambient.mp3` | Calm, ambient pads, subtle fantasy feel ~2-3min |
+
+---
+
+# Voiceover Lines
 
 ## Game Selection
 | File | Dialogue |
@@ -67,5 +120,5 @@ Voice lines are duplicated for both avatar genders:
 | File | Dialogue |
 |------|----------|
 | `welcome.mp3` | Welcome greeting |
-| `pack_open.mp3` | Pack opening line |
-| `rare_pull.mp3` | Rare card reaction |
+| `pack_open.mp3` | Pack opening excitement line |
+| `rare_pull.mp3` | Rare/legendary card reaction |
