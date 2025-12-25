@@ -8,7 +8,7 @@ import { CONFIG, rollRarity, rollFrame, rollHolo, initializeCharacterPools } fro
 import { loadAllPacks } from './engines/pack-loader.js';
 import { gameState, loadGame, saveGame, resetSave, updateCreditsDisplay } from './state.js';
 import { initPackShop, showPackShop, toggleDebugPacks } from './shop.js';
-import { renderCollection, initScrollToTop, initScrapModal } from './collection.js';
+import { renderCollection, initScrollToTop, initScrapModal, toggleFilter, setSort, toggleSortDirection, setLayout, setSearchQuery, clearAllFilters, syncCollectionControlsUI } from './collection.js';
 import { openFocusMode, closeFocusMode } from './focus.js';
 import { initGames, exitGame } from './modules/games.js';
 import { setAnimationsEnabled, destroyShaderCanvas } from './engines/shader-engine.js';
@@ -148,6 +148,7 @@ function switchTab(tabId) {
 
     // Tab-specific initialization
     if (tabId === 'collection') {
+        syncCollectionControlsUI();
         renderCollection(null, openFocusMode);
     } else if (tabId === 'games') {
         initGames();
@@ -244,6 +245,7 @@ async function init() {
     renderCollection(null, openFocusMode);
     initScrollToTop();
     initScrapModal();
+    initCollectionControls();
 
     // Update landing page credits
     const landingCredits = document.getElementById('landing-credits-amount');
@@ -408,6 +410,91 @@ async function init() {
 
     console.log('✦ Project Prism initialized! ✦');
     console.log('Debug: Run testRngDistribution(1000) to test RNG');
+}
+
+// ============================================
+// COLLECTION CONTROLS
+// ============================================
+
+/**
+ * Debounce helper for search input
+ */
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/**
+ * Initialize collection controls event handlers
+ */
+function initCollectionControls() {
+    // Search input (debounced)
+    const searchInput = document.getElementById('collection-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce((e) => {
+            setSearchQuery(e.target.value);
+        }, 300));
+    }
+
+    // Sort dropdown
+    const sortSelect = document.getElementById('collection-sort-by');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            setSort(e.target.value);
+        });
+    }
+
+    // Sort direction toggle
+    const sortDirectionBtn = document.getElementById('sort-direction-btn');
+    if (sortDirectionBtn) {
+        sortDirectionBtn.addEventListener('click', toggleSortDirection);
+    }
+
+    // Filter panel toggle
+    const filterToggleBtn = document.getElementById('filter-toggle-btn');
+    const filterPanel = document.getElementById('filter-panel');
+    if (filterToggleBtn && filterPanel) {
+        filterToggleBtn.addEventListener('click', () => {
+            const isHidden = filterPanel.hidden;
+            filterPanel.hidden = !isHidden;
+            filterToggleBtn.classList.toggle('active', isHidden);
+        });
+    }
+
+    // Filter chips (event delegation)
+    if (filterPanel) {
+        filterPanel.addEventListener('click', (e) => {
+            const chip = e.target.closest('.filter-chip');
+            if (chip) {
+                const filterType = chip.dataset.filter;
+                const value = chip.dataset.value;
+                toggleFilter(filterType, value);
+            }
+        });
+    }
+
+    // Clear filters button
+    const clearFiltersBtn = document.getElementById('filter-clear');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', clearAllFilters);
+    }
+
+    // Layout toggle buttons
+    document.querySelectorAll('.layout-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setLayout(btn.dataset.layout);
+        });
+    });
+
+    // Sync UI with saved settings on first load
+    syncCollectionControlsUI();
 }
 
 // ============================================

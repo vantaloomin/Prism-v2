@@ -3,7 +3,7 @@
  * Export and import save data via file download or Base64 codes
  */
 
-import { gameState, saveGame, loadGame } from './state.js';
+import { gameState, collectionViewSettings, saveGame, loadGame } from './state.js';
 import { CONFIG } from './engines/pack-logic.js';
 
 // Current save format version for future compatibility
@@ -37,6 +37,7 @@ export function getSaveData() {
         credits: gameState.credits,
         inventory: gameState.inventory,
         stats: gameState.stats,
+        collectionSettings: collectionViewSettings,
         audio: audioSettings
     };
 }
@@ -130,6 +131,21 @@ export function applySaveData(data) {
     gameState.credits = data.credits ?? CONFIG.STARTING_CREDITS;
     gameState.inventory = data.inventory ?? [];
     gameState.stats = data.stats ?? { packsOpened: 0, totalCards: 0 };
+
+    // Apply collection view settings if present
+    if (data.collectionSettings) {
+        Object.assign(collectionViewSettings, data.collectionSettings);
+        // Ensure filters object is complete
+        if (data.collectionSettings.filters) {
+            collectionViewSettings.filters = {
+                rarity: [],
+                frame: [],
+                holo: [],
+                pack: [],
+                ...data.collectionSettings.filters
+            };
+        }
+    }
 
     // Save to localStorage
     saveGame();

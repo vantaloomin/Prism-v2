@@ -159,7 +159,87 @@
                         </button>
                     </div>
 
+                    <!-- Controls Toolbar -->
+                    <div class="collection-controls">
+                        <!-- Search -->
+                        <div class="collection-search">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="collection-search" placeholder="Search cards...">
+                        </div>
+
+                        <!-- Sort Dropdown -->
+                        <div class="collection-sort">
+                            <select id="collection-sort-by">
+                                <option value="rarity">Sort: Rarity</option>
+                                <option value="name">Sort: Name</option>
+                                <option value="frame">Sort: Frame</option>
+                                <option value="holo">Sort: Holo</option>
+                                <option value="pack">Sort: Pack</option>
+                                <option value="recent">Sort: Recent</option>
+                            </select>
+                            <button id="sort-direction-btn" class="sort-direction-btn" title="Toggle sort direction">
+                                ▲
+                            </button>
+                        </div>
+
+                        <!-- Filter Toggle Button -->
+                        <button id="filter-toggle-btn" class="filter-toggle-btn">
+                            <span class="filter-icon">⚙</span>
+                            <span>Filters</span>
+                        </button>
+
+                        <!-- Layout Toggle -->
+                        <div class="layout-toggle">
+                            <button class="layout-btn active" data-layout="grid" title="Grid view">▦</button>
+                            <button class="layout-btn" data-layout="compact" title="Compact view">▤</button>
+                            <button class="layout-btn" data-layout="large" title="Large view">◳</button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Panel (Collapsible) -->
+                    <div class="collection-filter-panel" id="filter-panel" hidden>
+                        <div class="filter-section">
+                            <span class="filter-label">Rarity:</span>
+                            <div class="filter-chips" id="filter-rarity">
+                                <button class="filter-chip" data-filter="rarity" data-value="c">C</button>
+                                <button class="filter-chip" data-filter="rarity" data-value="r">R</button>
+                                <button class="filter-chip" data-filter="rarity" data-value="sr">SR</button>
+                                <button class="filter-chip" data-filter="rarity" data-value="ssr">SSR</button>
+                                <button class="filter-chip" data-filter="rarity" data-value="ur">UR</button>
+                            </div>
+                        </div>
+                        <div class="filter-section">
+                            <span class="filter-label">Frame:</span>
+                            <div class="filter-chips" id="filter-frame">
+                                <button class="filter-chip" data-filter="frame" data-value="white">White</button>
+                                <button class="filter-chip" data-filter="frame" data-value="blue">Blue</button>
+                                <button class="filter-chip" data-filter="frame" data-value="red">Red</button>
+                                <button class="filter-chip" data-filter="frame" data-value="gold">Gold</button>
+                                <button class="filter-chip" data-filter="frame" data-value="rainbow">Rainbow</button>
+                                <button class="filter-chip" data-filter="frame" data-value="black">Black</button>
+                            </div>
+                        </div>
+                        <div class="filter-section">
+                            <span class="filter-label">Holo:</span>
+                            <div class="filter-chips" id="filter-holo">
+                                <button class="filter-chip" data-filter="holo" data-value="none">None</button>
+                                <button class="filter-chip" data-filter="holo" data-value="shiny">Shiny</button>
+                                <button class="filter-chip" data-filter="holo" data-value="rainbow">Rainbow</button>
+                                <button class="filter-chip" data-filter="holo" data-value="pearl">Pearl</button>
+                                <button class="filter-chip" data-filter="holo" data-value="fractal">Fractal</button>
+                                <button class="filter-chip" data-filter="holo" data-value="void">Void</button>
+                            </div>
+                        </div>
+                        <div class="filter-section">
+                            <span class="filter-label">Pack:</span>
+                            <div class="filter-chips" id="filter-pack">
+                                <!-- Dynamically populated from available packs -->
+                            </div>
+                        </div>
+                        <button class="filter-clear-btn" id="filter-clear">Clear All Filters</button>
+                    </div>
                 </div>
+
 
                 <!-- Collection Grid (sorted by rarity) -->
                 <div class="collection-container" id="collection-container">

@@ -3,7 +3,7 @@
  * Collection rendering and shader initialization
  */
 
-import { gameState, collectionState } from './state.js';
+import { gameState, collectionState, collectionViewSettings, saveGame } from './state.js';
 import {
     createCardElement,
     getRaritySortOrder,
@@ -17,6 +17,7 @@ import {
     scrapFromGroup,
     getMaxScrappable
 } from './engines/scrap-logic.js';
+import { getAllEnabledPacks } from './engines/pack-loader.js';
 
 // ============================================
 // SCRAP MODAL STATE
@@ -25,6 +26,106 @@ import {
 let currentScrapGroup = null;
 let currentScrapQuantity = 1;
 let currentOnFocusClick = null;
+
+// ============================================
+// FILTER & SORT HELPERS
+// ============================================
+
+/**
+ * Get cards per page based on layout
+ */
+function getCardsPerPage(layout) {
+    switch (layout) {
+        case 'compact': return 40;
+        case 'large': return 12;
+        default: return 20; // grid
+    }
+}
+
+/**
+ * Filter cards based on current filter settings and search query
+ */
+function filterCards(cards, filters, searchQuery) {
+    return cards.filter(card => {
+        // Search filter (case-insensitive name match)
+        if (searchQuery && searchQuery.trim()) {
+            const query = searchQuery.trim().toLowerCase();
+            if (!card.name.toLowerCase().includes(query)) {
+                return false;
+            }
+        }
+
+        // Rarity filter
+        if (filters.rarity.length > 0 && !filters.rarity.includes(card.rarity.id)) {
+            return false;
+        }
+
+        // Frame filter
+        if (filters.frame.length > 0 && !filters.frame.includes(card.frame.id)) {
+            return false;
+        }
+
+        // Holo filter
+        if (filters.holo.length > 0 && !filters.holo.includes(card.holo.id)) {
+            return false;
+        }
+
+        // Pack filter
+        if (filters.pack.length > 0 && !filters.pack.includes(card.packType)) {
+            return false;
+        }
+
+        return true;
+    });
+}
+
+/**
+ * Sort card groups based on sort settings
+ */
+function sortCardGroups(groups, sortBy, direction) {
+    const multiplier = direction === 'desc' ? -1 : 1;
+
+    return groups.sort((a, b) => {
+        let result = 0;
+
+        switch (sortBy) {
+            case 'name':
+                result = a.card.name.localeCompare(b.card.name);
+                break;
+
+            case 'frame':
+                result = getFrameSortOrder(a.card.frame.id) - getFrameSortOrder(b.card.frame.id);
+                if (result === 0) result = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
+                break;
+
+            case 'holo':
+                result = getHoloSortOrder(a.card.holo.id) - getHoloSortOrder(b.card.holo.id);
+                if (result === 0) result = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
+                break;
+
+            case 'pack':
+                result = (a.card.packId || '').localeCompare(b.card.packId || '');
+                if (result === 0) result = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
+                break;
+
+            case 'recent':
+                // Recent: use inventory index (cards are added at the end)
+                result = (a.inventoryIndex || 0) - (b.inventoryIndex || 0);
+                break;
+
+            case 'rarity':
+            default:
+                // Default: rarity → frame → holo → name
+                result = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
+                if (result === 0) result = getFrameSortOrder(a.card.frame.id) - getFrameSortOrder(b.card.frame.id);
+                if (result === 0) result = getHoloSortOrder(a.card.holo.id) - getHoloSortOrder(b.card.holo.id);
+                if (result === 0) result = a.card.name.localeCompare(b.card.name);
+                break;
+        }
+
+        return result * multiplier;
+    });
+}
 
 // ============================================
 // COLLECTION RENDERING
@@ -44,16 +145,16 @@ export function renderCollection(page = null, onFocusClick = null) {
     const totalCount = document.getElementById('total-count');
     const badge = document.getElementById('collection-badge');
 
-    // Cards per page (5 columns × 4 rows = 20)
-    const CARDS_PER_PAGE = 20;
+    const settings = collectionViewSettings;
+    const CARDS_PER_PAGE = getCardsPerPage(settings.layout);
 
-    // Update counts
+    // Update total counts (unfiltered)
     totalCount.textContent = gameState.inventory.length;
     badge.textContent = gameState.inventory.length;
 
     if (gameState.inventory.length === 0) {
         container.innerHTML = `
-            <div class="binder-grid">
+            <div class="binder-grid layout-${settings.layout}">
                 <div class="gallery-empty" style="grid-column: 1 / -1;">
                     <div class="gallery-empty-icon">📦</div>
                     <p>No cards yet. Open a pack to start your collection!</p>
@@ -64,42 +165,49 @@ export function renderCollection(page = null, onFocusClick = null) {
         return;
     }
 
-    // Group cards by unique combo (character + frame + holo)
+    // 1. Filter cards
+    const filteredCards = filterCards(gameState.inventory, settings.filters, settings.searchQuery);
+
+    // 2. Group cards by unique combo (character + frame + holo)
     const cardGroups = {};
-    gameState.inventory.forEach(card => {
+    filteredCards.forEach((card, index) => {
         const key = getCardGroupKey(card);
         if (!cardGroups[key]) {
             cardGroups[key] = {
                 card: card,
                 count: 0,
-                groupKey: key
+                groupKey: key,
+                inventoryIndex: gameState.inventory.indexOf(card) // For "recent" sorting
             };
         }
         cardGroups[key].count++;
     });
 
-    // Convert to array and sort (Common → UR, White → Black, None → Void)
-    const sortedGroups = Object.values(cardGroups);
-    sortedGroups.sort((a, b) => {
-        // Sort by rarity
-        const rarityDiff = getRaritySortOrder(a.card.rarity.id) - getRaritySortOrder(b.card.rarity.id);
-        if (rarityDiff !== 0) return rarityDiff;
-
-        // Then by frame
-        const frameDiff = getFrameSortOrder(a.card.frame.id) - getFrameSortOrder(b.card.frame.id);
-        if (frameDiff !== 0) return frameDiff;
-
-        // Then by holo
-        const holoDiff = getHoloSortOrder(a.card.holo.id) - getHoloSortOrder(b.card.holo.id);
-        if (holoDiff !== 0) return holoDiff;
-
-        // Finally by name
-        return a.card.name.localeCompare(b.card.name);
-    });
+    // 3. Convert to array and sort
+    const sortedGroups = sortCardGroups(Object.values(cardGroups), settings.sortBy, settings.sortDirection);
 
     uniqueCount.textContent = sortedGroups.length;
 
-    // Pagination
+    // Handle empty filtered results
+    if (sortedGroups.length === 0) {
+        container.innerHTML = `
+            <div class="binder-grid layout-${settings.layout}">
+                <div class="collection-empty-filters">
+                    <div class="empty-icon">🔍</div>
+                    <p>No cards match your filters</p>
+                    <button id="clear-filters-empty">Clear Filters</button>
+                </div>
+            </div>
+        `;
+        // Wire up clear button
+        document.getElementById('clear-filters-empty')?.addEventListener('click', () => {
+            clearAllFilters();
+            renderCollection(1, onFocusClick);
+        });
+        return;
+    }
+
+    // 4. Pagination
     const totalPages = Math.ceil(sortedGroups.length / CARDS_PER_PAGE);
     const currentPage = page !== null ? page : (collectionState.currentPage || 1);
     collectionState.currentPage = Math.max(1, Math.min(currentPage, totalPages));
@@ -108,11 +216,11 @@ export function renderCollection(page = null, onFocusClick = null) {
     const endIdx = Math.min(startIdx + CARDS_PER_PAGE, sortedGroups.length);
     const pageGroups = sortedGroups.slice(startIdx, endIdx);
 
-    // Render binder grid
+    // 5. Render binder grid
     container.innerHTML = '';
 
     const grid = document.createElement('div');
-    grid.className = 'binder-grid';
+    grid.className = `binder-grid layout-${settings.layout}`;
 
     pageGroups.forEach(group => {
         const wrapper = document.createElement('div');
@@ -153,7 +261,7 @@ export function renderCollection(page = null, onFocusClick = null) {
         grid.appendChild(wrapper);
     });
 
-    // Render pagination controls if more than one page (at top)
+    // 6. Render pagination controls if more than one page (at top)
     if (totalPages > 1) {
         const pagination = document.createElement('div');
         pagination.className = 'pagination-controls';
@@ -185,6 +293,201 @@ export function renderCollection(page = null, onFocusClick = null) {
 
     // Update Convert All button state
     updateConvertAllButton();
+}
+
+// ============================================
+// COLLECTION CONTROLS API
+// ============================================
+
+/**
+ * Toggle a filter value (add if not present, remove if present)
+ */
+export function toggleFilter(filterType, value) {
+    const filters = collectionViewSettings.filters[filterType];
+    if (!filters) return;
+
+    const index = filters.indexOf(value);
+    if (index === -1) {
+        filters.push(value);
+    } else {
+        filters.splice(index, 1);
+    }
+
+    collectionState.currentPage = 1; // Reset to first page
+    saveGame();
+    renderCollection(1, currentOnFocusClick);
+    syncFilterChipsUI();
+}
+
+/**
+ * Set sort options
+ */
+export function setSort(sortBy, direction = null) {
+    collectionViewSettings.sortBy = sortBy;
+    if (direction) {
+        collectionViewSettings.sortDirection = direction;
+    }
+    collectionState.currentPage = 1;
+    saveGame();
+    renderCollection(1, currentOnFocusClick);
+}
+
+/**
+ * Toggle sort direction
+ */
+export function toggleSortDirection() {
+    collectionViewSettings.sortDirection = collectionViewSettings.sortDirection === 'asc' ? 'desc' : 'asc';
+    saveGame();
+    renderCollection(null, currentOnFocusClick);
+    syncSortDirectionUI();
+}
+
+/**
+ * Set layout mode
+ */
+export function setLayout(layout) {
+    collectionViewSettings.layout = layout;
+    collectionState.currentPage = 1; // Reset because cards per page changes
+    saveGame();
+    renderCollection(1, currentOnFocusClick);
+    syncLayoutUI();
+}
+
+/**
+ * Set search query
+ */
+export function setSearchQuery(query) {
+    collectionViewSettings.searchQuery = query;
+    collectionState.currentPage = 1;
+    // Don't save on every keystroke, just render
+    renderCollection(1, currentOnFocusClick);
+}
+
+/**
+ * Clear all filters
+ */
+export function clearAllFilters() {
+    collectionViewSettings.filters = {
+        rarity: [],
+        frame: [],
+        holo: [],
+        pack: []
+    };
+    collectionViewSettings.searchQuery = '';
+    collectionState.currentPage = 1;
+    saveGame();
+
+    // Clear search input
+    const searchInput = document.getElementById('collection-search');
+    if (searchInput) searchInput.value = '';
+
+    syncFilterChipsUI();
+    renderCollection(1, currentOnFocusClick);
+}
+
+/**
+ * Sync filter chip UI to match current settings
+ */
+export function syncFilterChipsUI() {
+    const settings = collectionViewSettings;
+
+    // Sync all filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        const filterType = chip.dataset.filter;
+        const value = chip.dataset.value;
+
+        if (settings.filters[filterType]?.includes(value)) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
+    });
+
+    // Sync filter toggle button
+    const filterToggle = document.getElementById('filter-toggle-btn');
+    const hasActiveFilters = Object.values(settings.filters).some(arr => arr.length > 0);
+    if (filterToggle) {
+        filterToggle.classList.toggle('active', hasActiveFilters);
+    }
+}
+
+/**
+ * Sync sort dropdown and direction button to match current settings
+ */
+export function syncSortUI() {
+    const sortSelect = document.getElementById('collection-sort-by');
+    const directionBtn = document.getElementById('sort-direction-btn');
+
+    if (sortSelect) {
+        sortSelect.value = collectionViewSettings.sortBy;
+    }
+
+    syncSortDirectionUI();
+}
+
+/**
+ * Sync sort direction button UI
+ */
+function syncSortDirectionUI() {
+    const directionBtn = document.getElementById('sort-direction-btn');
+    if (directionBtn) {
+        directionBtn.textContent = collectionViewSettings.sortDirection === 'asc' ? '▲' : '▼';
+        directionBtn.classList.toggle('desc', collectionViewSettings.sortDirection === 'desc');
+    }
+}
+
+/**
+ * Sync layout buttons to match current settings
+ */
+export function syncLayoutUI() {
+    document.querySelectorAll('.layout-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.layout === collectionViewSettings.layout);
+    });
+}
+
+/**
+ * Sync all collection control UIs to match current settings
+ */
+export function syncCollectionControlsUI() {
+    populatePackFilterChips();
+    syncFilterChipsUI();
+    syncSortUI();
+    syncLayoutUI();
+
+    // Sync search input
+    const searchInput = document.getElementById('collection-search');
+    if (searchInput) {
+        searchInput.value = collectionViewSettings.searchQuery || '';
+    }
+}
+
+/**
+ * Dynamically populate pack filter chips based on available packs
+ */
+function populatePackFilterChips() {
+    const packChipsContainer = document.getElementById('filter-pack');
+    if (!packChipsContainer) return;
+
+    // Get all enabled packs
+    const packs = getAllEnabledPacks();
+
+    // Clear existing chips (if any)
+    packChipsContainer.innerHTML = '';
+
+    // Create a chip for each pack
+    packs.forEach(pack => {
+        const chip = document.createElement('button');
+        chip.className = 'filter-chip';
+        chip.dataset.filter = 'pack';
+        chip.dataset.value = pack.id;
+        // Truncate " Pack" suffix for cleaner display (e.g., "Waifu Pack" → "Waifu")
+        let displayName = pack.name;
+        if (displayName.endsWith(' Pack') && displayName.split(' ').length > 1) {
+            displayName = displayName.slice(0, -5); // Remove " Pack" (5 chars)
+        }
+        chip.textContent = displayName;
+        packChipsContainer.appendChild(chip);
+    });
 }
 
 // ============================================

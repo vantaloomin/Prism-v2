@@ -24,6 +24,29 @@ export const collectionState = {
     currentPage: 1
 };
 
+// Collection view settings (sorting, filtering, layout)
+export const collectionViewSettings = {
+    sortBy: 'rarity',          // 'rarity' | 'name' | 'frame' | 'holo' | 'pack' | 'recent'
+    sortDirection: 'asc',      // 'asc' | 'desc'
+    filters: {
+        rarity: [],            // [] = all, or ['c', 'r', 'sr', 'ssr', 'ur']
+        frame: [],             // [] = all, or ['white', 'blue', 'red', 'gold', 'rainbow', 'black']
+        holo: [],              // [] = all, or ['none', 'shiny', 'rainbow', 'pearl', 'fractal', 'void']
+        pack: []               // [] = all, or ['waifu', 'husbando', ...]
+    },
+    searchQuery: '',           // Character name search
+    layout: 'grid'             // 'grid' | 'compact' | 'large'
+};
+
+// Default collection view settings (for reset)
+const DEFAULT_COLLECTION_VIEW_SETTINGS = {
+    sortBy: 'rarity',
+    sortDirection: 'asc',
+    filters: { rarity: [], frame: [], holo: [], pack: [] },
+    searchQuery: '',
+    layout: 'grid'
+};
+
 // ============================================
 // PERSISTENCE (localStorage)
 // ============================================
@@ -36,6 +59,7 @@ export function saveGame() {
         credits: gameState.credits,
         inventory: gameState.inventory,
         stats: gameState.stats,
+        collectionSettings: collectionViewSettings,
         savedAt: Date.now()
     };
 
@@ -61,6 +85,15 @@ export function loadGame() {
             // Ensure totalScrapped exists for older saves
             if (gameState.stats.totalScrapped === undefined) {
                 gameState.stats.totalScrapped = 0;
+            }
+            // Load collection view settings (with defaults for older saves)
+            if (saveData.collectionSettings) {
+                Object.assign(collectionViewSettings, DEFAULT_COLLECTION_VIEW_SETTINGS, saveData.collectionSettings);
+                // Ensure filters object is complete
+                collectionViewSettings.filters = {
+                    ...DEFAULT_COLLECTION_VIEW_SETTINGS.filters,
+                    ...saveData.collectionSettings.filters
+                };
             }
             console.log('Game loaded!', gameState.stats);
             return true;
